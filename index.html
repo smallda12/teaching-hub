@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>高雄特殊教育學校國小部 115 學年度教材</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>📚</text></svg>">
+<style>
+/* 特教取向：大字、高對比、大按鈕（沿用各單元網站的設計原則） */
+:root{
+  --底:#faf6ee; --紙:#fffdf8; --框:#e2d8c4; --字:#33291c; --淡字:#6f6152;
+  --主:#2f6f4f; --主淡:#eaf3ec;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--底); color:var(--字);
+  font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;
+  font-size:20px; line-height:1.7; -webkit-text-size-adjust:100%;
+}
+
+/* ── 頁首 ── */
+.頁首{background:var(--主); color:#fff; padding:26px 20px; text-align:center;}
+.頁首 h1{margin:0; font-size:38px; letter-spacing:1px;}
+.頁首 p{margin:8px 0 0; font-size:19px; opacity:.92;}
+
+main{max-width:1180px; margin:0 auto; padding:26px 18px 90px;}
+
+/* ── 麵包屑 ── */
+.麵包屑{display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  margin:0 0 20px; font-size:19px; color:var(--淡字); min-height:52px;}
+.麵包屑 button{
+  font:inherit; font-size:19px; cursor:pointer; color:var(--主); background:var(--主淡);
+  border:2px solid var(--主); border-radius:10px; padding:8px 18px; font-weight:700;}
+.麵包屑 button:hover{background:var(--主); color:#fff;}
+.麵包屑 .目前{font-weight:700; color:var(--字);}
+
+.區說明{margin:0 0 18px; font-size:19px; color:var(--淡字);}
+
+/* ── 卡片格 ── */
+.格{display:grid; gap:16px;}
+.領域格{grid-template-columns:repeat(auto-fill,minmax(290px,1fr));}
+.單元格{grid-template-columns:repeat(auto-fill,minmax(320px,1fr));}
+
+.卡{
+  background:var(--紙); border:2px solid var(--框); border-left:10px solid var(--主);
+  border-radius:14px; padding:20px 22px; cursor:pointer; text-align:left;
+  font:inherit; color:inherit; width:100%; display:block;
+  box-shadow:0 2px 6px rgba(0,0,0,.05); transition:transform .12s, box-shadow .12s;}
+.卡:hover{transform:translateY(-3px); box-shadow:0 8px 18px rgba(0,0,0,.12);}
+.卡:focus-visible{outline:4px solid #f0a500; outline-offset:3px;}
+
+.卡標{display:flex; align-items:center; gap:14px;}
+.卡圖{font-size:44px; line-height:1;}
+.卡名{font-size:29px; font-weight:800;}
+.卡副{margin-top:10px; font-size:18px; color:var(--淡字);}
+
+/* 單元卡（外連） */
+a.卡{text-decoration:none;}
+.單元序{display:inline-block; min-width:96px; padding:3px 12px; margin-bottom:10px;
+  background:var(--主淡); color:var(--主); border-radius:999px;
+  font-size:17px; font-weight:800;}
+.單元名{font-size:27px; font-weight:800; line-height:1.35;}
+.單元資訊{margin-top:10px; font-size:17px; color:var(--淡字);}
+.前往{margin-top:14px; font-size:19px; font-weight:800; color:var(--主);}
+
+.隱藏{display:none !important;}
+
+/* ── 頁尾 ── */
+.頁尾{max-width:1180px; margin:0 auto; padding:0 18px 40px; color:var(--淡字); font-size:17px;}
+.提醒{background:#fff8e6; border:2px solid #f0d9a0; border-radius:12px; padding:14px 18px; margin-bottom:14px;}
+
+/* ── 響應式 ── */
+@media (max-width:1024px){
+  body{font-size:19px;}
+  .頁首 h1{font-size:32px;}
+  .卡名{font-size:26px;} .單元名{font-size:24px;}
+}
+@media (max-width:600px){
+  body{font-size:18px;}
+  .頁首{padding:20px 14px;} .頁首 h1{font-size:25px;} .頁首 p{font-size:17px;}
+  main{padding:18px 12px 70px;}
+  .格{gap:12px;} .領域格,.單元格{grid-template-columns:1fr;}
+  .卡{padding:16px 16px; border-left-width:8px;}
+  .卡圖{font-size:36px;} .卡名{font-size:23px;} .單元名{font-size:22px;}
+  .麵包屑{font-size:17px;} .麵包屑 button{font-size:17px; padding:7px 14px;}
+}
+@media (hover:none){ .卡:hover{transform:none;} }
+</style>
+</head>
+<body>
+
+<header class="頁首">
+  <h1>高雄特殊教育學校國小部 115 學年度教材</h1>
+  <p>第一學期　9 個領域　45 個單元</p>
+</header>
+
+<main>
+  <nav class="麵包屑" id="麵包屑"></nav>
+  <p class="區說明" id="區說明"></p>
+  <div class="格 領域格" id="領域區"></div>
+  <div class="格 單元格 隱藏" id="單元區"></div>
+</main>
+
+<footer class="頁尾">
+  <div class="提醒">
+    ⚠️ 點單元會<b>開新分頁</b>連到該單元的教學網站，需要網路。<br>
+    各單元網站用網址開啟時是<b>公開版</b>，點名的照片上傳功能會自動關閉；
+    老師要用點名功能，請雙擊該單元資料夾裡的 <code>教學網站\index.html</code>（教室版）。
+  </div>
+  <div id="頁尾統計"></div>
+</footer>
+
+<script>
+/* 資料由 產出總入口.py 從 製作完成區\ 的 線上網址.txt 與 data.js 產生，不要手動編輯。 */
+const 資料 = [
+ {
+  "名": "自然",
+  "圖": "🌱",
+  "色": "#3f9142",
+  "單元": [
+   {
+    "序": 1,
+    "名": "植物小百科",
+    "網址": "https://smallda12.github.io/teaching-site-plant/",
+    "週": "第1～4週（115.08.31 – 115.09.25）",
+    "頁": 62,
+    "題": 12,
+    "卡": 20
+   },
+   {
+    "序": 2,
+    "名": "校園探險家",
+    "網址": "https://smallda12.github.io/teaching-site-explorer/",
+    "週": "",
+    "頁": 58,
+    "題": 12,
+    "卡": 16
+   },
+   {
+    "序": 3,
+    "名": "水溶液大觀園",
+    "網址": "https://smallda12.github.io/teaching-site-solution/",
+    "週": "第9～12週（115.10.26 – 115.11.20）",
+    "頁": 71,
+    "題": 12,
+    "卡": 13
+   },
+   {
+    "序": 4,
+    "名": "物質的溶解",
+    "網址": "https://smallda12.github.io/teaching-site-dissolve/",
+    "週": "第13～16週（115.11.23 – 115.12.18）",
+    "頁": 62,
+    "題": 12,
+    "卡": 12
+   },
+   {
+    "序": 5,
+    "名": "熱對物質的影響",
+    "網址": "https://smallda12.github.io/teaching-site-heat/",
+    "週": "",
+    "頁": 54,
+    "題": 9,
+    "卡": 18
+   }
+  ]
+ },
+ {
+  "名": "社會",
+  "圖": "🏮",
+  "色": "#c0562e",
+  "單元": [
+   {
+    "序": 1,
+    "名": "月圓人團圓",
+    "網址": "https://smallda12.github.io/teaching-site-moon/",
+    "週": "第1～4週（115.08.31 – 115.09.25）",
+    "頁": 66,
+    "題": 12,
+    "卡": 10
+   },
+   {
+    "序": 2,
+    "名": "聖誕快樂",
+    "網址": "https://smallda12.github.io/teaching-site-christmas/",
+    "週": "第5～8週",
+    "頁": 57,
+    "題": 12,
+    "卡": 13
+   },
+   {
+    "序": 3,
+    "名": "認識火車站",
+    "網址": "https://smallda12.github.io/teaching-site-train-station/",
+    "週": "第9～12週（115.10.26 – 115.11.20）",
+    "頁": 74,
+    "題": 21,
+    "卡": 16
+   },
+   {
+    "序": 4,
+    "名": "認識機場",
+    "網址": "https://smallda12.github.io/teaching-site-airport/",
+    "週": "第 13～16 週",
+    "頁": 90,
+    "題": 23,
+    "卡": 18
+   },
+   {
+    "序": 5,
+    "名": "認識港口",
+    "網址": "https://smallda12.github.io/teaching-site-harbor/",
+    "週": "第17～21週",
+    "頁": 63,
+    "題": 18,
+    "卡": 14
+   }
+  ]
+ },
+ {
+  "名": "數學",
+  "圖": "📐",
+  "色": "#3a6ea8",
+  "單元": [
+   {
+    "序": 1,
+    "名": "時間的運算",
+    "網址": "https://smallda12.github.io/teaching-site-time/",
+    "週": "第1～4週（115.08.31 – 115.09.25）",
+    "頁": 72,
+    "題": 15,
+    "卡": 10
+   },
+   {
+    "序": 2,
+    "名": "重量",
+    "網址": "https://smallda12.github.io/teaching-site-weight/",
+    "週": "",
+    "頁": 72,
+    "題": 18,
+    "卡": 10
+   },
+   {
+    "序": 3,
+    "名": "平面圖形",
+    "網址": "https://smallda12.github.io/teaching-site-shapes/",
+    "週": "第9～12週",
+    "頁": 54,
+    "題": 13,
+    "卡": 10
+   },
+   {
+    "序": 4,
+    "名": "扇形",
+    "網址": "https://smallda12.github.io/teaching-site-sector/",
+    "週": "第13～16週",
+    "頁": 44,
+    "題": 9,
+    "卡": 10
+   },
+   {
+    "序": 5,
+    "名": "線對稱圖形",
+    "網址": "https://smallda12.github.io/teaching-site-symmetry/",
+    "週": "",
+    "頁": 78,
+    "題": 21,
+    "卡": 22
+   }
+  ]
+ },
+ {
+  "名": "語文",
+  "圖": "📖",
+  "色": "#8a5a2b",
+  "單元": [
+   {
+    "序": 1,
+    "名": "作家與作品",
+    "網址": "https://smallda12.github.io/teaching-site-detective/",
+    "週": "第1～4週",
+    "頁": 81,
+    "題": 12,
+    "卡": 10
+   },
+   {
+    "序": 2,
+    "名": "拔一條河",
+    "網址": "https://smallda12.github.io/teaching-site-tugofwar/",
+    "週": "第5～8週",
+    "頁": 81,
+    "題": 12,
+    "卡": 10
+   },
+   {
+    "序": 3,
+    "名": "讓愛飛翔",
+    "網址": "https://smallda12.github.io/teaching-site-letlovefly/",
+    "週": "第9～12週",
+    "頁": 81,
+    "題": 12,
+    "卡": 10
+   },
+   {
+    "序": 4,
+    "名": "自然饗宴",
+    "網址": "https://smallda12.github.io/teaching-site-mountain/",
+    "週": "第13～16週",
+    "頁": 81,
+    "題": 12,
+    "卡": 10
+   },
+   {
+    "序": 5,
+    "名": "生活情味",
+    "網址": "https://smallda12.github.io/teaching-site-flavor/",
+    "週": "第17～21週",
+    "頁": 81,
+    "題": 12,
+    "卡": 10
+   }
+  ]
+ },
+ {
+  "名": "健體",
+  "圖": "🏃",
+  "色": "#c2410c",
+  "單元": [
+   {
+    "序": 1,
+    "名": "我會注意安全",
+    "網址": "https://smallda12.github.io/teaching-site-safety/",
+    "週": "第1～4週（115.08.31 – 115.09.25）",
+    "頁": 62,
+    "題": 15,
+    "卡": 22
+   },
+   {
+    "序": 2,
+    "名": "身體軸心運動",
+    "網址": "https://smallda12.github.io/teaching-site-axis/",
+    "週": "第 5～8 週",
+    "頁": 76,
+    "題": 15,
+    "卡": 20
+   },
+   {
+    "序": 3,
+    "名": "克服危險",
+    "網址": "https://smallda12.github.io/teaching-site-danger/",
+    "週": "第 9～12 週",
+    "頁": 81,
+    "題": 15,
+    "卡": 20
+   },
+   {
+    "序": 4,
+    "名": "我會賽跑",
+    "網址": "https://smallda12.github.io/teaching-site-race/",
+    "週": "第 13～16 週",
+    "頁": 76,
+    "題": 15,
+    "卡": 20
+   },
+   {
+    "序": 5,
+    "名": "飲食上線",
+    "網址": "https://smallda12.github.io/teaching-site-food/",
+    "週": "第17～21週（115.12.21 起）",
+    "頁": 84,
+    "題": 24,
+    "卡": 10
+   }
+  ]
+ },
+ {
+  "名": "綜合",
+  "圖": "🌏",
+  "色": "#2f8f8f",
+  "單元": [
+   {
+    "序": 1,
+    "名": "性別教育-認識青春期",
+    "網址": "https://smallda12.github.io/teaching-site-puberty/",
+    "週": "第1～4週（115.08.31 – 115.09.25）",
+    "頁": 84,
+    "題": 24,
+    "卡": 10
+   },
+   {
+    "序": 2,
+    "名": "安全教育-做自己身體的主人",
+    "網址": "https://smallda12.github.io/teaching-site-bodysafety/",
+    "週": "第5～8週（115.09.28 起）",
+    "頁": 84,
+    "題": 24,
+    "卡": 10
+   },
+   {
+    "序": 3,
+    "名": "多元文化-台灣客閩",
+    "網址": "https://smallda12.github.io/teaching-site-hakka/",
+    "週": "第9～12週",
+    "頁": 62,
+    "題": 12,
+    "卡": 14
+   },
+   {
+    "序": 4,
+    "名": "環保教育-水資源與能源",
+    "網址": "https://smallda12.github.io/teaching-site-water/",
+    "週": "第13～16週",
+    "頁": 74,
+    "題": 15,
+    "卡": 12
+   },
+   {
+    "序": 5,
+    "名": "防疫大作戰-病毒傳染",
+    "網址": "https://smallda12.github.io/teaching-site-virus/",
+    "週": "第 17～21 週，每週 2 節",
+    "頁": 62,
+    "題": 12,
+    "卡": 10
+   }
+  ]
+ },
+ {
+  "名": "藝文",
+  "圖": "🎨",
+  "色": "#9333a8",
+  "單元": [
+   {
+    "序": 1,
+    "名": "樂來越幸福-手搖鈴演奏",
+    "網址": "https://smallda12.github.io/teaching-site-handbell/",
+    "週": "第 1～4 週",
+    "頁": 60,
+    "題": 12,
+    "卡": 10
+   },
+   {
+    "序": 2,
+    "名": "創意點線面-廣告顏料描繪",
+    "網址": "https://smallda12.github.io/teaching-site-dotline/",
+    "週": "第 5～9 週",
+    "頁": 60,
+    "題": 12,
+    "卡": 10
+   },
+   {
+    "序": 3,
+    "名": "異材質創作-再生藝術",
+    "網址": "https://smallda12.github.io/teaching-site-recycleart/",
+    "週": "第10～15週",
+    "頁": 60,
+    "題": 12,
+    "卡": 10
+   },
+   {
+    "序": 4,
+    "名": "蝶戀花",
+    "網址": "https://smallda12.github.io/teaching-site-butterfly/",
+    "週": "第16～18週（115.12.14 – 116.01.01）",
+    "頁": 62,
+    "題": 16,
+    "卡": 10
+   },
+   {
+    "序": 5,
+    "名": "唱唱跳跳-慢節奏熱門流行舞蹈",
+    "網址": "https://smallda12.github.io/teaching-site-slowdance/",
+    "週": "<第N～N週>",
+    "頁": 62,
+    "題": 16,
+    "卡": 10
+   }
+  ]
+ },
+ {
+  "名": "特需生活管理",
+  "圖": "🏠",
+  "色": "#b8860b",
+  "單元": [
+   {
+    "序": 1,
+    "名": "危機總動員",
+    "網址": "https://smallda12.github.io/teaching-site-crisis/",
+    "週": "第1～4週",
+    "頁": 62,
+    "題": 16,
+    "卡": 10
+   },
+   {
+    "序": 2,
+    "名": "警報解除",
+    "網址": "https://smallda12.github.io/teaching-site-alarm/",
+    "週": "第1～4週",
+    "頁": 62,
+    "題": 16,
+    "卡": 10
+   },
+   {
+    "序": 3,
+    "名": "男生女生~耶！",
+    "網址": "https://smallda12.github.io/teaching-site-respect/",
+    "週": "第1～4週",
+    "頁": 62,
+    "題": 16,
+    "卡": 10
+   },
+   {
+    "序": 4,
+    "名": "自我保護觀",
+    "網址": "https://smallda12.github.io/teaching-site-selfprotect/",
+    "週": "第1～4週",
+    "頁": 62,
+    "題": 16,
+    "卡": 10
+   },
+   {
+    "序": 5,
+    "名": "便利的交通工具",
+    "網址": "https://smallda12.github.io/teaching-site-transport/",
+    "週": "第17～21週",
+    "頁": 62,
+    "題": 16,
+    "卡": 10
+   }
+  ]
+ },
+ {
+  "名": "特需功能性動作訓練",
+  "圖": "🤸",
+  "色": "#4f5bd5",
+  "單元": [
+   {
+    "序": 1,
+    "名": "上肢綜合練習",
+    "網址": "https://smallda12.github.io/teaching-site-armstretch/",
+    "週": "第1～4週",
+    "頁": 84,
+    "題": 12,
+    "卡": 10
+   },
+   {
+    "序": 2,
+    "名": "下肢綜合練習",
+    "網址": "https://smallda12.github.io/teaching-site-legsteps/",
+    "週": "第5～8週",
+    "頁": 84,
+    "題": 12,
+    "卡": 10
+   },
+   {
+    "序": 3,
+    "名": "姿勢控制練習",
+    "網址": "https://smallda12.github.io/teaching-site-posturectrl/",
+    "週": "<第N～N週>",
+    "頁": 84,
+    "題": 12,
+    "卡": 10
+   },
+   {
+    "序": 4,
+    "名": "協調遊戲大挑戰",
+    "網址": "https://smallda12.github.io/teaching-site-coordination/",
+    "週": "第13～16週（115.11.23 – 115.12.18）",
+    "頁": 84,
+    "題": 12,
+    "卡": 10
+   },
+   {
+    "序": 5,
+    "名": "移動技巧小遊戲",
+    "網址": "https://smallda12.github.io/teaching-site-movement/",
+    "週": "第17～21週",
+    "頁": 84,
+    "題": 12,
+    "卡": 10
+   }
+  ]
+ }
+];
+
+const $ = (s) => document.querySelector(s);
+const 領域區 = $("#領域區"), 單元區 = $("#單元區"),
+      麵包屑 = $("#麵包屑"), 區說明 = $("#區說明");
+
+const 總單元 = 資料.reduce((n, d) => n + d.單元.length, 0);
+$("#頁尾統計").textContent =
+  `共 ${資料.length} 個領域、${總單元} 個單元；本頁為純靜態頁面，離線也開得起來（連結需要網路）。`;
+
+/* ── 第一層：領域 ── */
+function 顯示領域() {
+  領域區.classList.remove("隱藏");
+  單元區.classList.add("隱藏");
+  區說明.textContent = "請點選一個領域，看這個領域有哪些單元。";
+  麵包屑.innerHTML = '<span class="目前">📚 全部領域</span>';
+  領域區.innerHTML = "";
+  資料.forEach((d, i) => {
+    const b = document.createElement("button");
+    b.className = "卡";
+    b.style.borderLeftColor = d.色;
+    b.innerHTML =
+      `<span class="卡標"><span class="卡圖">${d.圖}</span>` +
+      `<span class="卡名">${d.名}</span></span>` +
+      `<span class="卡副">${d.單元.length} 個單元</span>`;
+    b.onclick = () => 顯示單元(i);
+    領域區.appendChild(b);
+  });
+  history.replaceState(null, "", "#");
+  window.scrollTo(0, 0);
+}
+
+/* ── 第二層：某領域的單元 ── */
+function 顯示單元(i) {
+  const d = 資料[i];
+  領域區.classList.add("隱藏");
+  單元區.classList.remove("隱藏");
+  區說明.textContent = "請點選一個單元，會開新分頁進入那個單元的教學網站。";
+
+  麵包屑.innerHTML = "";
+  const 回 = document.createElement("button");
+  回.textContent = "← 回全部領域";
+  回.onclick = 顯示領域;
+  麵包屑.appendChild(回);
+  const 目前 = document.createElement("span");
+  目前.className = "目前";
+  目前.textContent = `${d.圖} ${d.名}`;
+  麵包屑.appendChild(目前);
+
+  單元區.innerHTML = "";
+  d.單元.forEach((u) => {
+    const a = document.createElement("a");
+    a.className = "卡";
+    a.href = u.網址;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.style.borderLeftColor = d.色;
+    const 資訊 = [u.週, `${u.頁} 頁`, `${u.題} 題評量`, `${u.卡} 張圖卡`]
+      .filter(Boolean).join("　｜　");
+    a.innerHTML =
+      `<span class="單元序">第 ${u.序} 單元</span>` +
+      `<div class="單元名">${u.名}</div>` +
+      `<div class="單元資訊">${資訊}</div>` +
+      `<div class="前往" style="color:${d.色}">前往教學網站 →</div>`;
+    單元區.appendChild(a);
+  });
+  history.replaceState(null, "", "#" + encodeURIComponent(d.名));
+  window.scrollTo(0, 0);
+}
+
+/* 網址帶 #領域名 時直接開那一層；瀏覽器上一頁也回得去 */
+function 依網址顯示() {
+  const h = decodeURIComponent(location.hash.replace(/^#/, ""));
+  const i = 資料.findIndex((d) => d.名 === h);
+  if (i >= 0) 顯示單元(i); else 顯示領域();
+}
+window.addEventListener("hashchange", 依網址顯示);
+依網址顯示();
+</script>
+
+</body>
+</html>

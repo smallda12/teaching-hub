@@ -1,0 +1,6 @@
+# 學生個資一律不進版控
+*名單*.json
+*學生*.csv
+*點名*.json
+.DS_Store
+Thumbs.db
