@@ -55,14 +55,19 @@ main{max-width:1180px; margin:0 auto; padding:26px 18px 90px;}
 .卡名{font-size:29px; font-weight:800;}
 .卡副{margin-top:10px; font-size:18px; color:var(--淡字);}
 
-/* 單元卡（外連） */
-a.卡{text-decoration:none;}
-.單元序{display:inline-block; min-width:96px; padding:3px 12px; margin-bottom:10px;
-  background:var(--主淡); color:var(--主); border-radius:999px;
-  font-size:17px; font-weight:800;}
-.單元名{font-size:27px; font-weight:800; line-height:1.35;}
-.單元資訊{margin-top:10px; font-size:17px; color:var(--淡字);}
-.前往{margin-top:14px; font-size:19px; font-weight:800; color:var(--主);}
+/* ── 單元卡：只有封面圖 ＋ 單元名 ── */
+a.卡{text-decoration:none; padding:0; overflow:hidden; border-left-width:2px;}
+/* 🔴 `height:auto` 不可以省：<img> 上有 width/height 屬性（給瀏覽器預留版位、
+   避免載入時跳動），CSS 只寫 width:100% 的話那個 height 屬性會勝出，
+   圖就被拉成 367×506（實測）而不是 3:2。要讓 aspect-ratio 決定高度，
+   就必須把 height 交還給它。 */
+.封面{display:block; width:100%; height:auto; aspect-ratio:3/2; object-fit:cover;
+  background:var(--主淡); border-bottom:2px solid var(--框);}
+/* 還沒生封面的單元：用領域色的純色底頂著，版面不會塌 */
+.封面.無圖{display:flex; align-items:center; justify-content:center;
+  font-size:56px; color:#fff; border-bottom:none;}
+.單元名{font-size:27px; font-weight:800; line-height:1.35;
+  padding:16px 20px; text-align:center; color:var(--字);}
 
 .隱藏{display:none !important;}
 
@@ -123,46 +128,31 @@ const 資料 = [
     "序": 1,
     "名": "植物小百科",
     "網址": "https://smallda12.github.io/teaching-site-plant/",
-    "週": "第1～4週（115.08.31 – 115.09.25）",
-    "頁": 62,
-    "題": 12,
-    "卡": 20
+    "封面": "covers/nature01.webp"
    },
    {
     "序": 2,
     "名": "校園探險家",
     "網址": "https://smallda12.github.io/teaching-site-explorer/",
-    "週": "",
-    "頁": 58,
-    "題": 12,
-    "卡": 16
+    "封面": "covers/nature02.webp"
    },
    {
     "序": 3,
     "名": "水溶液大觀園",
     "網址": "https://smallda12.github.io/teaching-site-solution/",
-    "週": "第9～12週（115.10.26 – 115.11.20）",
-    "頁": 71,
-    "題": 12,
-    "卡": 13
+    "封面": "covers/nature03.webp"
    },
    {
     "序": 4,
     "名": "物質的溶解",
     "網址": "https://smallda12.github.io/teaching-site-dissolve/",
-    "週": "第13～16週（115.11.23 – 115.12.18）",
-    "頁": 62,
-    "題": 12,
-    "卡": 12
+    "封面": "covers/nature04.webp"
    },
    {
     "序": 5,
     "名": "熱對物質的影響",
     "網址": "https://smallda12.github.io/teaching-site-heat/",
-    "週": "",
-    "頁": 54,
-    "題": 9,
-    "卡": 18
+    "封面": "covers/nature05.webp"
    }
   ]
  },
@@ -175,46 +165,31 @@ const 資料 = [
     "序": 1,
     "名": "月圓人團圓",
     "網址": "https://smallda12.github.io/teaching-site-moon/",
-    "週": "第1～4週（115.08.31 – 115.09.25）",
-    "頁": 66,
-    "題": 12,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 2,
     "名": "聖誕快樂",
     "網址": "https://smallda12.github.io/teaching-site-christmas/",
-    "週": "第5～8週",
-    "頁": 57,
-    "題": 12,
-    "卡": 13
+    "封面": ""
    },
    {
     "序": 3,
     "名": "認識火車站",
     "網址": "https://smallda12.github.io/teaching-site-train-station/",
-    "週": "第9～12週（115.10.26 – 115.11.20）",
-    "頁": 74,
-    "題": 21,
-    "卡": 16
+    "封面": ""
    },
    {
     "序": 4,
     "名": "認識機場",
     "網址": "https://smallda12.github.io/teaching-site-airport/",
-    "週": "第 13～16 週",
-    "頁": 90,
-    "題": 23,
-    "卡": 18
+    "封面": ""
    },
    {
     "序": 5,
     "名": "認識港口",
     "網址": "https://smallda12.github.io/teaching-site-harbor/",
-    "週": "第17～21週",
-    "頁": 63,
-    "題": 18,
-    "卡": 14
+    "封面": ""
    }
   ]
  },
@@ -227,46 +202,31 @@ const 資料 = [
     "序": 1,
     "名": "時間的運算",
     "網址": "https://smallda12.github.io/teaching-site-time/",
-    "週": "第1～4週（115.08.31 – 115.09.25）",
-    "頁": 72,
-    "題": 15,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 2,
     "名": "重量",
     "網址": "https://smallda12.github.io/teaching-site-weight/",
-    "週": "",
-    "頁": 72,
-    "題": 18,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 3,
     "名": "平面圖形",
     "網址": "https://smallda12.github.io/teaching-site-shapes/",
-    "週": "第9～12週",
-    "頁": 54,
-    "題": 13,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 4,
     "名": "扇形",
     "網址": "https://smallda12.github.io/teaching-site-sector/",
-    "週": "第13～16週",
-    "頁": 44,
-    "題": 9,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 5,
     "名": "線對稱圖形",
     "網址": "https://smallda12.github.io/teaching-site-symmetry/",
-    "週": "",
-    "頁": 78,
-    "題": 21,
-    "卡": 22
+    "封面": ""
    }
   ]
  },
@@ -279,46 +239,31 @@ const 資料 = [
     "序": 1,
     "名": "作家與作品",
     "網址": "https://smallda12.github.io/teaching-site-detective/",
-    "週": "第1～4週",
-    "頁": 81,
-    "題": 12,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 2,
     "名": "拔一條河",
     "網址": "https://smallda12.github.io/teaching-site-tugofwar/",
-    "週": "第5～8週",
-    "頁": 81,
-    "題": 12,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 3,
     "名": "讓愛飛翔",
     "網址": "https://smallda12.github.io/teaching-site-letlovefly/",
-    "週": "第9～12週",
-    "頁": 81,
-    "題": 12,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 4,
     "名": "自然饗宴",
     "網址": "https://smallda12.github.io/teaching-site-mountain/",
-    "週": "第13～16週",
-    "頁": 81,
-    "題": 12,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 5,
     "名": "生活情味",
     "網址": "https://smallda12.github.io/teaching-site-flavor/",
-    "週": "第17～21週",
-    "頁": 81,
-    "題": 12,
-    "卡": 10
+    "封面": ""
    }
   ]
  },
@@ -331,46 +276,31 @@ const 資料 = [
     "序": 1,
     "名": "我會注意安全",
     "網址": "https://smallda12.github.io/teaching-site-safety/",
-    "週": "第1～4週（115.08.31 – 115.09.25）",
-    "頁": 62,
-    "題": 15,
-    "卡": 22
+    "封面": ""
    },
    {
     "序": 2,
     "名": "身體軸心運動",
     "網址": "https://smallda12.github.io/teaching-site-axis/",
-    "週": "第 5～8 週",
-    "頁": 76,
-    "題": 15,
-    "卡": 20
+    "封面": ""
    },
    {
     "序": 3,
     "名": "克服危險",
     "網址": "https://smallda12.github.io/teaching-site-danger/",
-    "週": "第 9～12 週",
-    "頁": 81,
-    "題": 15,
-    "卡": 20
+    "封面": ""
    },
    {
     "序": 4,
     "名": "我會賽跑",
     "網址": "https://smallda12.github.io/teaching-site-race/",
-    "週": "第 13～16 週",
-    "頁": 76,
-    "題": 15,
-    "卡": 20
+    "封面": ""
    },
    {
     "序": 5,
     "名": "飲食上線",
     "網址": "https://smallda12.github.io/teaching-site-food/",
-    "週": "第17～21週（115.12.21 起）",
-    "頁": 84,
-    "題": 24,
-    "卡": 10
+    "封面": ""
    }
   ]
  },
@@ -383,46 +313,31 @@ const 資料 = [
     "序": 1,
     "名": "性別教育-認識青春期",
     "網址": "https://smallda12.github.io/teaching-site-puberty/",
-    "週": "第1～4週（115.08.31 – 115.09.25）",
-    "頁": 84,
-    "題": 24,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 2,
     "名": "安全教育-做自己身體的主人",
     "網址": "https://smallda12.github.io/teaching-site-bodysafety/",
-    "週": "第5～8週（115.09.28 起）",
-    "頁": 84,
-    "題": 24,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 3,
     "名": "多元文化-台灣客閩",
     "網址": "https://smallda12.github.io/teaching-site-hakka/",
-    "週": "第9～12週",
-    "頁": 62,
-    "題": 12,
-    "卡": 14
+    "封面": ""
    },
    {
     "序": 4,
     "名": "環保教育-水資源與能源",
     "網址": "https://smallda12.github.io/teaching-site-water/",
-    "週": "第13～16週",
-    "頁": 74,
-    "題": 15,
-    "卡": 12
+    "封面": ""
    },
    {
     "序": 5,
     "名": "防疫大作戰-病毒傳染",
     "網址": "https://smallda12.github.io/teaching-site-virus/",
-    "週": "第 17～21 週，每週 2 節",
-    "頁": 62,
-    "題": 12,
-    "卡": 10
+    "封面": ""
    }
   ]
  },
@@ -435,46 +350,31 @@ const 資料 = [
     "序": 1,
     "名": "樂來越幸福-手搖鈴演奏",
     "網址": "https://smallda12.github.io/teaching-site-handbell/",
-    "週": "第 1～4 週",
-    "頁": 60,
-    "題": 12,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 2,
     "名": "創意點線面-廣告顏料描繪",
     "網址": "https://smallda12.github.io/teaching-site-dotline/",
-    "週": "第 5～9 週",
-    "頁": 60,
-    "題": 12,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 3,
     "名": "異材質創作-再生藝術",
     "網址": "https://smallda12.github.io/teaching-site-recycleart/",
-    "週": "第10～15週",
-    "頁": 60,
-    "題": 12,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 4,
     "名": "蝶戀花",
     "網址": "https://smallda12.github.io/teaching-site-butterfly/",
-    "週": "第16～18週（115.12.14 – 116.01.01）",
-    "頁": 62,
-    "題": 16,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 5,
     "名": "唱唱跳跳-慢節奏熱門流行舞蹈",
     "網址": "https://smallda12.github.io/teaching-site-slowdance/",
-    "週": "<第N～N週>",
-    "頁": 62,
-    "題": 16,
-    "卡": 10
+    "封面": ""
    }
   ]
  },
@@ -487,46 +387,31 @@ const 資料 = [
     "序": 1,
     "名": "危機總動員",
     "網址": "https://smallda12.github.io/teaching-site-crisis/",
-    "週": "第1～4週",
-    "頁": 62,
-    "題": 16,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 2,
     "名": "警報解除",
     "網址": "https://smallda12.github.io/teaching-site-alarm/",
-    "週": "第1～4週",
-    "頁": 62,
-    "題": 16,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 3,
     "名": "男生女生~耶！",
     "網址": "https://smallda12.github.io/teaching-site-respect/",
-    "週": "第1～4週",
-    "頁": 62,
-    "題": 16,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 4,
     "名": "自我保護觀",
     "網址": "https://smallda12.github.io/teaching-site-selfprotect/",
-    "週": "第1～4週",
-    "頁": 62,
-    "題": 16,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 5,
     "名": "便利的交通工具",
     "網址": "https://smallda12.github.io/teaching-site-transport/",
-    "週": "第17～21週",
-    "頁": 62,
-    "題": 16,
-    "卡": 10
+    "封面": ""
    }
   ]
  },
@@ -539,46 +424,31 @@ const 資料 = [
     "序": 1,
     "名": "上肢綜合練習",
     "網址": "https://smallda12.github.io/teaching-site-armstretch/",
-    "週": "第1～4週",
-    "頁": 84,
-    "題": 12,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 2,
     "名": "下肢綜合練習",
     "網址": "https://smallda12.github.io/teaching-site-legsteps/",
-    "週": "第5～8週",
-    "頁": 84,
-    "題": 12,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 3,
     "名": "姿勢控制練習",
     "網址": "https://smallda12.github.io/teaching-site-posturectrl/",
-    "週": "<第N～N週>",
-    "頁": 84,
-    "題": 12,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 4,
     "名": "協調遊戲大挑戰",
     "網址": "https://smallda12.github.io/teaching-site-coordination/",
-    "週": "第13～16週（115.11.23 – 115.12.18）",
-    "頁": 84,
-    "題": 12,
-    "卡": 10
+    "封面": ""
    },
    {
     "序": 5,
     "名": "移動技巧小遊戲",
     "網址": "https://smallda12.github.io/teaching-site-movement/",
-    "週": "第17～21週",
-    "頁": 84,
-    "題": 12,
-    "卡": 10
+    "封面": ""
    }
   ]
  }
@@ -619,7 +489,8 @@ function 顯示單元(i) {
   const d = 資料[i];
   領域區.classList.add("隱藏");
   單元區.classList.remove("隱藏");
-  區說明.textContent = "請點選一個單元，會開新分頁進入那個單元的教學網站。";
+  // 老師 2026-08-15 指定：單元頁只留封面與單元名，說明文字也拿掉
+  區說明.textContent = "";
 
   麵包屑.innerHTML = "";
   const 回 = document.createElement("button");
@@ -639,13 +510,12 @@ function 顯示單元(i) {
     a.target = "_blank";
     a.rel = "noopener noreferrer";
     a.style.borderLeftColor = d.色;
-    const 資訊 = [u.週, `${u.頁} 頁`, `${u.題} 題評量`, `${u.卡} 張圖卡`]
-      .filter(Boolean).join("　｜　");
-    a.innerHTML =
-      `<span class="單元序">第 ${u.序} 單元</span>` +
-      `<div class="單元名">${u.名}</div>` +
-      `<div class="單元資訊">${資訊}</div>` +
-      `<div class="前往" style="color:${d.色}">前往教學網站 →</div>`;
+    /* 卡片只有兩樣東西：封面圖 ＋ 單元名（老師 2026-08-15 指定，其餘全部拿掉）
+       🛑 單元名是 HTML 文字不是烤在圖上的——改名不必重生圖，也不會有中文錯字。 */
+    const 封面 = u.封面
+      ? `<img class="封面" src="${u.封面}" alt="${u.名}" width="760" height="506">`
+      : `<div class="封面 無圖" style="background:${d.色}">${d.圖}</div>`;
+    a.innerHTML = 封面 + `<div class="單元名">${u.名}</div>`;
     單元區.appendChild(a);
   });
   history.replaceState(null, "", "#" + encodeURIComponent(d.名));

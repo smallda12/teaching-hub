@@ -4,3 +4,6 @@
 *點名*.json
 .DS_Store
 Thumbs.db
+
+# 封面原圖是中繼檔（1536×1024 PNG，每張 2.4 MB），進 repo 的是 covers/*.webp
+_covers_原圖/
