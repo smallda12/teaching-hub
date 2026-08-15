@@ -1,0 +1,25 @@
+高雄特殊教育學校國小部 115 學年度教材｜總入口
+第一學期　9 個領域　45 個單元
+
+■ 網址（分享這一個就到得了全部 45 站）
+https://smallda12.github.io/teaching-hub/
+
+■ 怎麼用
+  首頁列出 9 個領域 → 點領域看該領域的 5 個單元 → 點單元開新分頁進入那一站的教學網站。
+  網址可以直接帶領域，例如：
+    https://smallda12.github.io/teaching-hub/#自然
+    https://smallda12.github.io/teaching-hub/#特需功能性動作訓練
+
+■ 教室版 vs 公開版
+  從本入口點進去的都是**公開版**（照片上傳自動關閉）。
+  老師要用「點點名」的照片功能，請雙擊該單元資料夾裡的 教學網站\index.html。
+
+■ GitHub repo（更新用）
+https://github.com/smallda12/teaching-hub
+本機 repo 就是本資料夾。
+
+■ 新增單元之後怎麼更新
+  1. 確認新單元已上架、而且 製作完成區\<單元>\線上網址.txt 裡有網址
+  2. python 產出總入口.py          （預設只掃第一學期；要兩學期都掃就加 --全部）
+  3. git add -A && git commit && git push
+  🛑 index.html 裡的資料是產生出來的，不要手動編輯。
