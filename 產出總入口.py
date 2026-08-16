@@ -82,12 +82,18 @@ def 掃單元(樣式):
         #    而且不會有任何錯誤訊息。命名規則見 生成封面.py 的 檔名()。
         後綴 = "b" if 學期 == "第二學期" else ""
         代號 = "%s%02d%s" % (代碼[領域], 序號, 後綴) if 領域 in 代碼 else ""
+
+        # 使用說明書：說明\<代號>.html（由 產出使用說明書.py 產生），沒有就不顯示按鈕
+        說明 = ""
+        if 代號 and os.path.exists(os.path.join(ROOT, "說明", 代號 + ".html")):
+            說明 = "說明/%s.html" % 代號
         封面 = ""
         if 代號 and os.path.exists(os.path.join(ROOT, "covers", 代號 + ".webp")):
             封面 = "covers/%s.webp" % 代號
 
         out.append(dict(領域=領域, 學期=學期, 序=序號, 單元=單元,
-                        網址=mm.group(0), 週=週, 頁=頁, 題=題, 卡=卡, 封面=封面))
+                        網址=mm.group(0), 週=週, 頁=頁, 題=題, 卡=卡, 封面=封面,
+                        說明=說明))
     return out
 
 
@@ -108,7 +114,7 @@ def main():
         群.setdefault(x["領域"], []).append(x)
     資料 = [{"名": k, "圖": 圖[k], "色": 色[k],
             "單元": [{"序": u["序"], "名": u["單元"], "網址": u["網址"],
-                    "封面": u["封面"]}
+                    "封面": u["封面"], "說明": u["說明"]}
                    for u in v]}
           for k, v in sorted(群.items(), key=lambda a: 序[a[0]])]
 

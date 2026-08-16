@@ -55,8 +55,16 @@ main{max-width:1180px; margin:0 auto; padding:26px 18px 90px;}
 .卡名{font-size:29px; font-weight:800;}
 .卡副{margin-top:10px; font-size:18px; color:var(--淡字);}
 
-/* ── 單元卡：只有封面圖 ＋ 單元名 ── */
-a.卡{text-decoration:none; padding:0; overflow:hidden; border-left-width:2px;}
+/* ── 單元卡：封面圖 ＋ 單元名（＋ 底部的使用說明書連結）── */
+a.卡,.單元格 .卡{text-decoration:none; padding:0; overflow:hidden; border-left-width:2px;}
+.單元格 .卡{display:flex; flex-direction:column;}
+.主連結{text-decoration:none; color:inherit; display:block;}
+/* 說明書連結：與主連結分開，才不會變成「點卡片卻開到說明書」 */
+.說明連結{
+  display:block; text-align:center; text-decoration:none; font-weight:700; font-size:19px;
+  padding:12px 10px; border-top:2px solid var(--框); background:#00000006; margin-top:auto;}
+.說明連結:hover{background:#00000012; text-decoration:underline;}
+.說明連結:focus-visible{outline:4px solid #f0a500; outline-offset:-4px;}
 /* 🔴 `height:auto` 不可以省：<img> 上有 width/height 屬性（給瀏覽器預留版位、
    避免載入時跳動），CSS 只寫 width:100% 的話那個 height 屬性會勝出，
    圖就被拉成 367×506（實測）而不是 3:2。要讓 aspect-ratio 決定高度，
@@ -128,31 +136,36 @@ const 資料 = [
     "序": 1,
     "名": "植物小百科",
     "網址": "https://smallda12.github.io/teaching-site-plant/",
-    "封面": "covers/nature01.webp"
+    "封面": "covers/nature01.webp",
+    "說明": "說明/nature01.html"
    },
    {
     "序": 2,
     "名": "校園探險家",
     "網址": "https://smallda12.github.io/teaching-site-explorer/",
-    "封面": "covers/nature02.webp"
+    "封面": "covers/nature02.webp",
+    "說明": "說明/nature02.html"
    },
    {
     "序": 3,
     "名": "水溶液大觀園",
     "網址": "https://smallda12.github.io/teaching-site-solution/",
-    "封面": "covers/nature03.webp"
+    "封面": "covers/nature03.webp",
+    "說明": "說明/nature03.html"
    },
    {
     "序": 4,
     "名": "物質的溶解",
     "網址": "https://smallda12.github.io/teaching-site-dissolve/",
-    "封面": "covers/nature04.webp"
+    "封面": "covers/nature04.webp",
+    "說明": "說明/nature04.html"
    },
    {
     "序": 5,
     "名": "熱對物質的影響",
     "網址": "https://smallda12.github.io/teaching-site-heat/",
-    "封面": "covers/nature05.webp"
+    "封面": "covers/nature05.webp",
+    "說明": "說明/nature05.html"
    }
   ]
  },
@@ -165,31 +178,36 @@ const 資料 = [
     "序": 1,
     "名": "月圓人團圓",
     "網址": "https://smallda12.github.io/teaching-site-moon/",
-    "封面": "covers/society01.webp"
+    "封面": "covers/society01.webp",
+    "說明": "說明/society01.html"
    },
    {
     "序": 2,
     "名": "聖誕快樂",
     "網址": "https://smallda12.github.io/teaching-site-christmas/",
-    "封面": "covers/society02.webp"
+    "封面": "covers/society02.webp",
+    "說明": "說明/society02.html"
    },
    {
     "序": 3,
     "名": "認識火車站",
     "網址": "https://smallda12.github.io/teaching-site-train-station/",
-    "封面": "covers/society03.webp"
+    "封面": "covers/society03.webp",
+    "說明": "說明/society03.html"
    },
    {
     "序": 4,
     "名": "認識機場",
     "網址": "https://smallda12.github.io/teaching-site-airport/",
-    "封面": "covers/society04.webp"
+    "封面": "covers/society04.webp",
+    "說明": "說明/society04.html"
    },
    {
     "序": 5,
     "名": "認識港口",
     "網址": "https://smallda12.github.io/teaching-site-harbor/",
-    "封面": "covers/society05.webp"
+    "封面": "covers/society05.webp",
+    "說明": "說明/society05.html"
    }
   ]
  },
@@ -202,31 +220,36 @@ const 資料 = [
     "序": 1,
     "名": "時間的運算",
     "網址": "https://smallda12.github.io/teaching-site-time/",
-    "封面": "covers/math01.webp"
+    "封面": "covers/math01.webp",
+    "說明": "說明/math01.html"
    },
    {
     "序": 2,
     "名": "重量",
     "網址": "https://smallda12.github.io/teaching-site-weight/",
-    "封面": "covers/math02.webp"
+    "封面": "covers/math02.webp",
+    "說明": "說明/math02.html"
    },
    {
     "序": 3,
     "名": "平面圖形",
     "網址": "https://smallda12.github.io/teaching-site-shapes/",
-    "封面": "covers/math03.webp"
+    "封面": "covers/math03.webp",
+    "說明": "說明/math03.html"
    },
    {
     "序": 4,
     "名": "扇形",
     "網址": "https://smallda12.github.io/teaching-site-sector/",
-    "封面": "covers/math04.webp"
+    "封面": "covers/math04.webp",
+    "說明": "說明/math04.html"
    },
    {
     "序": 5,
     "名": "線對稱圖形",
     "網址": "https://smallda12.github.io/teaching-site-symmetry/",
-    "封面": "covers/math05.webp"
+    "封面": "covers/math05.webp",
+    "說明": "說明/math05.html"
    }
   ]
  },
@@ -239,31 +262,36 @@ const 資料 = [
     "序": 1,
     "名": "作家與作品",
     "網址": "https://smallda12.github.io/teaching-site-detective/",
-    "封面": "covers/chinese01.webp"
+    "封面": "covers/chinese01.webp",
+    "說明": "說明/chinese01.html"
    },
    {
     "序": 2,
     "名": "拔一條河",
     "網址": "https://smallda12.github.io/teaching-site-tugofwar/",
-    "封面": "covers/chinese02.webp"
+    "封面": "covers/chinese02.webp",
+    "說明": "說明/chinese02.html"
    },
    {
     "序": 3,
     "名": "讓愛飛翔",
     "網址": "https://smallda12.github.io/teaching-site-letlovefly/",
-    "封面": "covers/chinese03.webp"
+    "封面": "covers/chinese03.webp",
+    "說明": "說明/chinese03.html"
    },
    {
     "序": 4,
     "名": "自然饗宴",
     "網址": "https://smallda12.github.io/teaching-site-mountain/",
-    "封面": "covers/chinese04.webp"
+    "封面": "covers/chinese04.webp",
+    "說明": "說明/chinese04.html"
    },
    {
     "序": 5,
     "名": "生活情味",
     "網址": "https://smallda12.github.io/teaching-site-flavor/",
-    "封面": "covers/chinese05.webp"
+    "封面": "covers/chinese05.webp",
+    "說明": "說明/chinese05.html"
    }
   ]
  },
@@ -276,31 +304,36 @@ const 資料 = [
     "序": 1,
     "名": "我會注意安全",
     "網址": "https://smallda12.github.io/teaching-site-safety/",
-    "封面": "covers/pe01.webp"
+    "封面": "covers/pe01.webp",
+    "說明": "說明/pe01.html"
    },
    {
     "序": 2,
     "名": "身體軸心運動",
     "網址": "https://smallda12.github.io/teaching-site-axis/",
-    "封面": "covers/pe02.webp"
+    "封面": "covers/pe02.webp",
+    "說明": "說明/pe02.html"
    },
    {
     "序": 3,
     "名": "克服危險",
     "網址": "https://smallda12.github.io/teaching-site-danger/",
-    "封面": "covers/pe03.webp"
+    "封面": "covers/pe03.webp",
+    "說明": "說明/pe03.html"
    },
    {
     "序": 4,
     "名": "我會賽跑",
     "網址": "https://smallda12.github.io/teaching-site-race/",
-    "封面": "covers/pe04.webp"
+    "封面": "covers/pe04.webp",
+    "說明": "說明/pe04.html"
    },
    {
     "序": 5,
     "名": "飲食上線",
     "網址": "https://smallda12.github.io/teaching-site-food/",
-    "封面": "covers/pe05.webp"
+    "封面": "covers/pe05.webp",
+    "說明": "說明/pe05.html"
    }
   ]
  },
@@ -313,31 +346,36 @@ const 資料 = [
     "序": 1,
     "名": "性別教育-認識青春期",
     "網址": "https://smallda12.github.io/teaching-site-puberty/",
-    "封面": "covers/life01.webp"
+    "封面": "covers/life01.webp",
+    "說明": "說明/life01.html"
    },
    {
     "序": 2,
     "名": "安全教育-做自己身體的主人",
     "網址": "https://smallda12.github.io/teaching-site-bodysafety/",
-    "封面": "covers/life02.webp"
+    "封面": "covers/life02.webp",
+    "說明": "說明/life02.html"
    },
    {
     "序": 3,
     "名": "多元文化-台灣客閩",
     "網址": "https://smallda12.github.io/teaching-site-hakka/",
-    "封面": "covers/life03.webp"
+    "封面": "covers/life03.webp",
+    "說明": "說明/life03.html"
    },
    {
     "序": 4,
     "名": "環保教育-水資源與能源",
     "網址": "https://smallda12.github.io/teaching-site-water/",
-    "封面": "covers/life04.webp"
+    "封面": "covers/life04.webp",
+    "說明": "說明/life04.html"
    },
    {
     "序": 5,
     "名": "防疫大作戰-病毒傳染",
     "網址": "https://smallda12.github.io/teaching-site-virus/",
-    "封面": "covers/life05.webp"
+    "封面": "covers/life05.webp",
+    "說明": "說明/life05.html"
    }
   ]
  },
@@ -350,31 +388,36 @@ const 資料 = [
     "序": 1,
     "名": "樂來越幸福-手搖鈴演奏",
     "網址": "https://smallda12.github.io/teaching-site-handbell/",
-    "封面": "covers/arts01.webp"
+    "封面": "covers/arts01.webp",
+    "說明": "說明/arts01.html"
    },
    {
     "序": 2,
     "名": "創意點線面-廣告顏料描繪",
     "網址": "https://smallda12.github.io/teaching-site-dotline/",
-    "封面": "covers/arts02.webp"
+    "封面": "covers/arts02.webp",
+    "說明": "說明/arts02.html"
    },
    {
     "序": 3,
     "名": "異材質創作-再生藝術",
     "網址": "https://smallda12.github.io/teaching-site-recycleart/",
-    "封面": "covers/arts03.webp"
+    "封面": "covers/arts03.webp",
+    "說明": "說明/arts03.html"
    },
    {
     "序": 4,
     "名": "蝶戀花",
     "網址": "https://smallda12.github.io/teaching-site-butterfly/",
-    "封面": "covers/arts04.webp"
+    "封面": "covers/arts04.webp",
+    "說明": "說明/arts04.html"
    },
    {
     "序": 5,
     "名": "唱唱跳跳-慢節奏熱門流行舞蹈",
     "網址": "https://smallda12.github.io/teaching-site-slowdance/",
-    "封面": "covers/arts05.webp"
+    "封面": "covers/arts05.webp",
+    "說明": "說明/arts05.html"
    }
   ]
  },
@@ -387,31 +430,36 @@ const 資料 = [
     "序": 1,
     "名": "危機總動員",
     "網址": "https://smallda12.github.io/teaching-site-crisis/",
-    "封面": "covers/selfcare01.webp"
+    "封面": "covers/selfcare01.webp",
+    "說明": "說明/selfcare01.html"
    },
    {
     "序": 2,
     "名": "警報解除",
     "網址": "https://smallda12.github.io/teaching-site-alarm/",
-    "封面": "covers/selfcare02.webp"
+    "封面": "covers/selfcare02.webp",
+    "說明": "說明/selfcare02.html"
    },
    {
     "序": 3,
     "名": "男生女生~耶！",
     "網址": "https://smallda12.github.io/teaching-site-respect/",
-    "封面": "covers/selfcare03.webp"
+    "封面": "covers/selfcare03.webp",
+    "說明": "說明/selfcare03.html"
    },
    {
     "序": 4,
     "名": "自我保護觀",
     "網址": "https://smallda12.github.io/teaching-site-selfprotect/",
-    "封面": "covers/selfcare04.webp"
+    "封面": "covers/selfcare04.webp",
+    "說明": "說明/selfcare04.html"
    },
    {
     "序": 5,
     "名": "便利的交通工具",
     "網址": "https://smallda12.github.io/teaching-site-transport/",
-    "封面": "covers/selfcare05.webp"
+    "封面": "covers/selfcare05.webp",
+    "說明": "說明/selfcare05.html"
    }
   ]
  },
@@ -424,31 +472,36 @@ const 資料 = [
     "序": 1,
     "名": "上肢綜合練習",
     "網址": "https://smallda12.github.io/teaching-site-armstretch/",
-    "封面": "covers/motor01.webp"
+    "封面": "covers/motor01.webp",
+    "說明": "說明/motor01.html"
    },
    {
     "序": 2,
     "名": "下肢綜合練習",
     "網址": "https://smallda12.github.io/teaching-site-legsteps/",
-    "封面": "covers/motor02.webp"
+    "封面": "covers/motor02.webp",
+    "說明": "說明/motor02.html"
    },
    {
     "序": 3,
     "名": "姿勢控制練習",
     "網址": "https://smallda12.github.io/teaching-site-posturectrl/",
-    "封面": "covers/motor03.webp"
+    "封面": "covers/motor03.webp",
+    "說明": "說明/motor03.html"
    },
    {
     "序": 4,
     "名": "協調遊戲大挑戰",
     "網址": "https://smallda12.github.io/teaching-site-coordination/",
-    "封面": "covers/motor04.webp"
+    "封面": "covers/motor04.webp",
+    "說明": "說明/motor04.html"
    },
    {
     "序": 5,
     "名": "移動技巧小遊戲",
     "網址": "https://smallda12.github.io/teaching-site-movement/",
-    "封面": "covers/motor05.webp"
+    "封面": "covers/motor05.webp",
+    "說明": "說明/motor05.html"
    }
   ]
  }
@@ -504,19 +557,37 @@ function 顯示單元(i) {
 
   單元區.innerHTML = "";
   d.單元.forEach((u) => {
+    /* 🛑 卡片外框改成 <div> 不是 <a>：底下要放「使用說明書」第二個連結，
+       而 <a> 裡面不可以再包 <a>（巢狀連結是無效 HTML，瀏覽器會自己拆掉）。
+       主連結仍然涵蓋封面與單元名，點卡片的行為跟以前一樣。 */
+    const 卡 = document.createElement("div");
+    卡.className = "卡";
+    卡.style.borderLeftColor = d.色;
+
     const a = document.createElement("a");
-    a.className = "卡";
+    a.className = "主連結";
     a.href = u.網址;
     a.target = "_blank";
     a.rel = "noopener noreferrer";
-    a.style.borderLeftColor = d.色;
-    /* 卡片只有兩樣東西：封面圖 ＋ 單元名（老師 2026-08-15 指定，其餘全部拿掉）
+    /* 卡片主體只有兩樣東西：封面圖 ＋ 單元名（老師 2026-08-15 指定）
        🛑 單元名是 HTML 文字不是烤在圖上的——改名不必重生圖，也不會有中文錯字。 */
     const 封面 = u.封面
       ? `<img class="封面" src="${u.封面}" alt="${u.名}" width="760" height="506">`
       : `<div class="封面 無圖" style="background:${d.色}">${d.圖}</div>`;
     a.innerHTML = 封面 + `<div class="單元名">${u.名}</div>`;
-    單元區.appendChild(a);
+    卡.appendChild(a);
+
+    /* 使用說明書（老師 2026-08-16 指定：放在該領域的單元頁裡，跟單元擺在一起）
+       同分頁開啟，看完按瀏覽器上一頁就回到這裡。沒有說明書就不長出這個按鈕。 */
+    if (u.說明) {
+      const s = document.createElement("a");
+      s.className = "說明連結";
+      s.href = u.說明;
+      s.textContent = "📖 使用說明書";
+      s.style.color = d.色;
+      卡.appendChild(s);
+    }
+    單元區.appendChild(卡);
   });
   history.replaceState(null, "", "#" + encodeURIComponent(d.名));
   window.scrollTo(0, 0);
