@@ -30,12 +30,21 @@ def main():
     os.makedirs(DST, exist_ok=True)
 
     # 同一個代號重生多次時取最新的那一張（檔名帶時間戳）
+    # 🛑 代號結尾可能帶一個 `b`＝第二學期（2026-08-16，見 生成封面.py 的 檔名()）。
+    #    少了 `[a-z]?` 這一段，二下的封面會被靜靜略過而且不報錯。
     最新 = {}
+    漏網 = []
     for f in sorted(glob.glob(os.path.join(SRC, "*.png"))):
-        m = re.match(r"([a-z]+\d{2})_\d{8}_\d{6}\.png$", os.path.basename(f))
+        m = re.match(r"([a-z]+\d{2}[a-z]?)_\d{8}_\d{6}\.png$", os.path.basename(f))
         if m:
             最新[m.group(1)] = f
+        else:
+            漏網.append(os.path.basename(f))
     assert 最新, "🛑 `_covers_原圖\\` 裡沒有符合命名的封面（<代號><序號>_<時間戳>.png）"
+    # 🛑 對不上正則的檔案要講出來，不可以靜靜略過（2026-08-16）：
+    #    正則跟不上新命名時，症狀是「少壓了幾張」而且全程沒有任何錯誤訊息。
+    assert not 漏網, ("🛑 這些檔名對不上代號正則，沒有被壓成 webp：%s\n"
+                    "   正則是 <代號><兩位序號>[學期碼]_<日期>_<時間>.png" % 漏網)
 
     共 = 0
     for 代號, f in sorted(最新.items()):

@@ -9,3 +9,6 @@ Thumbs.db
 _covers_原圖/
 __pycache__/
 *.pyc
+
+# 改腳本前留的備份，不進版控（版本紀錄本來就在 git 裡）
+*.bak_*
