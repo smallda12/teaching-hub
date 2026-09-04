@@ -1,14 +1,20 @@
 高雄特殊教育學校國小部 115 學年度教材｜總入口
-第一學期　9 個領域　45 個單元
+115 學年度　兩學期　各 9 個領域　各 45 個單元
 
-■ 網址（分享這一個就到得了全部 45 站）
-https://smallda12.github.io/teaching-hub/
+■ 網址（2026-09-03 起改成「學年度 → 學期 → 領域 → 單元」四層結構）
+  學年度首頁（選學期）：https://smallda12.github.io/teaching-hub/
+  第一學期（45 單元）：https://smallda12.github.io/teaching-hub/115-1/
+  第二學期（45 單元）：https://smallda12.github.io/teaching-hub/115-2/
+
+  🛑 舊分享連結是 teaching-hub/ 直接看到 45 單元清單，現在同一個網址
+     變成「選學期」頁，原本第一學期的清單搬到 teaching-hub/115-1/。
 
 ■ 怎麼用
-  首頁列出 9 個領域 → 點領域看該領域的 5 個單元 → 點單元開新分頁進入那一站的教學網站。
-  網址可以直接帶領域，例如：
-    https://smallda12.github.io/teaching-hub/#自然
-    https://smallda12.github.io/teaching-hub/#特需功能性動作訓練
+  學年度首頁點學期 → 該學期列出 9 個領域 → 點領域看該領域的 5 個單元
+  → 點單元開新分頁進入那一站的教學網站。
+  各學期頁的網址可以直接帶領域，例如：
+    https://smallda12.github.io/teaching-hub/115-1/#自然
+    https://smallda12.github.io/teaching-hub/115-2/#語文
 
 ■ 教室版 vs 公開版
   從本入口點進去的都是**公開版**（照片上傳自動關閉）。
@@ -20,6 +26,16 @@ https://github.com/smallda12/teaching-hub
 
 ■ 新增單元之後怎麼更新
   1. 確認新單元已上架、而且 製作完成區\<單元>\線上網址.txt 裡有網址
-  2. python 產出總入口.py          （預設只掃第一學期；要兩學期都掃就加 --全部）
+  2. python 產出總入口.py            （第一學期，寫入 115-1\index.html）
+     python 產出總入口.py --學期二   （第二學期，寫入 115-2\index.html）
   3. git add -A && git commit && git push
-  🛑 index.html 裡的資料是產生出來的，不要手動編輯。
+  🛑 115-1\index.html、115-2\index.html 裡的資料是產生出來的，不要手動編輯。
+  🛑 根目錄的 index.html 是純靜態的學期選單，不是本腳本產生的，要改版面才手動編輯。
+
+■ 115-2（第二學期）目前還缺的東西
+  covers\ 底下只有 8 個單元（醒獅鼓演奏／壓克力顏料描繪／上肢～移動技巧五支／
+  校園探險家b）生好第二學期封面（檔名 XXXXb.webp），其餘 37 個單元還沒生，
+  115-2 頁面會顯示純色底＋領域圖示＋單元名頂著，不影響功能。
+  說明\ 底下目前 0 個第二學期的使用說明書（XXXXb.html），所以 115-2 頁面
+  暫時都不會出現「📖 使用說明書」按鈕。兩者都是選填、不生不會報錯，
+  之後要補的話跑 生成封面.py／套用封面.py／產出使用說明書.py 再重跑本腳本即可。

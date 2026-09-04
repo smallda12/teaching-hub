@@ -2,8 +2,14 @@
 r"""從 `製作完成區\` 掃出所有單元，把資料注入 index.html 的 `const 資料 = __資料__;`。
 
 用法：
-    python 產出總入口.py            # 只掃第一學期（預設）
-    python 產出總入口.py --全部     # 兩個學期都掃
+    python 產出總入口.py            # 只掃第一學期，寫入 115-1\index.html（預設）
+    python 產出總入口.py --學期二   # 只掃第二學期，寫入 115-2\index.html
+    python 產出總入口.py --全部     # 兩個學期都掃，寫入根目錄 index.html（舊版合併頁，備用）
+
+🛑 2026-09-03 起改成「學年度總覽 → 學期 → 領域 → 單元」四層結構：
+   根目錄 index.html 是純靜態的學期選單（2 個連結，不是本腳本產生的），
+   115-1\、115-2\ 底下才是各自的「9 領域 45 單元」頁（本腳本產生資料）。
+   兩個子頁沿用同一份 covers\、說明\（放在 ROOT 底下共用，子頁用 ../ 開頭引用）。
 
 🛑 **`index.html` 裡的資料是產生出來的，不要手動編輯。**
    新增單元、改了網址或圖卡張數，重跑本腳本即可。
@@ -98,7 +104,13 @@ def 掃單元(樣式):
 
 
 def main():
-    樣式 = "*" if "--全部" in sys.argv else "*第一學期*"
+    if "--全部" in sys.argv:
+        樣式, 目標, 前綴 = "*", os.path.join(ROOT, "index.html"), ""
+    elif "--學期二" in sys.argv:
+        樣式, 目標, 前綴 = "*第二學期*", os.path.join(ROOT, "115-2", "index.html"), "../"
+    else:
+        樣式, 目標, 前綴 = "*第一學期*", os.path.join(ROOT, "115-1", "index.html"), "../"
+
     單元們 = 掃單元(樣式)
     assert 單元們, "🛑 一個單元都沒掃到，八成是路徑錯了（不要讓空清單變成成功）"
 
@@ -114,7 +126,8 @@ def main():
         群.setdefault(x["領域"], []).append(x)
     資料 = [{"名": k, "圖": 圖[k], "色": 色[k],
             "單元": [{"序": u["序"], "名": u["單元"], "網址": u["網址"],
-                    "封面": u["封面"], "說明": u["說明"]}
+                    "封面": (前綴 + u["封面"]) if u["封面"] else "",
+                    "說明": (前綴 + u["說明"]) if u["說明"] else ""}
                    for u in v]}
           for k, v in sorted(群.items(), key=lambda a: 序[a[0]])]
 
@@ -122,7 +135,8 @@ def main():
     壞 = [x["單元"] for x in 單元們 if not (x["頁"] and x["題"] and x["卡"])]
     assert not 壞, "🛑 這些單元的頁數／題數／圖卡數是 0，先查素材：%s" % 壞
 
-    p = os.path.join(ROOT, "index.html")
+    p = 目標
+    assert os.path.exists(p), "🛑 目標檔案不存在，先建立子頁模板：%s" % p
     html = open(p, encoding="utf-8").read()
     新 = "const 資料 = %s;" % json.dumps(資料, ensure_ascii=False, indent=1)
     html2, n = re.subn(r"const 資料 = .*?;\n", 新 + "\n", html, count=1, flags=re.S)
