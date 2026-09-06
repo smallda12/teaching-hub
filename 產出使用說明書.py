@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
-r"""替第一學期 45 個單元各產生一份「使用說明書」網頁，放進 `說明\<代號>.html`。
+r"""替一個學期的 45 個單元各產生一份「使用說明書」網頁，放進 `說明\<代號>.html`。
+
+🔴 2026-09-06 加 `--學期二`：讀 `課程目標_第二學期.json`、找 `<領域>_第二學期_第N單元_` 資料夾、
+   代號加後綴 `b`（與 `產出總入口.py`／`生成封面.py` 同一條規則，兩個學期的「領域＋序號」會撞號）。
+   沒加就是第一學期，行為與以前完全一樣。
+    python 產出使用說明書.py --學期二          # 第二學期 45 份 → 說明\<代號>b.html
+    python 產出使用說明書.py --學期二 --list   # 乾跑
 
     python 產出使用說明書.py            # 產出全部
     python 產出使用說明書.py --list     # 乾跑，只印每一份會寫進去什麼
@@ -35,7 +41,11 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 完成區 = os.path.dirname(ROOT)
 BASE = os.path.dirname(完成區)
 OUT = os.path.join(ROOT, "說明")
-目標檔 = os.path.join(BASE, "課程目標_第一學期.json")
+學期二 = "--學期二" in sys.argv
+學期名 = "第二學期" if 學期二 else "第一學期"
+學期號 = 2 if 學期二 else 1
+代號後綴 = "b" if 學期二 else ""     # 🛑 與 產出總入口.py 的 後綴 規則一致
+目標檔 = os.path.join(BASE, "課程目標_%s.json" % 學期名)
 進度表 = os.path.join(BASE, "教學進度表")
 
 代碼 = {"自然": "nature", "社會": "society", "數學": "math", "語文": "chinese",
@@ -165,7 +175,7 @@ def 網址(資料夾):
 
 
 def 找資料夾(x):
-    頭 = "%s_第一學期_第%d單元_" % (x["領域"], x["序"])
+    頭 = "%s_%s_第%d單元_" % (x["領域"], 學期名, x["序"])
     for d in sorted(os.listdir(完成區)):
         if d.startswith(頭) and os.path.isdir(os.path.join(完成區, d)):
             return d
@@ -182,7 +192,7 @@ def 頁面(x, 資料夾, 池):
 
     目標段 = 學習目標敘述(x)
     列 = [
-        ("領域", 領), ("學期", "115 學年度　第 1 學期"),
+        ("領域", 領), ("學期", "115 學年度　第 %d 學期" % 學期號),
         ("單元", "第 %d 單元　%s" % (x["序"], x["單元"])),
         ("教學期程", "%s　%s" % (x["週次"], x["起迄日"])),
     ]
@@ -236,7 +246,7 @@ p{{margin:8px 0;}} .無{{color:var(--淡字);}}
 </head>
 <body>
 <header class="頁首">
-  <div class="眉">{圖[領]} {e(領)}　115 學年度第 1 學期</div>
+  <div class="眉">{圖[領]} {e(領)}　115 學年度第 {學期號} 學期</div>
   <h1>{e(x['單元'])}</h1>
   <div class="副">教材使用說明書　｜　{e(x['週次'])}</div>
 </header>
@@ -322,7 +332,7 @@ def main():
         if not d:
             缺.append("%s 第%d單元 %s" % (x["領域"], x["序"], x["單元"]))
             continue
-        代號 = "%s%02d" % (代碼[x["領域"]], x["序"])
+        代號 = "%s%02d%s" % (代碼[x["領域"]], x["序"], 代號後綴)
         doc = 頁面(x, d, 池)
         if "--list" in sys.argv:
             print("── %s → 說明/%s.html（%d 字）" % (x["單元"], 代號, len(doc)))
@@ -333,7 +343,9 @@ def main():
     if "--list" in sys.argv:
         return
     # 🛑 印的是數出來的值
-    實 = len(glob.glob(os.path.join(OUT, "*.html")))
+    # 🛑 兩個學期共用 說明\，只數這個學期的（第二學期檔名以 b.html 結尾）
+    實 = len([f for f in glob.glob(os.path.join(OUT, "*.html"))
+           if os.path.basename(f).endswith("b.html") == 學期二])
     print("✅ 產出 %d 份；說明\\ 實際有 %d 個 html" % (成功, 實))
     assert 缺 == [], "🛑 這些單元找不到 製作完成區 資料夾：%s" % 缺
     assert 實 == 成功, "🛑 寫出的份數與資料夾內檔案數不符（%d vs %d）" % (成功, 實)
