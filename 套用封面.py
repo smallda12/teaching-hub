@@ -2,7 +2,8 @@
 r"""把 `_covers_原圖\` 逐張校對通過的封面，壓成網頁用的 `covers\*.webp`。
 
 用法：
-    python 套用封面.py
+    python 套用封面.py            # 全部（含既有 90 張，會重新壓一次）
+    python 套用封面.py new        # 只壓代號以 new 開頭的（新班級／第一學習階段），不動既有 90 張
 
 🛑 `_covers_原圖\` 是中繼檔（1536×1024 PNG，每張 2.4 MB），**不進版控**；
    進 repo 的是壓過的 webp（每張約 30～60 KB）。
@@ -13,6 +14,7 @@ r"""把 `_covers_原圖\` 逐張校對通過的封面，壓成網頁用的 `cove
 import glob
 import os
 import re
+import sys
 
 from PIL import Image
 
@@ -45,6 +47,12 @@ def main():
     #    正則跟不上新命名時，症狀是「少壓了幾張」而且全程沒有任何錯誤訊息。
     assert not 漏網, ("🛑 這些檔名對不上代號正則，沒有被壓成 webp：%s\n"
                     "   正則是 <代號><兩位序號>[學期碼]_<日期>_<時間>.png" % 漏網)
+
+    # 帶代號前綴（例如 new）時只壓符合的，不動其他既有封面
+    前綴 = sys.argv[1] if len(sys.argv) > 1 else ""
+    if 前綴:
+        最新 = {k: v for k, v in 最新.items() if k.startswith(前綴)}
+        assert 最新, "🛑 沒有代號以 %r 開頭的封面原圖" % 前綴
 
     共 = 0
     for 代號, f in sorted(最新.items()):

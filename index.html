@@ -39,6 +39,14 @@ a.學期卡:focus-visible{outline:4px solid #f0a500; outline-offset:3px;}
 .學期副{font-size:19px; color:var(--淡字);}
 .學期箭{margin-top:16px; font-size:19px; font-weight:700; color:var(--主);}
 
+.階段{margin:0 0 44px;}
+.階段 + .階段{margin-top:8px;}
+.階段名{margin:0 0 4px; font-size:32px; font-weight:800; color:var(--字);
+  padding-left:14px; border-left:10px solid var(--階段色,var(--主));}
+.階段副{margin:0 0 18px 24px; font-size:19px; color:var(--淡字);}
+a.學期卡{border-left-color:var(--階段色,var(--主));}
+.學期箭{color:var(--階段色,var(--主));}
+
 .頁尾{max-width:900px; margin:0 auto; padding:0 18px 40px; color:var(--淡字); font-size:17px;}
 .提醒{background:#fff8e6; border:2px solid #f0d9a0; border-radius:12px; padding:14px 18px;}
 
@@ -47,6 +55,7 @@ a.學期卡:focus-visible{outline:4px solid #f0a500; outline-offset:3px;}
   .頁首{padding:26px 14px;} .頁首 h1{font-size:26px;} .頁首 p{font-size:17px;}
   main{padding:26px 12px 70px;}
   .學期名{font-size:27px;} .學期卡{padding:26px 22px !important;}
+  .階段名{font-size:26px;} .階段副{font-size:17px; margin-left:20px;}
 }
 </style>
 </head>
@@ -54,25 +63,47 @@ a.學期卡:focus-visible{outline:4px solid #f0a500; outline-offset:3px;}
 
 <header class="頁首">
   <h1>高雄特殊教育學校國小部 115 學年度教材</h1>
-  <p>請選擇學期</p>
+  <p>請先選學習階段，再選學期</p>
 </header>
 
 <main>
-  <p class="區說明">每個學期各有 9 個領域、45 個單元，點進去再依領域找單元。</p>
-  <div class="學期格">
-    <a class="學期卡" href="115-1/">
-      <div class="學期圖">📗</div>
-      <div class="學期名">第一學期</div>
-      <div class="學期副">9 個領域　45 個單元</div>
-      <div class="學期箭">進入第一學期 →</div>
-    </a>
-    <a class="學期卡" href="115-2/">
-      <div class="學期圖">📘</div>
-      <div class="學期名">第二學期</div>
-      <div class="學期副">9 個領域　45 個單元</div>
-      <div class="學期箭">進入第二學期 →</div>
-    </a>
-  </div>
+  <section class="階段" style="--階段色:#2f6f4f">
+    <h2 class="階段名">第一學習階段</h2>
+    <p class="階段副">每個學期 6 個領域、30 個單元</p>
+    <div class="學期格">
+      <a class="學期卡" href="stage1-1/">
+        <div class="學期圖">📗</div>
+        <div class="學期名">第一學期</div>
+        <div class="學期副">6 個領域　30 個單元</div>
+        <div class="學期箭">進入第一學期 →</div>
+      </a>
+      <a class="學期卡" href="stage1-2/">
+        <div class="學期圖">📘</div>
+        <div class="學期名">第二學期</div>
+        <div class="學期副">6 個領域　30 個單元</div>
+        <div class="學期箭">進入第二學期 →</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="階段" style="--階段色:#3a6ea8">
+    <h2 class="階段名">第三學習階段</h2>
+    <p class="階段副">每個學期 9 個領域、45 個單元</p>
+    <div class="學期格">
+      <a class="學期卡" href="115-1/">
+        <div class="學期圖">📗</div>
+        <div class="學期名">第一學期</div>
+        <div class="學期副">9 個領域　45 個單元</div>
+        <div class="學期箭">進入第一學期 →</div>
+      </a>
+      <a class="學期卡" href="115-2/">
+        <div class="學期圖">📘</div>
+        <div class="學期名">第二學期</div>
+        <div class="學期副">9 個領域　45 個單元</div>
+        <div class="學期箭">進入第二學期 →</div>
+      </a>
+    </div>
+  </section>
 </main>
 
 <footer class="頁尾">
