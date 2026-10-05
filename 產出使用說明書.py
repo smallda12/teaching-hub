@@ -7,6 +7,14 @@ r"""替一個學期的 45 個單元各產生一份「使用說明書」網頁，
     python 產出使用說明書.py --學期二          # 第二學期 45 份 → 說明\<代號>b.html
     python 產出使用說明書.py --學期二 --list   # 乾跑
 
+🆕 2026-10-05 加 `--階段一`：第一學習階段（新班級）60 站，代號加前綴 `new`（與封面同規則）。
+   先跑 `python 抽課程目標.py --階段一 [--學期 2] --寫入` 產生 `課程目標_階段一_第N學期.json`。
+    python 產出使用說明書.py --階段一            # 新班級第一學期 30 份 → 說明\new<代號>.html
+    python 產出使用說明書.py --階段一 --學期二   # 新班級第二學期 30 份 → 說明\new<代號>b.html
+   🛑 兩班資料夾名格式相同，找資料夾一律先用 產出總入口.學習階段() 分班。
+   🔴 同一天順手修：「← 回單元列表」原本連 `../index.html#領域`，但根首頁 10-04 改成
+      先選學習階段，錨點落空 → 一律改連所屬學期頁（115-1／115-2／stage1-1／stage1-2）。
+
     python 產出使用說明書.py            # 產出全部
     python 產出使用說明書.py --list     # 乾跑，只印每一份會寫進去什麼
     python 產出使用說明書.py 自然       # 只重出某個領域
@@ -42,20 +50,19 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 BASE = os.path.dirname(完成區)
 OUT = os.path.join(ROOT, "說明")
 學期二 = "--學期二" in sys.argv
+階段一 = "--階段一" in sys.argv
 學期名 = "第二學期" if 學期二 else "第一學期"
 學期號 = 2 if 學期二 else 1
 代號後綴 = "b" if 學期二 else ""     # 🛑 與 產出總入口.py 的 後綴 規則一致
-目標檔 = os.path.join(BASE, "課程目標_%s.json" % 學期名)
+代號前綴 = "new" if 階段一 else ""   # 🛑 與 產出總入口.py／生成封面.py 的新班級前綴一致
+目標檔 = os.path.join(BASE, "課程目標_%s%s.json" % ("階段一_" if 階段一 else "", 學期名))
 進度表 = os.path.join(BASE, "教學進度表")
+計畫夾一 = os.path.join(BASE, "!115教學計畫校內版-最新版")
+# 「← 回單元列表」要回到所屬學期頁（根首頁沒有領域錨點）
+學期頁 = ("stage1-%d" if 階段一 else "115-%d") % 學期號
 
-代碼 = {"自然": "nature", "社會": "society", "數學": "math", "語文": "chinese",
-      "健體": "pe", "綜合": "life", "藝文": "arts",
-      "特需生活管理": "selfcare", "特需功能性動作訓練": "motor"}
-圖 = {"自然": "🌱", "社會": "🏮", "數學": "📐", "語文": "📖", "健體": "🏃",
-     "綜合": "🌏", "藝文": "🎨", "特需生活管理": "🏠", "特需功能性動作訓練": "🤸"}
-色 = {"自然": "#3f9142", "社會": "#c0562e", "數學": "#3a6ea8", "語文": "#8a5a2b",
-     "健體": "#c2410c", "綜合": "#2f8f8f", "藝文": "#9333a8",
-     "特需生活管理": "#b8860b", "特需功能性動作訓練": "#4f5bd5"}
+sys.path.insert(0, ROOT)
+from 產出總入口 import 學習階段, 代碼, 圖, 色   # 🛑 代碼／圖示／顏色只留一份，與入口頁一致
 
 # 三個程度層次的引導語（對應課程計畫的 A／B／C 組，**不寫組別代號也不寫姓名**）
 # 🛑 引導語**不可以用「能」收尾**：課程計畫的目標原文本來就是「能說明…」開頭，
@@ -74,15 +81,40 @@ def _姓名池():
     except ImportError:
         return []
     名 = set()
-    for p in glob.glob(os.path.join(進度表, "*.docx")):
+    # 🛑 2026-10-05：兩班的計畫都收（新版計畫夾含第一～三學習階段，黑名單寬一點只會更安全）；
+    #    姓名之間的分隔也收「、，,」——只切空白的話「王小明、李小華」整串超過 4 字會被整個漏掉。
+    檔 = glob.glob(os.path.join(進度表, "*.docx")) + [
+        str(p) for p in __import__("pathlib").Path(計畫夾一).rglob("*.docx")
+        if not p.name.startswith("~$")]
+    for p in 檔:
         for tb in docx.Document(p).tables:
             for r in tb.rows:
                 for c in r.cells:
                     for m in re.finditer(r"[（(]\s*[ABC]\s*組\s*[）)]([^\n\r]*)", c.text):
-                        for n in m.group(1).split():
+                        for n in re.split(r"[\s、，,]+", m.group(1)):
                             if 2 <= len(n) <= 4 and re.fullmatch(r"[一-鿿]+", n):
                                 名.add(n)
     return sorted(名)
+
+
+def _姓名池檢查(池):
+    """🛑 新班級計畫組別標籤後面出現的**每一個詞**都必須在黑名單裡。
+    2026-10-05 實查：新版計畫（三個學習階段）標籤後接的都是同一個通用詞、沒有寫姓名；
+    萬一之後改寫成真實姓名、又因長度或字元不合 `_姓名池()` 的篩選而漏收，這裡會當場中止。"""
+    if not 階段一:
+        return
+    import docx
+    標籤, 漏 = 0, set()
+    for p in __import__("pathlib").Path(計畫夾一).rglob("*第一學習階段.docx"):
+        for tb in docx.Document(str(p)).tables:
+            for r in tb.rows:
+                for c in r.cells:
+                    for m in re.finditer(r"[（(]\s*[ABC]\s*組\s*[）)]([^\n\r]*)", c.text):
+                        標籤 += 1
+                        漏 |= {n for n in re.split(r"[\s、，,]+", m.group(1)) if n and n not in 池}
+    assert 標籤, "🛑 第一學習階段計畫一個組別標籤都沒讀到，八成是路徑錯了"
+    assert not 漏, "🛑 第一學習階段計畫組別標籤後有 %d 個詞沒進黑名單，已中止（不印內容）" % len(漏)
+    print("第一學習階段計畫組別標籤 %d 個，後接詞全部在黑名單內" % 標籤)
 
 
 def _驗無姓名(文字, 誰, 池):
@@ -176,10 +208,11 @@ def 網址(資料夾):
 
 def 找資料夾(x):
     頭 = "%s_%s_第%d單元_" % (x["領域"], 學期名, x["序"])
-    for d in sorted(os.listdir(完成區)):
-        if d.startswith(頭) and os.path.isdir(os.path.join(完成區, d)):
-            return d
-    return None
+    要 = "一" if 階段一 else "三"      # 🛑 兩班資料夾名格式相同，一定要先分班
+    中 = [d for d in sorted(os.listdir(完成區))
+         if d.startswith(頭) and os.path.isdir(os.path.join(完成區, d)) and 學習階段(d) == 要]
+    assert len(中) <= 1, "🛑 同班同序號找到多個資料夾：%s" % 中
+    return 中[0] if 中 else None
 
 
 def 頁面(x, 資料夾, 池):
@@ -193,14 +226,21 @@ def 頁面(x, 資料夾, 池):
     目標段 = 學習目標敘述(x)
     列 = [
         ("領域", 領), ("學期", "115 學年度　第 %d 學期" % 學期號),
+    ] + ([("學習階段", "第一學習階段")] if 階段一 else []) + [
         ("單元", "第 %d 單元　%s" % (x["序"], x["單元"])),
-        ("教學期程", "%s　%s" % (x["週次"], x["起迄日"])),
+        # 新版計畫（第一學習階段）日期欄是空的，不留尾端空白
+        ("教學期程", ("%s　%s" % (x["週次"], x["起迄日"])).rstrip("　")),
     ]
 
     重點html = "".join("<li>%s</li>" % e(t) for t in 重點) or "<li class='無'>（本單元的 data.js 沒有標示教學重點）</li>"
     內容html = "".join("<li>%s</li>" % e(t) for t in
                      [s for s in re.split(r"[／\n]", x["單元內容"]) if s.strip()])
     目標html = "".join("<p>%s</p>" % e(s) for s in 目標段) or "<p class='無'>（課程計畫未列學期目標）</p>"
+    # 🛑 課程計畫本身沒寫學年目標（第一學習階段健體）：照實標示，不補寫
+    學年html = ("<p>%s</p>\n    <p class=\"註\">（本單元屬於這一條學年目標底下；同一條學年目標可能涵蓋多個單元。）</p>"
+              % e(x["學年目標"]) if x["學年目標"]
+              else "<p class='無'>（課程計畫未列學年目標）</p>")
+    眉 = "%s %s　%s115 學年度第 %d 學期" % (圖[領], e(領), "第一學習階段　" if 階段一 else "", 學期號)
 
     doc = f"""<!DOCTYPE html>
 <html lang="zh-Hant">
@@ -246,13 +286,13 @@ p{{margin:8px 0;}} .無{{color:var(--淡字);}}
 </head>
 <body>
 <header class="頁首">
-  <div class="眉">{圖[領]} {e(領)}　115 學年度第 {學期號} 學期</div>
+  <div class="眉">{眉}</div>
   <h1>{e(x['單元'])}</h1>
   <div class="副">教材使用說明書　｜　{e(x['週次'])}</div>
 </header>
 <main>
   <div class="列">
-    <a class="鈕" href="../index.html#{e(領)}">← 回 {e(領)} 單元列表</a>
+    <a class="鈕" href="../{學期頁}/index.html#{e(領)}">← 回 {e(領)} 單元列表</a>
     {'<a class="鈕 實" href="' + e(網) + '" target="_blank" rel="noopener noreferrer">前往教學網站 →</a>' if 網 else ''}
   </div>
 
@@ -267,8 +307,7 @@ p{{margin:8px 0;}} .無{{color:var(--淡字);}}
 
   <section>
     <h2>二、學年目標</h2>
-    <p>{e(x['學年目標'])}</p>
-    <p class="註">（本單元屬於這一條學年目標底下；同一條學年目標可能涵蓋多個單元。）</p>
+    {學年html}
   </section>
 
   <section>
@@ -324,6 +363,8 @@ def main():
 
     池 = _姓名池()
     print("姓名黑名單 %d 個（輸出前逐份比對）" % len(池))
+    assert 池, "🛑 姓名黑名單是空的（python-docx 沒裝或計畫檔讀不到），比對形同虛設，已中止"
+    _姓名池檢查(池)
     os.makedirs(OUT, exist_ok=True)
 
     成功, 缺 = 0, []
@@ -332,7 +373,7 @@ def main():
         if not d:
             缺.append("%s 第%d單元 %s" % (x["領域"], x["序"], x["單元"]))
             continue
-        代號 = "%s%02d%s" % (代碼[x["領域"]], x["序"], 代號後綴)
+        代號 = "%s%s%02d%s" % (代號前綴, 代碼[x["領域"]], x["序"], 代號後綴)
         doc = 頁面(x, d, 池)
         if "--list" in sys.argv:
             print("── %s → 說明/%s.html（%d 字）" % (x["單元"], 代號, len(doc)))
@@ -344,8 +385,10 @@ def main():
         return
     # 🛑 印的是數出來的值
     # 🛑 兩個學期共用 說明\，只數這個學期的（第二學期檔名以 b.html 結尾）
+    #    新班級檔名以 new 開頭，兩班也要分開數
     實 = len([f for f in glob.glob(os.path.join(OUT, "*.html"))
-           if os.path.basename(f).endswith("b.html") == 學期二])
+           if os.path.basename(f).endswith("b.html") == 學期二
+           and os.path.basename(f).startswith("new") == 階段一])
     print("✅ 產出 %d 份；說明\\ 實際有 %d 個 html" % (成功, 實))
     assert 缺 == [], "🛑 這些單元找不到 製作完成區 資料夾：%s" % 缺
     assert 實 == 成功, "🛑 寫出的份數與資料夾內檔案數不符（%d vs %d）" % (成功, 實)
