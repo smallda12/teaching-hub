@@ -51,15 +51,21 @@ BASE = os.path.dirname(完成區)
 OUT = os.path.join(ROOT, "說明")
 學期二 = "--學期二" in sys.argv
 階段一 = "--階段一" in sys.argv
+# 🆕 2026-10-07 `--階段二`：第二學習階段（陸續上線；沒有線上網址的單元略過、不算缺）
+階段二 = "--階段二" in sys.argv
+assert not (階段一 and 階段二), "🛑 --階段一 與 --階段二 只能擇一"
+階段 = "一" if 階段一 else ("二" if 階段二 else "三")
+階段名 = {"一": "第一學習階段", "二": "第二學習階段"}.get(階段, "")
 學期名 = "第二學期" if 學期二 else "第一學期"
 學期號 = 2 if 學期二 else 1
 代號後綴 = "b" if 學期二 else ""     # 🛑 與 產出總入口.py 的 後綴 規則一致
-代號前綴 = "new" if 階段一 else ""   # 🛑 與 產出總入口.py／生成封面.py 的新班級前綴一致
-目標檔 = os.path.join(BASE, "課程目標_%s%s.json" % ("階段一_" if 階段一 else "", 學期名))
+代號前綴 = {"一": "new", "二": "two", "三": ""}[階段]   # 🛑 與 產出總入口.階段前綴／生成封面.py 一致
+目標檔 = os.path.join(BASE, "課程目標_%s%s.json" % (
+    {"一": "階段一_", "二": "階段二_"}.get(階段, ""), 學期名))
 進度表 = os.path.join(BASE, "教學進度表")
 計畫夾一 = os.path.join(BASE, "!115教學計畫校內版-最新版")
 # 「← 回單元列表」要回到所屬學期頁（根首頁沒有領域錨點）
-學期頁 = ("stage1-%d" if 階段一 else "115-%d") % 學期號
+學期頁 = {"一": "stage1-%d", "二": "stage2-%d", "三": "115-%d"}[階段] % 學期號
 
 sys.path.insert(0, ROOT)
 from 產出總入口 import 學習階段, 代碼, 圖, 色   # 🛑 代碼／圖示／顏色只留一份，與入口頁一致
@@ -101,20 +107,20 @@ def _姓名池檢查(池):
     """🛑 新班級計畫組別標籤後面出現的**每一個詞**都必須在黑名單裡。
     2026-10-05 實查：新版計畫（三個學習階段）標籤後接的都是同一個通用詞、沒有寫姓名；
     萬一之後改寫成真實姓名、又因長度或字元不合 `_姓名池()` 的篩選而漏收，這裡會當場中止。"""
-    if not 階段一:
+    if 階段 == "三":
         return
     import docx
     標籤, 漏 = 0, set()
-    for p in __import__("pathlib").Path(計畫夾一).rglob("*第一學習階段.docx"):
+    for p in __import__("pathlib").Path(計畫夾一).rglob("*%s.docx" % 階段名):
         for tb in docx.Document(str(p)).tables:
             for r in tb.rows:
                 for c in r.cells:
                     for m in re.finditer(r"[（(]\s*[ABC]\s*組\s*[）)]([^\n\r]*)", c.text):
                         標籤 += 1
                         漏 |= {n for n in re.split(r"[\s、，,]+", m.group(1)) if n and n not in 池}
-    assert 標籤, "🛑 第一學習階段計畫一個組別標籤都沒讀到，八成是路徑錯了"
-    assert not 漏, "🛑 第一學習階段計畫組別標籤後有 %d 個詞沒進黑名單，已中止（不印內容）" % len(漏)
-    print("第一學習階段計畫組別標籤 %d 個，後接詞全部在黑名單內" % 標籤)
+    assert 標籤, "🛑 %s計畫一個組別標籤都沒讀到，八成是路徑錯了" % 階段名
+    assert not 漏, "🛑 %s計畫組別標籤後有 %d 個詞沒進黑名單，已中止（不印內容）" % (階段名, len(漏))
+    print("%s計畫組別標籤 %d 個，後接詞全部在黑名單內" % (階段名, 標籤))
 
 
 def _驗無姓名(文字, 誰, 池):
@@ -208,7 +214,7 @@ def 網址(資料夾):
 
 def 找資料夾(x):
     頭 = "%s_%s_第%d單元_" % (x["領域"], 學期名, x["序"])
-    要 = "一" if 階段一 else "三"      # 🛑 兩班資料夾名格式相同，一定要先分班
+    要 = 階段      # 🛑 三班資料夾名格式相同，一定要先分班
     中 = [d for d in sorted(os.listdir(完成區))
          if d.startswith(頭) and os.path.isdir(os.path.join(完成區, d)) and 學習階段(d) == 要]
     assert len(中) <= 1, "🛑 同班同序號找到多個資料夾：%s" % 中
@@ -226,7 +232,7 @@ def 頁面(x, 資料夾, 池):
     目標段 = 學習目標敘述(x)
     列 = [
         ("領域", 領), ("學期", "115 學年度　第 %d 學期" % 學期號),
-    ] + ([("學習階段", "第一學習階段")] if 階段一 else []) + [
+    ] + ([("學習階段", 階段名)] if 階段名 else []) + [
         ("單元", "第 %d 單元　%s" % (x["序"], x["單元"])),
         # 新版計畫（第一學習階段）日期欄是空的，不留尾端空白
         ("教學期程", ("%s　%s" % (x["週次"], x["起迄日"])).rstrip("　")),
@@ -240,7 +246,7 @@ def 頁面(x, 資料夾, 池):
     學年html = ("<p>%s</p>\n    <p class=\"註\">（本單元屬於這一條學年目標底下；同一條學年目標可能涵蓋多個單元。）</p>"
               % e(x["學年目標"]) if x["學年目標"]
               else "<p class='無'>（課程計畫未列學年目標）</p>")
-    眉 = "%s %s　%s115 學年度第 %d 學期" % (圖[領], e(領), "第一學習階段　" if 階段一 else "", 學期號)
+    眉 = "%s %s　%s115 學年度第 %d 學期" % (圖[領], e(領), (階段名 + "　") if 階段名 else "", 學期號)
 
     doc = f"""<!DOCTYPE html>
 <html lang="zh-Hant">
@@ -370,6 +376,10 @@ def main():
     成功, 缺 = 0, []
     for x in 資料:
         d = 找資料夾(x)
+        if 階段 == "二" and not (d and 網址(d)):
+            # 第二學習階段陸續上線：還沒上線的單元不出說明書（入口頁也不會列它）
+            print("   ℹ️ 略過（尚未上線）：%s 第%d單元 %s" % (x["領域"], x["序"], x["單元"]))
+            continue
         if not d:
             缺.append("%s 第%d單元 %s" % (x["領域"], x["序"], x["單元"]))
             continue
@@ -386,9 +396,13 @@ def main():
     # 🛑 印的是數出來的值
     # 🛑 兩個學期共用 說明\，只數這個學期的（第二學期檔名以 b.html 結尾）
     #    新班級檔名以 new 開頭，兩班也要分開數
+    def _屬於本階段(名):
+        if 代號前綴:
+            return 名.startswith(代號前綴)
+        return not 名.startswith(("new", "two"))   # 白鯨班沒有前綴：排除另外兩個階段
     實 = len([f for f in glob.glob(os.path.join(OUT, "*.html"))
            if os.path.basename(f).endswith("b.html") == 學期二
-           and os.path.basename(f).startswith("new") == 階段一])
+           and _屬於本階段(os.path.basename(f))])
     print("✅ 產出 %d 份；說明\\ 實際有 %d 個 html" % (成功, 實))
     assert 缺 == [], "🛑 這些單元找不到 製作完成區 資料夾：%s" % 缺
     assert 實 == 成功, "🛑 寫出的份數與資料夾內檔案數不符（%d vs %d）" % (成功, 實)
