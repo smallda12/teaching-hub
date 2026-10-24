@@ -373,7 +373,7 @@ def main():
     _姓名池檢查(池)
     os.makedirs(OUT, exist_ok=True)
 
-    成功, 缺 = 0, []
+    成功, 缺, 本次輸出檔 = 0, [], []
     for x in 資料:
         d = 找資料夾(x)
         if 階段 == "二" and not (d and 網址(d)):
@@ -388,7 +388,9 @@ def main():
         if "--list" in sys.argv:
             print("── %s → 說明/%s.html（%d 字）" % (x["單元"], 代號, len(doc)))
             continue
-        open(os.path.join(OUT, 代號 + ".html"), "w", encoding="utf-8").write(doc)
+        輸出檔 = os.path.join(OUT, 代號 + ".html")
+        open(輸出檔, "w", encoding="utf-8").write(doc)
+        本次輸出檔.append(輸出檔)
         成功 += 1
 
     if "--list" in sys.argv:
@@ -396,13 +398,8 @@ def main():
     # 🛑 印的是數出來的值
     # 🛑 兩個學期共用 說明\，只數這個學期的（第二學期檔名以 b.html 結尾）
     #    新班級檔名以 new 開頭，兩班也要分開數
-    def _屬於本階段(名):
-        if 代號前綴:
-            return 名.startswith(代號前綴)
-        return not 名.startswith(("new", "two"))   # 白鯨班沒有前綴：排除另外兩個階段
-    實 = len([f for f in glob.glob(os.path.join(OUT, "*.html"))
-           if os.path.basename(f).endswith("b.html") == 學期二
-           and _屬於本階段(os.path.basename(f))])
+    # 共用說明資料夾含不同領域、學期與班別；只核對本次篩選範圍的輸出檔。
+    實 = sum(os.path.isfile(f) for f in 本次輸出檔)
     print("✅ 產出 %d 份；說明\\ 實際有 %d 個 html" % (成功, 實))
     assert 缺 == [], "🛑 這些單元找不到 製作完成區 資料夾：%s" % 缺
     assert 實 == 成功, "🛑 寫出的份數與資料夾內檔案數不符（%d vs %d）" % (成功, 實)
