@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2, user-scalable=yes">
+<title>特需生活管理島 3D 立體繪本導覽原型 ｜ 高雄特教國小部</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🏝️</text></svg>">
+<style>
+:root {
+  --bg-sea: #e2f1f8;
+  --sea-deep: #bfe3f0;
+  --font-main: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", sans-serif;
+  --text-dark: #2c3e50;
+  --text-muted: #607d8b;
+  --white: #ffffff;
+  --shadow-soft: 0 10px 25px rgba(44, 62, 80, 0.12);
+  --shadow-card: 0 16px 36px rgba(44, 62, 80, 0.18);
+  --s1-color: #2e7d32;
+  --s1-light: #e8f5e9;
+  --s2-color: #1565c0;
+  --s2-light: #e3f2fd;
+  --s3-color: #e65100;
+  --s3-light: #fff3e0;
+  --accent-gold: #fbc02d;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: var(--font-main);
+  background: radial-gradient(circle at 50% 30%, #eef8fc 0%, #d8edf5 100%);
+  color: var(--text-dark);
+  min-height: 100vh;
+  overflow-x: hidden;
+  user-select: none;
+}
+
+/* 頂部控制列 */
+header.top-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 72px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 2px solid #cfd8dc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 1000;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+.brand-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand-icon {
+  font-size: 34px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+}
+.brand-title {
+  font-size: 23px;
+  font-weight: 900;
+  color: #1a365d;
+  letter-spacing: 0.5px;
+}
+.brand-subtitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: #eceff1;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-left: 6px;
+}
+
+/* 階段切換膠囊按鈕 */
+.stage-filters {
+  display: flex;
+  gap: 8px;
+  background: #eceff1;
+  padding: 6px;
+  border-radius: 30px;
+  border: 1px solid #cfd8dc;
+}
+.filter-btn {
+  border: none;
+  background: transparent;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.filter-btn:hover { color: var(--text-dark); background: rgba(255,255,255,0.6); }
+.filter-btn.active {
+  background: var(--white);
+  color: var(--text-dark);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+.filter-btn.active[data-stage="1"] { color: var(--s1-color); border: 2px solid var(--s1-color); }
+.filter-btn.active[data-stage="2"] { color: var(--s2-color); border: 2px solid var(--s2-color); }
+.filter-btn.active[data-stage="3"] { color: var(--s3-color); border: 2px solid var(--s3-color); }
+
+/* 模式切換按鈕（雙軌切換承諾） */
+.mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.toggle-btn {
+  background: #f1f8e9;
+  border: 2px solid #81c784;
+  color: #2e7d32;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 900;
+  padding: 9px 20px;
+  border-radius: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 3px 8px rgba(46,125,50,0.15);
+  transition: all 0.2s;
+}
+.toggle-btn:hover {
+  background: #2e7d32;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(46,125,50,0.25);
+}
+
+/* 主畫布視口 (3D Island Viewport) */
+#island-viewport {
+  position: relative;
+  width: 100vw;
+  height: calc(100vh - 72px);
+  margin-top: 72px;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.5) 0%, transparent 70%),
+    repeating-radial-gradient(circle at 50% 50%, rgba(200, 230, 245, 0.4) 0, rgba(200, 230, 245, 0.4) 30px, transparent 31px, transparent 60px);
+}
+
+/* 3D 浮動島嶼容器 (SVG + HTML 標籤疊層) */
+.island-stage-container {
+  position: relative;
+  width: 1500px;
+  height: 950px;
+  flex-shrink: 0;
+  transform-origin: center center;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* 浮動浪花與漂浮動畫 */
+.floating-wave {
+  animation: floatSea 6s ease-in-out infinite alternate;
+}
+@keyframes floatSea {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(0.4deg); }
+  100% { transform: translateY(4px) rotate(-0.3deg); }
+}
+
+/* 浮動膠囊地標標籤 (Pill Tooltips) - 依參考圖片風格設計 */
+.island-pin {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0.1s;
+}
+.island-pin:hover, .island-pin.active-pin {
+  transform: translate(-50%, -115%) scale(1.12);
+  z-index: 50;
+}
+
+.pill-card {
+  background: var(--white);
+  padding: 8px 18px;
+  border-radius: 30px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14), 0 2px 6px rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(255,255,255,0.9);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  position: relative;
+}
+.pill-card::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px 7px 0 7px;
+  border-style: solid;
+  border-color: var(--white) transparent transparent transparent;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+}
+
+.pill-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.pill-stage-1 .pill-dot { background: var(--s1-color); box-shadow: 0 0 0 3px rgba(46,125,50,0.2); }
+.pill-stage-2 .pill-dot { background: var(--s2-color); box-shadow: 0 0 0 3px rgba(21,101,192,0.2); }
+.pill-stage-3 .pill-dot { background: var(--s3-color); box-shadow: 0 0 0 3px rgba(230,81,0,0.2); }
+
+.pill-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-dark);
+  letter-spacing: 0.3px;
+}
+.pill-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: #f1f3f4;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+/* 核心中央共學廣場標籤 (突出樣式) */
+.pill-center {
+  background: linear-gradient(135deg, #0277bd, #01579b);
+  border: 2px solid #4fc3f7;
+  box-shadow: 0 10px 24px rgba(2, 119, 189, 0.35);
+}
+.pill-center .pill-title { color: #ffffff; }
+.pill-center .pill-dot { background: #ffd600; box-shadow: 0 0 0 3px rgba(255,214,0,0.3); }
+.pill-center::after { border-color: #01579b transparent transparent transparent; }
+
+/* 聚落主入口標籤 */
+.pill-region-title {
+  padding: 9px 20px;
+  border-radius: 20px;
+  font-size: 19px;
+  font-weight: 900;
+  color: #fff;
+}
+.pill-region-1 { background: var(--s1-color); border: 2px solid #a5d6a7; }
+.pill-region-1::after { border-color: var(--s1-color) transparent transparent transparent; }
+.pill-region-2 { background: var(--s2-color); border: 2px solid #90caf9; }
+.pill-region-2::after { border-color: var(--s2-color) transparent transparent transparent; }
+.pill-region-3 { background: var(--s3-color); border: 2px solid #ffcc80; }
+.pill-region-3::after { border-color: var(--s3-color) transparent transparent transparent; }
+
+/* 經典列表總覽視圖 (Classic View) */
+#classic-viewport {
+  display: none;
+  max-width: 1200px;
+  margin: 100px auto 60px;
+  padding: 0 24px;
+}
+.classic-stage-sec {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 30px 34px;
+  margin-bottom: 36px;
+  box-shadow: var(--shadow-soft);
+  border: 2px solid #e0e0e0;
+}
+.classic-sec-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+.classic-sec-title {
+  font-size: 26px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.classic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+.classic-card {
+  background: #fbfbfb;
+  border: 2px solid #e8e8e8;
+  border-radius: 14px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.classic-card:hover {
+  background: var(--white);
+  border-color: #42a5f5;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+}
+.classic-card-name {
+  font-size: 19px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+}
+.classic-card-sub {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+.classic-card-action {
+  margin-top: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1976d2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 抽屜式教材寶箱視窗 (Treasure Box Modal - 選項 A 核心) */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 32, 39, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.modal-overlay.open {
+  display: flex;
+  opacity: 1;
+}
+
+.treasure-box {
+  background: var(--white);
+  width: 100%;
+  max-width: 680px;
+  border-radius: 28px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  border: 3px solid #cfd8dc;
+  overflow: hidden;
+  transform: scale(0.92) translateY(20px);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+}
+.modal-overlay.open .treasure-box {
+  transform: scale(1) translateY(0);
+}
+
+.treasure-header {
+  padding: 24px 30px 18px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 2px solid #f0f4f8;
+  position: relative;
+}
+.unit-meta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.badge-stage-1 { background: var(--s1-light); color: var(--s1-color); }
+.badge-stage-2 { background: var(--s2-light); color: var(--s2-color); }
+.badge-stage-3 { background: var(--s3-light); color: var(--s3-color); }
+
+.unit-title-big {
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--text-dark);
+  line-height: 1.3;
+}
+
+.close-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #eceff1;
+  background: #f8fafc;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+.close-btn:hover {
+  background: #ff5252;
+  color: var(--white);
+  border-color: #ff5252;
+  transform: rotate(90deg);
+}
+
+.treasure-body {
+  padding: 26px 30px;
+  background: #fdfdfe;
+}
+
+.treasure-actions-label {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 五大教材入口巨型按鈕（特教高對比友善） */
+.treasure-btn-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.t-btn {
+  background: var(--white);
+  border: 2px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: var(--text-dark);
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+}
+.t-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.t-icon-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+.btn-ppt { border-color: #ffcdd2; }
+.btn-ppt:hover { border-color: #e53935; background: #fff5f5; }
+.btn-ppt .t-icon-box { background: #ffebee; }
+
+.btn-video { border-color: #c8e6c9; }
+.btn-video:hover { border-color: #43a047; background: #f1f8e9; }
+.btn-video .t-icon-box { background: #e8f5e9; }
+
+.btn-quiz { border-color: #ffe0b2; }
+.btn-quiz:hover { border-color: #fb8c00; background: #fff8e1; }
+.btn-quiz .t-icon-box { background: #fff3e0; }
+
+.btn-cards { border-color: #bbdefb; }
+.btn-cards:hover { border-color: #1e88e5; background: #f0f7ff; }
+.btn-cards .t-icon-box { background: #e3f2fd; }
+
+.btn-roulette {
+  grid-column: span 2;
+  border-color: #e1bee7;
+  background: linear-gradient(135deg, #ffffff 0%, #faf5fc 100%);
+}
+.btn-roulette:hover { border-color: #ab47bc; background: #f3e5f5; }
+.btn-roulette .t-icon-box { background: #f3e5f5; }
+
+.t-btn-title {
+  font-size: 19px;
+  font-weight: 800;
+  display: block;
+}
+.t-btn-desc {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* 完整網站直達大鈕 */
+.full-site-launch {
+  background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+  color: var(--white);
+  border-radius: 20px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 900;
+  box-shadow: 0 8px 18px rgba(43,88,118,0.3);
+  transition: all 0.2s;
+}
+.full-site-launch:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(43,88,118,0.45);
+}
+
+/* 特殊教育無障礙大字與導覽提示 */
+.island-tip {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px 20px;
+  border-radius: 20px;
+  border: 2px solid #b0bec5;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 900;
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<!-- 頂部控制列 -->
+<header class="top-nav">
+  <div class="brand-area">
+    <div class="brand-icon">🏠</div>
+    <div>
+      <span class="brand-title">特需生活管理島</span>
+      <span class="brand-subtitle">3D 立體繪本探索版</span>
+    </div>
+  </div>
+
+  <!-- 階段聚焦切換 -->
+  <div class="stage-filters">
+    <button class="filter-btn active" data-stage="all">🌐 全島總覽</button>
+    <button class="filter-btn" data-stage="1">🌱 第一階段（啟蒙村）</button>
+    <button class="filter-btn" data-stage="2">🌿 第二階段（實踐鎮）</button>
+    <button class="filter-btn" data-stage="3">🌳 第三階段（進階城）</button>
+  </div>
+
+  <!-- 模式切換（實現隨時可切換回原狀） -->
+  <div class="mode-toggle">
+    <button class="toggle-btn" id="btn-toggle-view" onclick="toggleViewMode()">
+      <span id="toggle-icon">📋</span>
+      <span id="toggle-text">切換經典清單</span>
+    </button>
+  </div>
+</header>
+
+<!-- 視圖 A：3D 立體繪本島嶼視口 (預設) -->
+<main id="island-viewport">
+  <div class="island-stage-container floating-wave" id="island-stage">
+    
+    <!-- SVG 3D 立體等角積木浮空小島底圖 (純向量輕量高畫質) -->
+    <svg viewBox="0 0 1500 950" width="1500" height="950" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- 陰影與漸層濾鏡 -->
+        <filter id="islandShadow" x="-10%" y="-10%" width="130%" height="130%">
+          <feDropShadow dx="0" dy="32" stdDeviation="28" flood-color="#1b4965" flood-opacity="0.22" />
+        </filter>
+        <linearGradient id="waterFlow" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#80deea" stop-opacity="0.8"/>
+          <stop offset="100%" stop-color="#00acc1" stop-opacity="0.9"/>
+        </linearGradient>
+        
+        <!-- 泥土斷層立體漸層 -->
+        <linearGradient id="earthSide" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#b08968"/>
+          <stop offset="50%" stop-color="#8d6e63"/>
+          <stop offset="100%" stop-color="#6d4c41"/>
+        </linearGradient>
+        <linearGradient id="earthSideDark" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#8d6e63"/>
+          <stop offset="100%" stop-color="#4e342e"/>
+        </linearGradient>
+
+        <!-- 各階段草皮頂面漸層 -->
+        <linearGradient id="grassCenter" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#fdfbf7"/>
+          <stop offset="100%" stop-color="#f1ece1"/>
+        </linearGradient>
+        <linearGradient id="grassStage1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#dcedc8"/>
+          <stop offset="100%" stop-color="#c5e1a5"/>
+        </linearGradient>
+        <linearGradient id="grassStage2" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#e1f5fe"/>
+          <stop offset="100%" stop-color="#b3e5fc"/>
+        </linearGradient>
+        <linearGradient id="grassStage3" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#ffe0b2"/>
+          <stop offset="100%" stop-color="#ffcc80"/>
+        </linearGradient>
+      </defs>
+
+      <!-- 浮空島投影 -->
+      <g filter="url(#islandShadow)">
+        <!-- 1. 中央核心主地塊底座 (Hexagon 3D Base) -->
+        <!-- 泥土側邊厚度 -->
+        <path d="M 600,480 L 900,480 L 1050,570 L 1050,620 L 900,530 L 600,530 Z" fill="url(#earthSide)" />
+        <path d="M 450,570 L 600,480 L 600,530 L 450,620 Z" fill="url(#earthSideDark)" />
+        <!-- 頂部共學廣場六角形 -->
+        <polygon points="750,390 900,480 900,660 750,750 600,660 600,480" fill="url(#grassCenter)" stroke="#d7ccc8" stroke-width="4" />
+      </g>
+
+      <!-- 2. 第一階段地塊 (啟蒙村 - 左上方綠色聚落) -->
+      <g id="land-stage-1">
+        <!-- 厚度側面 -->
+        <path d="M 280,310 L 480,200 L 480,250 L 280,360 Z" fill="url(#earthSideDark)" />
+        <path d="M 480,200 L 640,300 L 640,350 L 480,250 Z" fill="url(#earthSide)" />
+        <path d="M 280,310 L 440,410 L 440,460 L 280,360 Z" fill="url(#earthSideDark)" />
+        <!-- 頂部多邊形 -->
+        <polygon points="460,110 640,210 640,380 460,480 280,380 280,210" fill="url(#grassStage1)" stroke="#aed581" stroke-width="5" />
+        <!-- 連接中央的木棧道橋樑 -->
+        <polygon points="560,430 630,480 600,500 530,450" fill="#d7ccc8" stroke="#8d6e63" stroke-width="2"/>
+        <line x1="540" y1="440" x2="570" y2="420" stroke="#a1887f" stroke-width="3" />
+        <line x1="570" y1="460" x2="600" y2="440" stroke="#a1887f" stroke-width="3" />
+      </g>
+
+      <!-- 3. 第二階段地塊 (實踐鎮 - 右上方藍色聚落) -->
+      <g id="land-stage-2">
+        <!-- 厚度側面 -->
+        <path d="M 1040,210 L 1220,310 L 1220,360 L 1040,260 Z" fill="url(#earthSide)" />
+        <path d="M 860,310 L 1040,210 L 1040,260 L 860,360 Z" fill="url(#earthSideDark)" />
+        <path d="M 1040,480 L 1220,380 L 1220,430 L 1040,530 Z" fill="url(#earthSide)" />
+        <!-- 頂部多邊形 -->
+        <polygon points="1040,110 1220,210 1220,380 1040,480 860,380 860,210" fill="url(#grassStage2)" stroke="#81d4fa" stroke-width="5" />
+        <!-- 連接中央的石板步道橋樑 -->
+        <polygon points="940,430 870,480 900,500 970,450" fill="#e0e0e0" stroke="#9e9e9e" stroke-width="2"/>
+        <line x1="930" y1="440" x2="960" y2="420" stroke="#bdbdbd" stroke-width="3" />
+        <line x1="900" y1="460" x2="930" y2="440" stroke="#bdbdbd" stroke-width="3" />
+      </g>
+
+      <!-- 4. 第三階段地塊 (進階城 - 下方橘暖色聚落) -->
+      <g id="land-stage-3">
+        <!-- 厚度側面 -->
+        <path d="M 750,850 L 1000,700 L 1000,750 L 750,900 Z" fill="url(#earthSide)" />
+        <path d="M 500,700 L 750,850 L 750,900 L 500,750 Z" fill="url(#earthSideDark)" />
+        <!-- 頂部多邊形 -->
+        <polygon points="750,560 1000,700 1000,800 750,940 500,800 500,700" fill="url(#grassStage3)" stroke="#ffb74d" stroke-width="5" />
+      </g>
+
+      <!-- 5. 立體手繪小建築物與裝飾細節 (Isometric Miniatures) -->
+      <!-- 中央共學噴泉廣場 -->
+      <g id="building-center">
+        <!-- 水池 -->
+        <ellipse cx="750" cy="560" rx="60" ry="34" fill="url(#waterFlow)" stroke="#ffffff" stroke-width="3"/>
+        <ellipse cx="750" cy="558" rx="30" ry="17" fill="#ffffff" opacity="0.6"/>
+        <!-- 象徵特教的可愛小白鯨噴泉雕塑 -->
+        <path d="M 740,545 C 730,530 740,515 750,515 C 760,515 770,530 760,545 C 758,548 742,548 740,545 Z" fill="#4fc3f7" stroke="#0288d1" stroke-width="2"/>
+        <circle cx="745" cy="525" r="2" fill="#01579b"/>
+        <!-- 噴水水花 -->
+        <path d="M 750,515 Q 755,500 750,490 Q 745,500 750,515" fill="none" stroke="#e0f7fa" stroke-width="3" stroke-linecap="round"/>
+        <!-- 廣場小花與步道長椅 -->
+        <rect x="710" y="585" width="24" height="8" rx="2" fill="#8d6e63"/>
+        <rect x="765" y="585" width="24" height="8" rx="2" fill="#8d6e63"/>
+      </g>
+
+      <!-- 第一階段建築群 (可愛紅瓦小木屋、學校鐘塔、小樹林) -->
+      <g id="decor-stage-1">
+        <!-- 小樹 -->
+        <circle cx="340" cy="240" r="18" fill="#66bb6a" stroke="#2e7d32" stroke-width="2"/>
+        <rect x="337" y="255" width="6" height="14" fill="#795548"/>
+        <circle cx="600" cy="280" r="16" fill="#81c784" stroke="#388e3c" stroke-width="2"/>
+        <rect x="597" y="294" width="6" height="12" fill="#795548"/>
+        <!-- 校園與生活公約小屋 -->
+        <polygon points="460,240 500,215 540,240 500,265" fill="#ef5350"/>
+        <polygon points="460,240 500,265 500,300 460,275" fill="#c62828"/>
+        <polygon points="540,240 500,265 500,300 540,275" fill="#b71c1c"/>
+        <rect x="475" y="260" width="12" height="16" fill="#fff" opacity="0.8"/>
+        <!-- 洗手與如廁小亭 -->
+        <polygon points="360,330 390,312 420,330 390,348" fill="#42a5f5"/>
+        <polygon points="360,330 390,348 390,375 360,357" fill="#1e88e5"/>
+        <polygon points="420,330 390,348 390,375 420,357" fill="#1565c0"/>
+      </g>
+
+      <!-- 第二階段建築群 (鞋襪館、衣褲館、牙刷鐘樓、打掃家事工坊) -->
+      <g id="decor-stage-2">
+        <!-- 護牙鐘樓 (白色大樓 + 牙刷標誌) -->
+        <polygon points="1040,220 1080,195 1120,220 1080,245" fill="#29b6f6"/>
+        <polygon points="1040,220 1080,245 1080,310 1040,285" fill="#0288d1"/>
+        <polygon points="1120,220 1080,245 1080,310 1120,285" fill="#01579b"/>
+        <!-- 象徵牙刷 -->
+        <line x1="1080" y1="195" x2="1080" y2="175" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+        <rect x="1076" y="172" width="8" height="6" fill="#ffeb3b" rx="2"/>
+        <!-- 穿脫鞋襪自理屋 -->
+        <polygon points="940,300 975,280 1010,300 975,320" fill="#ffa726"/>
+        <polygon points="940,300 975,320 975,350 940,330" fill="#f57c00"/>
+        <polygon points="1010,300 975,320 975,350 1010,330" fill="#e65100"/>
+        <!-- 清潔與回收工坊 -->
+        <polygon points="1110,320 1140,302 1170,320 1140,338" fill="#66bb6a"/>
+        <polygon points="1110,320 1140,338 1140,370 1110,352" fill="#43a047"/>
+        <polygon points="1170,320 1140,338 1140,370 1170,352" fill="#2e7d32"/>
+        <circle cx="910" cy="240" r="16" fill="#4fc3f7" stroke="#0288d1" stroke-width="2"/>
+        <circle cx="1180" cy="250" r="17" fill="#81c784" stroke="#388e3c" stroke-width="2"/>
+      </g>
+
+      <!-- 第三階段建築群 (交通信號燈塔、健康醫療中心、社區活動廣場) -->
+      <g id="decor-stage-3">
+        <!-- 交通安全燈塔 (紅白條紋) -->
+        <polygon points="750,710 780,690 810,710 780,730" fill="#e53935"/>
+        <polygon points="750,710 780,730 780,780 750,760" fill="#ffffff"/>
+        <polygon points="810,710 780,730 780,780 810,760" fill="#d32f2f"/>
+        <!-- 燈塔頂部紅頂 -->
+        <polygon points="770,680 780,670 790,680 780,690" fill="#ffeb3b"/>
+        <!-- 社區休閒與健康中心 -->
+        <polygon points="620,770 650,750 680,770 650,790" fill="#ab47bc"/>
+        <polygon points="620,770 650,790 650,825 620,805" fill="#8e24aa"/>
+        <polygon points="680,770 650,790 650,825 680,805" fill="#6a1b9a"/>
+        <polygon points="820,770 850,750 880,770 850,790" fill="#26a69a"/>
+        <polygon points="820,770 850,790 850,825 820,805" fill="#00897b"/>
+        <polygon points="880,770 850,790 850,825 880,805" fill="#00695c"/>
+      </g>
+    </svg>
+
+    <!-- HTML 浮動膠囊地標標籤層 (Floating Pill Overlay) - 完全精確對位 -->
+    
+    <!-- 中央核心：生活管理共學廣場 -->
+    <div class="island-pin" style="left: 750px; top: 480px;" onclick="focusStage('all')">
+      <div class="pill-card pill-center">
+        <div class="pill-dot"></div>
+        <span class="pill-title">🌟 生活管理共學廣場</span>
+      </div>
+    </div>
+
+    <!-- 聚落大標籤 (Region Titles) -->
+    <div class="island-pin" style="left: 460px; top: 120px;" onclick="focusStage('1')">
+      <div class="pill-region-title pill-region-1">🌱 第一階段：啟蒙村 (10單元)</div>
+    </div>
+    <div class="island-pin" style="left: 1040px; top: 120px;" onclick="focusStage('2')">
+      <div class="pill-region-title pill-region-2">🌿 第二階段：實踐鎮 (10單元)</div>
+    </div>
+    <div class="island-pin" style="left: 750px; top: 920px;" onclick="focusStage('3')">
+      <div class="pill-region-title pill-region-3">🌳 第三階段：進階城 (10單元)</div>
+    </div>
+
+    <!-- 第一階段精選單元標籤 (Stage 1) -->
+    <div class="island-pin pill-stage-1" style="left: 360px; top: 220px;" onclick="openTreasureModal(131)">
+      <div class="pill-card">
+        <div class="pill-dot"></div>
+        <span class="pill-title">校園生活你我他</span>
+        <span class="pill-badge">一上 U1</span>
+      </div>
+    </div>
+    <div class="island-pin pill-stage-1" style="left: 540px; top: 210px;" onclick="openTreasureModal(132)">
+      <div class="pill-card">
+        <div class="pill-dot"></div>
+        <span class="pill-title">生活公約</span>
+        <span class="pill-badge">一上 U2</span>
+      </div>
+    </div>
+    <div class="island-pin pill-stage-1" style="left: 330px; top: 310px;" onclick="openTreasureModal(137)">
+      <div class="pill-card">
+        <div class="pill-dot"></div>
+        <span class="pill-title">穿脫衣物</span>
+        <span class="pill-badge">一下 U2</span>
+      </div>
+    </div>
+    <div class="island-pin pill-stage-1" style="left: 480px; top: 350px;" onclick="openTreasureModal(140)">
+      <div class="pill-card">
+        <div class="pill-dot"></div>
+        <span class="pill-title">如廁能力</span>
+        <span class="pill-badge">一下 U5</span>
+      </div>
+    </div>
+    <div class="island-pin pill-stage-1" style="left: 600px; top: 370px;" onclick="openTreasureModal(135)">
+      <div class="pill-card">
+        <div class="pill-dot"></div>
+        <span class="pill-title">食物ｅ點通</span>
+        <span class="pill-badge">一上 U5</span>
+      </div>
+    </div>
+
+    <!-- 第二階段精選單元標籤 (Stage 2 - 本期重點) -->
+    <div class="island-pin pill-stage-2" style="left: 920px; top: 210px;" onclick="openTreasureModal(229)">
+      <div class="pill-card">
+        <div class="pill-dot"></div>
+        <span class="pill-title">衣褲鞋襪大解密</span>
+        <span class="pill-badge">二上 U1</span>
+      </div>
+    </div>
+    <div class="island-pin pill-stage-2 active-pin" style="left: 1140px; top: 210px;" onclick="openTreasureModal(237)">
+      <div class="pill-card" style="border: 2px solid #1976d2;">
+        <div class="pill-dot"></div>
+        <span class="pill-title">⭐ 會穿脫鞋襪</span>
+        <span class="pill-badge">二上 U2</span>
+      </div>
+    </div>
+    <div class="island-pin pill-stage-2" style="left: 900px; top: 310px;" onclick="openTreasureModal(238)">
+      <div class="pill-card">
+        <div class="pill-dot"></div>
+        <span class="pill-title">會穿脫衣褲</span>
+        <span class="pill-badge">二上 U3</span>
+      </div>
+    </div>
+    <div class="island-pin pill-stage-2" style="left: 1180px; top: 310px;" onclick="openTreasureModal(219)">
+      <div class="pill-card">
+        <div class="pill-dot"></div>
+        <span class="pill-title">護牙一生</span>
+        <span class="pill-badge">二下 U1</span>
+      </div>
+    </div>
+    <div class="island-pin pill-stage-2" style="left: 1040px; top: 360px;" onclick="openTreasureModal(224)">
+      <div class="pill-card">
+        <div class="pill-dot"></div>
+        <span class="pill-title">我會掃地</span>
+        <span class="pill-badge">二下 U3</span>
+      </div>
+    </div>
+    <div class="island-pin pill-stage-2" style="left: 1180px; top: 430px;" onclick="openTreasureModal(227)">
+      <div class="pill-card">
+        <div class="pill-dot"></div>
+        <span class="pill-title">資源回收</span>
+        <span class="pill-badge">二下 U5</span>
+      </div>
+    </div>
+
+    <!-- 第三階段精選單元標籤 (Stage 3) -->
+    <div class="island-pin pill-stage-3" style="left: 620px; top: 690px;" onclick="openTreasureModal(31)">
+      <div class="pill-card">
+        <div class="pill-dot"></div>
+        <span class="pill-title">危機總動員</span>
+        <span class="pill-badge">三上 U1</span>
+      </div>
+    </div>
+    <div class="island-pin pill-stage-3" style="left: 880px; top: 690px;" onclick="openTreasureModal(82)">
+      <div class="pill-card">
+        <div class="pill-dot"></div>
+        <span class="pill-title">交通標誌與號誌燈</span>
+        <span class="pill-badge">三下 U1</span>
+      </div>
+    </div>
+    <div class="island-pin pill-stage-3" style="left: 560px; top: 780px;" onclick="openTreasureModal(37)">
+      <div class="pill-card">
+        <div class="pill-dot"></div>
+        <span class="pill-title">自我保護觀</span>
+        <span class="pill-badge">三上 U4</span>
+      </div>
+    </div>
+    <div class="island-pin pill-stage-3" style="left: 940px; top: 780px;" onclick="openTreasureModal(78)">
+      <div class="pill-card">
+        <div class="pill-dot"></div>
+        <span class="pill-title">健康情報站</span>
+        <span class="pill-badge">三下 U2</span>
+      </div>
+    </div>
+    <div class="island-pin pill-stage-3" style="left: 750px; top: 830px;" onclick="openTreasureModal(81)">
+      <div class="pill-card">
+        <div class="pill-dot"></div>
+        <span class="pill-title">認識社區環境與資源</span>
+        <span class="pill-badge">三下 U5</span>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- 視圖 B：經典清單總覽視口 (隨時無損切換原版) -->
+<section id="classic-viewport">
+  <!-- 第一階段清單 -->
+  <div class="classic-stage-sec">
+    <div class="classic-sec-header">
+      <div class="classic-sec-title" style="color: var(--s1-color);">
+        <span>🌱 第一學習階段（基礎探索）</span>
+      </div>
+      <span style="font-weight:700; color:var(--text-muted);">共 10 個單元</span>
+    </div>
+    <div class="classic-grid" id="classic-list-s1">
+      <!-- 由 JS 動態注入 -->
+    </div>
+  </div>
+
+  <!-- 第二階段清單 -->
+  <div class="classic-stage-sec">
+    <div class="classic-sec-header">
+      <div class="classic-sec-title" style="color: var(--s2-color);">
+        <span>🌿 第二學習階段（日常實踐）</span>
+      </div>
+      <span style="font-weight:700; color:var(--text-muted);">共 10 個單元</span>
+    </div>
+    <div class="classic-grid" id="classic-list-s2">
+      <!-- 由 JS 動態注入 -->
+    </div>
+  </div>
+
+  <!-- 第三階段清單 -->
+  <div class="classic-stage-sec">
+    <div class="classic-sec-header">
+      <div class="classic-sec-title" style="color: var(--s3-color);">
+        <span>🌳 第三學習階段（進階社區）</span>
+      </div>
+      <span style="font-weight:700; color:var(--text-muted);">共 10 個單元</span>
+    </div>
+    <div class="classic-grid" id="classic-list-s3">
+      <!-- 由 JS 動態注入 -->
+    </div>
+  </div>
+</section>
+
+<!-- 操作提示 -->
+<div class="island-tip">
+  <span>💡 點擊島上的【單元標籤】可直接開啟教材寶箱（70頁簡報／影音／評量／圖卡／輪盤）</span>
+</div>
+
+<!-- 抽屜式教材寶箱視窗 (選項 A 核心元件) -->
+<div class="modal-overlay" id="treasure-modal" onclick="closeModalOnOverlay(event)">
+  <div class="treasure-box" onclick="event.stopPropagation()">
+    <div class="treasure-header">
+      <div>
+        <div class="unit-meta-badge" id="modal-badge">🌿 第二階段・第一學期 第2單元</div>
+        <h2 class="unit-title-big" id="modal-title">會穿脫鞋襪</h2>
+      </div>
+      <button class="close-btn" onclick="closeTreasureModal()" aria-label="關閉">✕</button>
+    </div>
+
+    <div class="treasure-body">
+      <div class="treasure-actions-label">
+        <span>🎁 選擇學習教材項目（特教友善大字專區）：</span>
+      </div>
+
+      <!-- 五大入口直達按鈕 -->
+      <div class="treasure-btn-grid">
+        <a class="t-btn btn-ppt" id="btn-modal-ppt" href="#" target="_blank">
+          <div class="t-icon-box">📊</div>
+          <div>
+            <span class="t-btn-title">70 頁教學簡報</span>
+            <span class="t-btn-desc">⛶ 全螢幕放映・四階段教學</span>
+          </div>
+        </a>
+
+        <a class="t-btn btn-video" id="btn-modal-video" href="#" target="_blank">
+          <div class="t-icon-box">🎬</div>
+          <div>
+            <span class="t-btn-title">主題教學影片</span>
+            <span class="t-btn-desc">5 支短片清單・真人示範</span>
+          </div>
+        </a>
+
+        <a class="t-btn btn-quiz" id="btn-modal-quiz" href="#" target="_blank">
+          <div class="t-icon-box">🎯</div>
+          <div>
+            <span class="t-btn-title">互動評量遊戲</span>
+            <span class="t-btn-desc">兩選一測驗・計分挑戰</span>
+          </div>
+        </a>
+
+        <a class="t-btn btn-cards" id="btn-modal-cards" href="#" target="_blank">
+          <div class="t-icon-box">🗂️</div>
+          <div>
+            <span class="t-btn-title">認知學習圖卡</span>
+            <span class="t-btn-desc">10 組圖卡・雙面 PDF 下載</span>
+          </div>
+        </a>
+
+        <a class="t-btn btn-roulette" id="btn-modal-roulette" href="#" target="_blank">
+          <div class="t-icon-box">🎡</div>
+          <div>
+            <span class="t-btn-title">幸運大輪盤（課堂互動）</span>
+            <span class="t-btn-desc">語音朗讀・重複與抽過刪除模式</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- 直通獨立站台 -->
+      <a class="full-site-launch" id="btn-modal-site" href="#" target="_blank">
+        <span>🚀 進入此單元完整互動教學網站</span>
+        <span>開啟網站 →</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+// 特需生活管理 30 單元權威真實資料庫
+const LIFE_UNITS = {
+  // === 第一學習階段 ===
+  131: { id: 131, stage: 1, sem: "一上", u: 1, name: "校園生活你我他", repo: "teaching-site-campuslife", url: "https://smallda12.github.io/teaching-site-campuslife/" },
+  132: { id: 132, stage: 1, sem: "一上", u: 2, name: "生活公約", repo: "teaching-site-classrules", url: "https://smallda12.github.io/teaching-site-classrules/" },
+  133: { id: 133, stage: 1, sem: "一上", u: 3, name: "學校的一天", repo: "teaching-site-schoolday", url: "https://smallda12.github.io/teaching-site-schoolday/" },
+  134: { id: 134, stage: 1, sem: "一上", u: 4, name: "學校與家庭", repo: "teaching-site-schoolhome", url: "https://smallda12.github.io/teaching-site-schoolhome/" },
+  135: { id: 135, stage: 1, sem: "一上", u: 5, name: "食物ｅ點通", repo: "teaching-site-foodguide", url: "https://smallda12.github.io/teaching-site-foodguide/" },
+  136: { id: 136, stage: 1, sem: "一下", u: 1, name: "用餐囉", repo: "teaching-site-mealtime", url: "https://smallda12.github.io/teaching-site-mealtime/" },
+  137: { id: 137, stage: 1, sem: "一下", u: 2, name: "穿脫衣物", repo: "teaching-site-dressing", url: "https://smallda12.github.io/teaching-site-dressing/" },
+  138: { id: 138, stage: 1, sem: "一下", u: 3, name: "認識衣物", repo: "teaching-site-clothes", url: "https://smallda12.github.io/teaching-site-clothes/" },
+  139: { id: 139, stage: 1, sem: "一下", u: 4, name: "廁所大不同", repo: "teaching-site-restroom", url: "https://smallda12.github.io/teaching-site-restroom/" },
+  140: { id: 140, stage: 1, sem: "一下", u: 5, name: "如廁能力", repo: "teaching-site-toileting", url: "https://smallda12.github.io/teaching-site-toileting/" },
+
+  // === 第二學習階段 ===
+  229: { id: 229, stage: 2, sem: "二上", u: 1, name: "衣褲鞋襪大解密", repo: "teaching-site-stage2-lifeskill-clothes-shoes-socks", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-clothes-shoes-socks/" },
+  237: { id: 237, stage: 2, sem: "二上", u: 2, name: "會穿脫鞋襪", repo: "teaching-site-stage2-lifeskill-shoe-sock-dressing", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-shoe-sock-dressing/" },
+  238: { id: 238, stage: 2, sem: "二上", u: 3, name: "會穿脫衣褲", repo: "teaching-site-stage2-lifeskill-clothes-dressing", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-clothes-dressing/" },
+  230: { id: 230, stage: 2, sem: "二上", u: 4, name: "服裝儀容糾察隊", repo: "teaching-site-lifeskill-clothes-check", url: "https://smallda12.github.io/teaching-site-lifeskill-clothes-check/" },
+  231: { id: 231, stage: 2, sem: "二上", u: 5, name: "洗洗洗～洗乾淨", repo: "teaching-site-lifeskill-wash-clean", url: "https://smallda12.github.io/teaching-site-lifeskill-wash-clean/" },
+  219: { id: 219, stage: 2, sem: "二下", u: 1, name: "護牙一生", repo: "teaching-site-stage2-lifeskill-teeth", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-teeth/" },
+  223: { id: 223, stage: 2, sem: "二下", u: 2, name: "清潔基本功", repo: "teaching-site-stage2-lifeskill-cleaning", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-cleaning/" },
+  224: { id: 224, stage: 2, sem: "二下", u: 3, name: "我會掃地", repo: "teaching-site-stage2-lifeskill-sweeping", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-sweeping/" },
+  225: { id: 225, stage: 2, sem: "二下", u: 4, name: "垃圾分類", repo: "teaching-site-stage2-lifeskill-garbage-sorting", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-garbage-sorting/" },
+  227: { id: 227, stage: 2, sem: "二下", u: 5, name: "資源回收", repo: "teaching-site-stage2-lifeskill-recycling", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-recycling/" },
+
+  // === 第三學習階段 ===
+  31: { id: 31, stage: 3, sem: "三上", u: 1, name: "危機總動員", repo: "teaching-site-crisis", url: "https://smallda12.github.io/teaching-site-crisis/" },
+  32: { id: 32, stage: 3, sem: "三上", u: 2, name: "警報解除", repo: "teaching-site-alarm", url: "https://smallda12.github.io/teaching-site-alarm/" },
+  36: { id: 36, stage: 3, sem: "三上", u: 3, name: "男生女生~耶！", repo: "teaching-site-respect", url: "https://smallda12.github.io/teaching-site-respect/" },
+  37: { id: 37, stage: 3, sem: "三上", u: 4, name: "自我保護觀", repo: "teaching-site-selfprotect", url: "https://smallda12.github.io/teaching-site-selfprotect/" },
+  39: { id: 39, stage: 3, sem: "三上", u: 5, name: "便利的交通工具", repo: "teaching-site-transport", url: "https://smallda12.github.io/teaching-site-transport/" },
+  82: { id: 82, stage: 3, sem: "三下", u: 1, name: "認識交通標誌與號誌燈", repo: "teaching-site-trafficsign", url: "https://smallda12.github.io/teaching-site-trafficsign/" },
+  78: { id: 78, stage: 3, sem: "三下", u: 2, name: "健康情報站", repo: "teaching-site-healthinfo", url: "https://smallda12.github.io/teaching-site-healthinfo/" },
+  79: { id: 79, stage: 3, sem: "三下", u: 3, name: "疾病防治區", repo: "teaching-site-disease", url: "https://smallda12.github.io/teaching-site-disease/" },
+  80: { id: 80, stage: 3, sem: "三下", u: 4, name: "認識休閒活動", repo: "teaching-site-leisure", url: "https://smallda12.github.io/teaching-site-leisure/" },
+  81: { id: 81, stage: 3, sem: "三下", u: 5, name: "認識社區環境與資源", repo: "teaching-site-community", url: "https://smallda12.github.io/teaching-site-community/" }
+};
+
+// 視圖狀態管理
+let currentViewMode = "island"; // "island" or "classic"
+
+function toggleViewMode() {
+  const islandView = document.getElementById("island-viewport");
+  const classicView = document.getElementById("classic-viewport");
+  const toggleText = document.getElementById("toggle-text");
+  const toggleIcon = document.getElementById("toggle-icon");
+
+  if (currentViewMode === "island") {
+    currentViewMode = "classic";
+    islandView.style.display = "none";
+    classicView.style.display = "block";
+    toggleText.innerText = "切換 3D 島嶼";
+    toggleIcon.innerText = "🗺️";
+    renderClassicView();
+  } else {
+    currentViewMode = "island";
+    islandView.style.display = "flex";
+    classicView.style.display = "none";
+    toggleText.innerText = "切換經典清單";
+    toggleIcon.innerText = "📋";
+  }
+}
+
+// 聚焦階段平滑視角縮放
+function focusStage(stage) {
+  const container = document.getElementById("island-stage");
+  const buttons = document.querySelectorAll(".filter-btn");
+  buttons.forEach(b => b.classList.toggle("active", b.getAttribute("data-stage") === stage));
+
+  if (stage === "all") {
+    container.style.transform = "scale(1) translate(0px, 0px)";
+  } else if (stage === "1") {
+    container.style.transform = "scale(1.22) translate(180px, 140px)";
+  } else if (stage === "2") {
+    container.style.transform = "scale(1.22) translate(-220px, 140px)";
+  } else if (stage === "3") {
+    container.style.transform = "scale(1.22) translate(0px, -180px)";
+  }
+}
+
+// 綁定階段篩選按鈕
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const stage = btn.getAttribute("data-stage");
+    focusStage(stage);
+  });
+});
+
+// 開啟教材寶箱視窗 (選項 A 核心)
+function openTreasureModal(unitId) {
+  const unit = LIFE_UNITS[unitId];
+  if (!unit) return;
+
+  const modal = document.getElementById("treasure-modal");
+  const badge = document.getElementById("modal-badge");
+  const title = document.getElementById("modal-title");
+  const btnPpt = document.getElementById("btn-modal-ppt");
+  const btnVideo = document.getElementById("btn-modal-video");
+  const btnQuiz = document.getElementById("btn-modal-quiz");
+  const btnCards = document.getElementById("btn-modal-cards");
+  const btnRoulette = document.getElementById("btn-modal-roulette");
+  const btnSite = document.getElementById("btn-modal-site");
+
+  // 設置文字與樣式
+  title.innerText = unit.name;
+  const stageSymbol = unit.stage === 1 ? "🌱 第一階段" : unit.stage === 2 ? "🌿 第二階段" : "🌳 第三階段";
+  badge.innerText = `${stageSymbol}・${unit.sem} 第 ${unit.u} 單元`;
+  badge.className = `unit-meta-badge badge-stage-${unit.stage}`;
+
+  // 設置直達連結 (錨點路由對齊各單元標準)
+  btnPpt.href = `${unit.url}#teaching`;
+  btnVideo.href = `${unit.url}#videos`;
+  btnQuiz.href = `${unit.url}#quizzes`;
+  btnCards.href = `${unit.url}#flashcards`;
+  btnRoulette.href = `${unit.url}#teaching`;
+  btnSite.href = unit.url;
+
+  modal.classList.add("open");
+}
+
+function closeTreasureModal() {
+  document.getElementById("treasure-modal").classList.remove("open");
+}
+
+function closeModalOnOverlay(e) {
+  if (e.target.id === "treasure-modal") closeTreasureModal();
+}
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeTreasureModal();
+});
+
+// 渲染經典清單模式（完整 30 單元）
+function renderClassicView() {
+  const s1Grid = document.getElementById("classic-list-s1");
+  const s2Grid = document.getElementById("classic-list-s2");
+  const s3Grid = document.getElementById("classic-list-s3");
+  s1Grid.innerHTML = ""; s2Grid.innerHTML = ""; s3Grid.innerHTML = "";
+
+  Object.values(LIFE_UNITS).forEach(unit => {
+    const card = document.createElement("div");
+    card.className = "classic-card";
+    card.onclick = () => openTreasureModal(unit.id);
+    card.innerHTML = `
+      <div>
+        <div class="classic-card-name">${unit.name}</div>
+        <div class="classic-card-sub">${unit.sem} 第 ${unit.u} 單元</div>
+      </div>
+      <div class="classic-card-action">
+        <span>開啟教材寶箱</span>
+        <span>→</span>
+      </div>
+    `;
+
+    if (unit.stage === 1) s1Grid.appendChild(card);
+    else if (unit.stage === 2) s2Grid.appendChild(card);
+    else if (unit.stage === 3) s3Grid.appendChild(card);
+  });
+}
+</script>
+</body>
+</html>
