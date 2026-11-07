@@ -1396,6 +1396,56 @@ function createBench(x, y, z, rotY = 0) {
   return g;
 }
 
+// 建立跨海連接道路／景觀大橋（含路面、兩側護欄、橋墩與路燈）
+function createRoadBridge(x1, z1, r1, x2, z2, r2, yHeight = 1.95) {
+  const dx = x2 - x1;
+  const dz = z2 - z1;
+  const fullDist = Math.hypot(dx, dz);
+  const ux = dx / fullDist;
+  const uz = dz / fullDist;
+
+  // 從兩島邊緣內縮一點點開始架橋，確保視覺無縫銜接
+  const startX = x1 + ux * (r1 * 0.86);
+  const startZ = z1 + uz * (r1 * 0.86);
+  const endX = x2 - ux * (r2 * 0.86);
+  const endZ = z2 - uz * (r2 * 0.86);
+
+  const midX = (startX + endX) * 0.5;
+  const midZ = (startZ + endZ) * 0.5;
+  const len = Math.max(1.2, Math.hypot(endX - startX, endZ - startZ));
+  const angle = Math.atan2(dz, dx);
+
+  const g = new THREE.Group();
+  g.position.set(midX, 0, midZ);
+  g.rotation.y = -angle;
+
+  // 主路面與兩側木質護欄邊條
+  g.add(box(len, 0.22, 1.35, "#f5ebe0", 0, yHeight - 0.18, 0));
+  g.add(box(len, 0.34, 0.14, "#8d6e63", 0, yHeight - 0.12, -0.68));
+  g.add(box(len, 0.34, 0.14, "#8d6e63", 0, yHeight - 0.12, 0.68));
+
+  // 路面中線石磚點綴與護欄木樁、橋墩
+  const stepCount = Math.max(2, Math.floor(len / 2.6));
+  for (let i = 1; i < stepCount; i++) {
+    const px = -len / 2 + (len / stepCount) * i;
+    // 兩側木樁
+    g.add(box(0.18, 0.55, 0.18, "#6d4c41", px, yHeight - 0.05, -0.68));
+    g.add(box(0.18, 0.55, 0.18, "#6d4c41", px, yHeight - 0.05, 0.68));
+    // 水中橋墩
+    if (i % 2 === 1) {
+      g.add(cyl(0.22, 0.28, yHeight, "#a1887f", px, 0, -0.45, 6));
+      g.add(cyl(0.22, 0.28, yHeight, "#a1887f", px, 0, 0.45, 6));
+    }
+  }
+
+  // 橋中央路燈
+  if (len > 4.5) {
+    g.add(createStreetLamp(0, yHeight, -0.58));
+  }
+
+  return g;
+}
+
 // 多樣化微縮建築生成器（讓 30 個單元建築造型豐富緊湊）
 function createUnitBuilding(x, y, z, styleIdx, roofColor, wallColor = "#ffffff") {
   const g = new THREE.Group();
@@ -1535,58 +1585,69 @@ function buildWorldArchipelagoScene() {
   clearThreeWorld();
 
   // 中央總廣場島
-  const centerHex = createHexPlatform(4.8, 2.3, "#fdfbf7", "#38bdf8", "#8d6e63", 0, 0);
+  const centerR = 4.8;
+  const centerHex = createHexPlatform(centerR, 2.35, "#fdfbf7", "#38bdf8", "#8d6e63", 0, 0);
   worldGroup.add(centerHex.group);
   worldGroup.add(createDomainMonument("book_tower", "#0284c7", "#38bdf8", centerHex.topY));
-  worldGroup.add(createTree(-2.6, centerHex.topY, 1.5, 1.1, 0));
-  worldGroup.add(createTree(2.5, centerHex.topY, -1.4, 1.0, 1));
-  worldGroup.add(createMascot(1.6, centerHex.topY, 1.8, "#0284c7", "#fde047"));
+  worldGroup.add(createTree(-2.8, centerHex.topY, 1.6, 1.1, 0));
+  worldGroup.add(createTree(2.8, centerHex.topY, -1.5, 1.0, 1));
+  worldGroup.add(createMascot(1.8, centerHex.topY, 2.0, "#0284c7", "#fde047"));
 
   add3DPin(
     `<div class="label-pill pill-center"><div class="pin-dot"></div><span class="pin-title">🏫 特教教材共學總廣場</span><span class="pin-badge" style="background:rgba(255,255,255,0.22);color:#fff;">240 站</span></div>`,
-    new THREE.Vector3(0, centerHex.topY + 3.4, 0),
+    new THREE.Vector3(0, centerHex.topY + 3.5, 0),
     "",
     () => resetCamera(),
     true
   );
 
-  // 10 座領域島嶼緊密圍繞（內圈 5 座 ＋ 外嵌圈 5 座，形成緊湊六角群島沙盤）
+  // 10 座領域島嶼大幅拉開空間距離（遍布整個畫面視野，不擠在中央，並以跨海道路橋樑彼此相連）
   const coords = [
-    { x: -6.8, z: -4.2, h: 2.1 },
-    { x: 0.0,  z: -7.8, h: 2.2 },
-    { x: 6.8,  z: -4.2, h: 2.1 },
-    { x: 6.6,  z: 4.0,  h: 2.0 },
-    { x: -6.6, z: 4.0,  h: 2.0 },
-    { x: -12.2, z: 0.0, h: 1.85 },
-    { x: -4.2, z: -12.2, h: 1.9 },
-    { x: 4.4,  z: -12.2, h: 1.9 },
-    { x: 12.2, z: 0.0,  h: 1.85 },
-    { x: 0.0,  z: 8.6,  h: 1.85 }
+    { x: -17.5, z: -9.5,  h: 2.15, r: 4.0, bridgeFrom: -1 }, // 0: 特需生活管理島（內環左前）
+    { x: 0.0,   z: -18.5, h: 2.20, r: 4.0, bridgeFrom: -1 }, // 1: 功能性動作島（內環正北）
+    { x: 17.5,  z: -9.5,  h: 2.15, r: 4.0, bridgeFrom: -1 }, // 2: 語文繪本島（內環右前）
+    { x: 16.5,  z: 9.5,   h: 2.10, r: 4.0, bridgeFrom: -1 }, // 3: 健體活力島（內環右後）
+    { x: -16.5, z: 9.5,   h: 2.10, r: 4.0, bridgeFrom: -1 }, // 4: 數學邏輯島（內環左後）
+    { x: -32.5, z: -1.0,  h: 2.00, r: 3.9, bridgeFrom: 0  }, // 5: 自然探索島（外環極左）
+    { x: -14.5, z: -25.5, h: 2.05, r: 3.9, bridgeFrom: 1  }, // 6: 社會文化島（外環左北）
+    { x: 14.5,  z: -25.5, h: 2.05, r: 3.9, bridgeFrom: 1  }, // 7: 綜合實踐島（外環右北）
+    { x: 32.5,  z: -1.0,  h: 2.00, r: 3.9, bridgeFrom: 2  }, // 8: 藝術人文島（外環極右）
+    { x: 0.0,   z: 20.5,  h: 2.05, r: 3.9, bridgeFrom: 4  }  // 9: 生活啟蒙島（外環正南）
+  ];
+
+  // 額外環狀聯絡道路（讓外環與內環形成四通八達的跨海公路網）
+  const extraLinks = [
+    [4, 5], [2, 7], [0, 6], [3, 8], [3, 9]
   ];
 
   DOMAINS_DATA.forEach((d, idx) => {
     const c = coords[idx];
-    const plat = createHexPlatform(3.6, c.h, d.groundColor, d.trimColor, "#795548", c.x, c.z);
+    const plat = createHexPlatform(c.r, c.h, d.groundColor, d.trimColor, "#795548", c.x, c.z);
     worldGroup.add(plat.group);
 
-    // 島上緊湊建築群（主屋＋副屋＋樹木＋長椅＋吉祥物）
+    // 島內十字石板道路
+    plat.group.add(box(c.r * 1.45, 0.06, 0.72, "#f5ebe0", 0, plat.topY, 0));
+    plat.group.add(box(0.72, 0.06, c.r * 1.45, "#f5ebe0", 0, plat.topY, 0));
+
+    // 島上精緻聚落（主地標＋兩棟小屋＋樹木＋吉祥物＋街燈，彼此保持清晰間距）
     const mainBld = createDomainMonument(d.landmarkType, d.color, d.trimColor, plat.topY);
-    mainBld.scale.set(0.78, 0.78, 0.78);
+    mainBld.scale.set(0.76, 0.76, 0.76);
     plat.group.add(mainBld);
 
-    plat.group.add(createUnitBuilding(-1.35, plat.topY, 0.9, idx, d.color));
-    plat.group.add(createUnitBuilding(1.35, plat.topY, 0.85, idx + 1, d.trimColor));
-    plat.group.add(createTree(-1.8, plat.topY, -1.2, 0.95, idx));
-    plat.group.add(createTree(1.75, plat.topY, -1.1, 0.85, idx + 1));
-    plat.group.add(createMascot(0.0, plat.topY, 1.95, d.color, "#ffd54f"));
-    plat.group.add(createStreetLamp(-0.9, plat.topY, 1.85));
+    plat.group.add(createUnitBuilding(-1.85, plat.topY, 1.35, idx, d.color));
+    plat.group.add(createUnitBuilding(1.85, plat.topY, 1.35, idx + 1, d.trimColor));
+    plat.group.add(createTree(-2.25, plat.topY, -1.55, 0.95, idx));
+    plat.group.add(createTree(2.25, plat.topY, -1.5, 0.9, idx + 1));
+    plat.group.add(createMascot(0.0, plat.topY, 2.45, d.color, "#ffd54f"));
+    plat.group.add(createStreetLamp(-1.25, plat.topY, 2.3));
 
-    // 連接步道木橋
-    const angle = Math.atan2(c.z, c.x);
-    const dist = Math.hypot(c.x, c.z);
-    const bridge = box(dist * 0.45, 0.2, 1.0, "#bcaaa4", c.x * 0.5, 1.65, c.z * 0.5);
-    bridge.rotation.y = -angle;
-    worldGroup.add(bridge);
+    // 主跨海連接道路橋樑（內環連中央島，外環連內環島）
+    if (c.bridgeFrom === -1) {
+      worldGroup.add(createRoadBridge(0, 0, centerR, c.x, c.z, c.r, 1.95));
+    } else {
+      const p = coords[c.bridgeFrom];
+      worldGroup.add(createRoadBridge(p.x, p.z, p.r, c.x, c.z, c.r, 1.9));
+    }
 
     // 領域島浮動膠囊標籤
     add3DPin(
@@ -1595,20 +1656,25 @@ function buildWorldArchipelagoScene() {
         <span class="pin-title">${d.islandName}</span>
         <span class="pin-badge">${d.ownCount}站</span>
       </div>`,
-      new THREE.Vector3(c.x, plat.topY + 2.8, c.z),
+      new THREE.Vector3(c.x, plat.topY + 2.9, c.z),
       "",
       () => enterDomainIsland(d.id),
       true
     );
   });
 
+  extraLinks.forEach(([iA, iB]) => {
+    const a = coords[iA], b = coords[iB];
+    worldGroup.add(createRoadBridge(a.x, a.z, a.r, b.x, b.z, b.r, 1.88));
+  });
+
   // 海面小帆船點綴
-  [[-15, 7], [15, 6.5], [-13, -9]].forEach(([bx, bz], i) => {
+  [[-26, 15], [26, 14.5], [-25, -18], [25, -18], [-8, 10], [9, -9]].forEach(([bx, bz], i) => {
     const boat = new THREE.Group();
     boat.position.set(bx, 0.1, bz);
     boat.rotation.y = i * 1.1;
-    boat.add(box(1.3, 0.35, 0.75, "#ef4444", 0, 0, 0));
-    boat.add(cone(0.48, 1.15, "#ffffff", 0, 0.35, 0, 3));
+    boat.add(box(1.4, 0.35, 0.8, "#ef4444", 0, 0, 0));
+    boat.add(cone(0.52, 1.2, "#ffffff", 0, 0.35, 0, 3));
     worldGroup.add(boat);
   });
 }
@@ -1621,28 +1687,31 @@ function buildDomainIslandScene(domainId) {
   const d = DOMAIN_MAP[domainId];
   if (!d) return;
 
-  // 1. 中央領域主題廣場 (緊密核心六角地塊)
-  const centerHex = createHexPlatform(4.6, 2.2, "#fdfbf7", d.trimColor, "#795548", 0, 0);
+  // 1. 中央領域主題廣場 (獨立中央島，與三階段島嶼拉開寬闊海面距離並以跨海道路連接)
+  const centerR = 4.4;
+  const centerHex = createHexPlatform(centerR, 2.25, "#fdfbf7", d.trimColor, "#795548", 0, 0);
   worldGroup.add(centerHex.group);
+  centerHex.group.add(box(centerR * 1.5, 0.06, 0.8, "#f5ebe0", 0, centerHex.topY, 0));
+  centerHex.group.add(box(0.8, 0.06, centerR * 1.5, "#f5ebe0", 0, centerHex.topY, 0));
   worldGroup.add(createDomainMonument(d.landmarkType, d.color, d.trimColor, centerHex.topY));
-  worldGroup.add(createBench(-1.7, centerHex.topY, 1.5, 0.5));
-  worldGroup.add(createBench(1.7, centerHex.topY, 1.5, -0.5));
-  worldGroup.add(createStreetLamp(-2.1, centerHex.topY, 0.2));
-  worldGroup.add(createStreetLamp(2.1, centerHex.topY, 0.2));
-  worldGroup.add(createMascot(0, centerHex.topY, 2.2, d.color, "#fde047"));
+  worldGroup.add(createBench(-1.8, centerHex.topY, 1.65, 0.5));
+  worldGroup.add(createBench(1.8, centerHex.topY, 1.65, -0.5));
+  worldGroup.add(createStreetLamp(-2.2, centerHex.topY, 0.25));
+  worldGroup.add(createStreetLamp(2.2, centerHex.topY, 0.25));
+  worldGroup.add(createMascot(0, centerHex.topY, 2.4, d.color, "#fde047"));
 
   add3DPin(
     `<div class="label-pill pill-center">
       <span>${d.icon}</span>
       <span class="pin-title">${d.islandName}共學廣場</span>
     </div>`,
-    new THREE.Vector3(0, centerHex.topY + 3.2, 0),
+    new THREE.Vector3(0, centerHex.topY + 3.3, 0),
     "",
     () => selectStage("all"),
     true
   );
 
-  // 三個學習階段的雙六角緊湊聚落配置
+  // 三個學習階段分島配置（大幅拉開島嶼間距，藉由跨海景觀道路與橋樑連接，畫面清晰不擁擠）
   const stageConfigs = [
     {
       stage: "1",
@@ -1651,9 +1720,9 @@ function buildDomainIslandScene(domainId) {
       trimColor: "#43a047",
       roofA: "#ef5350",
       roofB: "#66bb6a",
-      hexA: { x: -5.8, z: -3.6, r: 4.3, h: 2.35 },
-      hexB: { x: -9.8, z: -1.8, r: 3.9, h: 2.55 },
-      hdrPos: new THREE.Vector3(-7.6, 5.3, -4.6),
+      hexA: { x: -16.5, z: -7.5, r: 4.5, h: 2.30 },
+      hexB: { x: -30.5, z: -2.0, r: 4.5, h: 2.45 },
+      hdrPos: new THREE.Vector3(-23.5, 5.8, -6.2),
       hdrClass: "pill-s1-hdr"
     },
     {
@@ -1663,9 +1732,9 @@ function buildDomainIslandScene(domainId) {
       trimColor: "#1e88e5",
       roofA: "#1e88e5",
       roofB: "#ffa726",
-      hexA: { x: 5.8, z: -3.6, r: 4.3, h: 2.35 },
-      hexB: { x: 9.8, z: -1.8, r: 3.9, h: 2.55 },
-      hdrPos: new THREE.Vector3(7.6, 5.3, -4.6),
+      hexA: { x: 16.5, z: -7.5, r: 4.5, h: 2.30 },
+      hexB: { x: 30.5, z: -2.0, r: 4.5, h: 2.45 },
+      hdrPos: new THREE.Vector3(23.5, 5.8, -6.2),
       hdrClass: "pill-s2-hdr"
     },
     {
@@ -1675,20 +1744,20 @@ function buildDomainIslandScene(domainId) {
       trimColor: "#fb8c00",
       roofA: "#ab47bc",
       roofB: "#fb8c00",
-      hexA: { x: -2.5, z: 5.8, r: 4.3, h: 1.95 },
-      hexB: { x: 2.5,  z: 5.8, r: 4.3, h: 2.05 },
-      hdrPos: new THREE.Vector3(0, 4.9, 8.8),
+      hexA: { x: -10.5, z: 16.5, r: 4.5, h: 2.10 },
+      hexB: { x: 10.5,  z: 16.5, r: 4.5, h: 2.20 },
+      hdrPos: new THREE.Vector3(0, 5.5, 19.5),
       hdrClass: "pill-s3-hdr"
     }
   ];
 
-  // 在每個六角地塊上的 5 個緊湊槽位（讓 5 棟單元小屋高低錯落擠在一起）
+  // 每個六角島上的 5 個單元建築位置（隨島嶼放大與道路鋪設，拉開建築彼此間距）
   const localSlots = [
-    { dx: -1.35, dz: -1.1 },
-    { dx: 1.35,  dz: -1.1 },
-    { dx: 0.0,   dz: 0.15 },
-    { dx: -1.45, dz: 1.25 },
-    { dx: 1.45,  dz: 1.25 }
+    { dx: -2.10, dz: -1.75 },
+    { dx: 2.10,  dz: -1.75 },
+    { dx: 0.0,   dz: 0.05 },
+    { dx: -2.10, dz: 1.85 },
+    { dx: 2.10,  dz: 1.85 }
   ];
 
   stageConfigs.forEach(sc => {
@@ -1696,6 +1765,23 @@ function buildDomainIslandScene(domainId) {
     const pA = createHexPlatform(sc.hexA.r, sc.hexA.h, sc.topColor, sc.trimColor, "#795548", sc.hexA.x, sc.hexA.z);
     const pB = createHexPlatform(sc.hexB.r, sc.hexB.h, sc.topColor, sc.trimColor, "#6d4c41", sc.hexB.x, sc.hexB.z);
     worldGroup.add(pA.group, pB.group);
+
+    // 島內十字石板路（連接五棟單元小屋與跨海大橋）
+    pA.group.add(box(sc.hexA.r * 1.55, 0.06, 0.72, "#f5ebe0", 0, pA.topY, 0));
+    pA.group.add(box(0.72, 0.06, sc.hexA.r * 1.55, "#f5ebe0", 0, pA.topY, 0));
+    pB.group.add(box(sc.hexB.r * 1.55, 0.06, 0.72, "#f5ebe0", 0, pB.topY, 0));
+    pB.group.add(box(0.72, 0.06, sc.hexB.r * 1.55, "#f5ebe0", 0, pB.topY, 0));
+
+    // 1. 連接中央廣場島 (0,0) 至該階段上學期島 (hexA) 的跨海景觀道路
+    worldGroup.add(createRoadBridge(0, 0, centerR, sc.hexA.x, sc.hexA.z, sc.hexA.r, 1.98));
+
+    // 若為第三階段，也從中央廣場島連接一條對稱跨海道路至 hexB
+    if (sc.stage === "3") {
+      worldGroup.add(createRoadBridge(0, 0, centerR, sc.hexB.x, sc.hexB.z, sc.hexB.r, 1.98));
+    }
+
+    // 2. 連接上學期島 (hexA) 與下學期島 (hexB) 的跨海景觀道路
+    worldGroup.add(createRoadBridge(sc.hexA.x, sc.hexA.z, sc.hexA.r, sc.hexB.x, sc.hexB.z, sc.hexB.r, 2.05));
 
     // 階段聚落主標題膠囊
     add3DPin(
@@ -1720,7 +1806,7 @@ function buildDomainIslandScene(domainId) {
 
       const roofColor = isSecondHalf ? sc.roofB : sc.roofA;
       const bld = createUnitBuilding(wx, topY, wz, idx, roofColor);
-      bld.scale.set(0.76, 0.76, 0.76);
+      bld.scale.set(0.74, 0.74, 0.74);
       worldGroup.add(bld);
 
       // 全島總覽時預設顯示每學期前 2 個代表單元標籤；點進該階段或開啟「全部標籤」時 10 個全開
@@ -1731,27 +1817,29 @@ function buildDomainIslandScene(domainId) {
           <span class="pin-title">${u.name}</span>
           <span class="pin-badge">${u.sem}U${u.u}</span>
         </div>`,
-        new THREE.Vector3(wx, topY + 1.85, wz),
+        new THREE.Vector3(wx, topY + 1.95, wz),
         `stage-${sc.stage} unit-pin`,
         () => openUnitModal(u.uid),
         isFeatured
       );
     });
 
-    // 聚落裝飾（小樹、街燈、小吉祥物、木椅緊密穿插）
-    worldGroup.add(createTree(sc.hexA.x - 2.4, pA.topY, sc.hexA.z, 0.9, 0));
-    worldGroup.add(createTree(sc.hexB.x + 2.3, pB.topY, sc.hexB.z - 0.5, 0.95, 1));
-    worldGroup.add(createMascot(sc.hexA.x + 0.2, pA.topY, sc.hexA.z + 2.1, sc.trimColor, "#ffd54f"));
-    worldGroup.add(createStreetLamp(sc.hexB.x, pB.topY, sc.hexB.z - 2.1));
+    // 聚落裝飾（小樹、街燈、小吉祥物）
+    worldGroup.add(createTree(sc.hexA.x - 3.1, pA.topY, sc.hexA.z, 0.9, 0));
+    worldGroup.add(createTree(sc.hexB.x + 3.1, pB.topY, sc.hexB.z - 0.5, 0.95, 1));
+    worldGroup.add(createMascot(sc.hexA.x, pA.topY, sc.hexA.z + 2.8, sc.trimColor, "#ffd54f"));
+    worldGroup.add(createStreetLamp(sc.hexB.x, pB.topY, sc.hexB.z - 2.8));
   });
 
   // 海面玩具紅帆船
-  const boat = new THREE.Group();
-  boat.position.set(-12.5, 0.1, 4.2);
-  boat.rotation.y = -0.4;
-  boat.add(box(1.3, 0.35, 0.75, "#e53935", 0, 0, 0));
-  boat.add(cone(0.5, 1.15, "#ffffff", 0, 0.35, 0, 3));
-  worldGroup.add(boat);
+  [[-22, 10], [22, 10], [0, -15]].forEach(([bx, bz], i) => {
+    const boat = new THREE.Group();
+    boat.position.set(bx, 0.1, bz);
+    boat.rotation.y = -0.4 + i * 0.9;
+    boat.add(box(1.4, 0.35, 0.8, "#e53935", 0, 0, 0));
+    boat.add(cone(0.52, 1.2, "#ffffff", 0, 0.35, 0, 3));
+    worldGroup.add(boat);
+  });
 }
 
 // ==========================================
@@ -1799,9 +1887,10 @@ function enterWorldView(pushHash = true) {
 
   renderDomainBar();
   buildWorldArchipelagoScene();
-  targetLook.set(0, 0, 0);
-  spherical.radius = 42;
-  spherical.phi = 1.0;
+  targetLook.set(0, 0, -2.5);
+  spherical.radius = 56;
+  spherical.theta = 0.08;
+  spherical.phi = 0.96;
 
   if (displayView === "list") renderListView();
 }
@@ -1846,21 +1935,25 @@ function selectStage(stage) {
   });
 
   if (stage === "all") {
-    targetLook.set(0, 0, 0);
-    spherical.radius = 36;
-    spherical.phi = 1.02;
+    targetLook.set(0, 0, 2.0);
+    spherical.radius = 50;
+    spherical.theta = 0.0;
+    spherical.phi = 0.98;
   } else if (stage === "1") {
-    targetLook.set(-7.6, 2.2, -2.8);
-    spherical.radius = 21;
-    spherical.theta = 0.85;
+    targetLook.set(-23.0, 2.0, -4.8);
+    spherical.radius = 27;
+    spherical.theta = 0.48;
+    spherical.phi = 0.96;
   } else if (stage === "2") {
-    targetLook.set(7.6, 2.2, -2.8);
-    spherical.radius = 21;
-    spherical.theta = -0.85;
+    targetLook.set(23.0, 2.0, -4.8);
+    spherical.radius = 27;
+    spherical.theta = -0.48;
+    spherical.phi = 0.96;
   } else if (stage === "3") {
-    targetLook.set(0, 1.9, 5.8);
-    spherical.radius = 21;
-    spherical.theta = 0.15;
+    targetLook.set(0, 2.0, 16.5);
+    spherical.radius = 27;
+    spherical.theta = 0.05;
+    spherical.phi = 0.96;
   }
 
   renderQuickDock();
@@ -2083,13 +2176,13 @@ function initThreeEngine() {
   scene.add(hemiLight);
 
   sunLight = new THREE.DirectionalLight(0xfffbeb, 0.92);
-  sunLight.position.set(26, 42, 24);
+  sunLight.position.set(34, 55, 32);
   sunLight.castShadow = true;
   sunLight.shadow.mapSize.width = 2048;
   sunLight.shadow.mapSize.height = 2048;
   sunLight.shadow.camera.near = 10;
-  sunLight.shadow.camera.far = 95;
-  const d = 24;
+  sunLight.shadow.camera.far = 150;
+  const d = 46;
   sunLight.shadow.camera.left = -d;
   sunLight.shadow.camera.right = d;
   sunLight.shadow.camera.top = d;
@@ -2098,12 +2191,12 @@ function initThreeEngine() {
   scene.add(sunLight);
 
   backLight = new THREE.DirectionalLight(0xbae6fd, 0.32);
-  backLight.position.set(-20, 18, -18);
+  backLight.position.set(-28, 22, -24);
   scene.add(backLight);
 
   // 海平面
   seaMesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(220, 220, 1, 1),
+    new THREE.PlaneGeometry(360, 360, 1, 1),
     new THREE.MeshLambertMaterial({ color: 0xbae6fd, transparent: true, opacity: 0.55 })
   );
   seaMesh.rotation.x = -Math.PI / 2;
@@ -2111,9 +2204,12 @@ function initThreeEngine() {
   seaMesh.receiveShadow = true;
   scene.add(seaMesh);
 
-  // 滑鼠與觸控事件
+  // 滑鼠與觸控事件（左鍵旋轉視角、右鍵或按住 Shift 拖曳平移畫面、滾輪縮放）
+  let isPanning = false;
+  stageEl.addEventListener("contextmenu", e => e.preventDefault());
   stageEl.addEventListener("pointerdown", e => {
     isDragging = true;
+    isPanning = (e.button === 2 || e.shiftKey);
     dragMoved = false;
     autoTour = false;
     document.getElementById("btn-tour").classList.remove("active");
@@ -2125,12 +2221,20 @@ function initThreeEngine() {
     const dy = e.clientY - prevPointer.y;
     if (Math.hypot(dx, dy) > 4) dragMoved = true;
     prevPointer = { x: e.clientX, y: e.clientY };
-    spherical.theta -= dx * 0.0065;
-    spherical.phi = Math.max(0.32, Math.min(1.38, spherical.phi - dy * 0.0065));
+    if (isPanning || e.shiftKey) {
+      const panSpeed = spherical.radius * 0.0014;
+      const cosT = Math.cos(spherical.theta);
+      const sinT = Math.sin(spherical.theta);
+      targetLook.x -= (dx * cosT - dy * sinT) * panSpeed;
+      targetLook.z -= (-dx * sinT - dy * cosT) * panSpeed;
+    } else {
+      spherical.theta -= dx * 0.0065;
+      spherical.phi = Math.max(0.32, Math.min(1.38, spherical.phi - dy * 0.0065));
+    }
   });
-  window.addEventListener("pointerup", () => { isDragging = false; });
+  window.addEventListener("pointerup", () => { isDragging = false; isPanning = false; });
   stageEl.addEventListener("wheel", e => {
-    spherical.radius = Math.max(15, Math.min(68, spherical.radius + e.deltaY * 0.028));
+    spherical.radius = Math.max(14, Math.min(92, spherical.radius + e.deltaY * 0.032));
   }, { passive: true });
   window.addEventListener("resize", onResize);
 
@@ -2167,10 +2271,10 @@ function onResize() {
 
 function resetCamera() {
   if (currentMode === "world") {
-    targetLook.set(0, 0, 0);
-    spherical.radius = 42;
-    spherical.theta = 0.68;
-    spherical.phi = 1.0;
+    targetLook.set(0, 0, -2.5);
+    spherical.radius = 56;
+    spherical.theta = 0.08;
+    spherical.phi = 0.96;
   } else {
     selectStage("all");
   }
