@@ -3,19 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>特需生活管理島 3D 立體微縮探索版 ｜ 高雄特教國小部</title>
+<title>高雄特殊教育學校國小部 115 學年度教材｜3D 領域群島與三階段導覽</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🏝️</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
-<!-- Three.js r128 CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
 <style>
 :root {
-  --bg-color: #f5f0e6;
-  --text-main: #2d3748;
-  --text-muted: #718096;
+  --bg-sea: #e6f2f5;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
   --white: #ffffff;
   --s1-color: #2e7d32;
   --s1-light: #e8f5e9;
@@ -23,16 +21,15 @@
   --s2-light: #e3f2fd;
   --s3-color: #e65100;
   --s3-light: #fff3e0;
-  --accent-gold: #fbc02d;
-  --shadow-soft: 0 12px 32px rgba(45, 55, 72, 0.12);
-  --shadow-card: 0 20px 40px rgba(0, 0, 0, 0.22);
+  --shadow-soft: 0 10px 28px rgba(15, 23, 42, 0.12);
+  --shadow-card: 0 22px 50px rgba(15, 23, 42, 0.28);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
 body {
   font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-  background: var(--bg-color);
+  background: var(--bg-sea);
   color: var(--text-main);
   overflow: hidden;
   width: 100vw;
@@ -40,129 +37,272 @@ body {
   user-select: none;
 }
 
-/* 頂部導覽列 */
+/* ── 第一列：頂部全域導覽列 ── */
 header.topbar {
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: 68px;
-  background: rgba(255, 255, 255, 0.88);
+  height: 64px;
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(14px);
-  border-bottom: 2px solid rgba(226, 232, 240, 0.8);
+  border-bottom: 2px solid rgba(203, 213, 225, 0.8);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  z-index: 100;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-}
-
-.brand {
-  display: flex;
-  align-items: center;
+  padding: 0 18px;
+  z-index: 200;
   gap: 12px;
-  text-decoration: none;
-  color: inherit;
-}
-.brand-icon {
-  font-size: 32px;
-  line-height: 1;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
-}
-.brand-text h1 {
-  font-size: 21px;
-  font-weight: 900;
-  color: #1a365d;
-  letter-spacing: 0.5px;
-}
-.brand-text p {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-muted);
 }
 
-/* 階段聚焦鈕 */
-.stage-tabs {
-  display: flex;
-  gap: 6px;
-  background: #edf2f7;
-  padding: 5px;
-  border-radius: 30px;
-}
-.tab-btn {
-  border: none;
-  background: transparent;
-  padding: 7px 16px;
-  border-radius: 20px;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.tab-btn:hover { color: var(--text-main); }
-.tab-btn.active {
-  background: var(--white);
-  color: var(--text-main);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-}
-.tab-btn.active[data-stage="1"] { color: var(--s1-color); border: 2px solid var(--s1-color); }
-.tab-btn.active[data-stage="2"] { color: var(--s2-color); border: 2px solid var(--s2-color); }
-.tab-btn.active[data-stage="3"] { color: var(--s3-color); border: 2px solid var(--s3-color); }
-
-/* 右側功能控制按鈕 */
-.top-controls {
+.brand-group {
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
 }
 
-.tod-btn {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: 2px solid #e2e8f0;
-  background: var(--white);
-  font-size: 20px;
-  cursor: pointer;
-  display: flex;
+.back-world-btn {
+  display: none;
   align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-}
-.tod-btn:hover { transform: scale(1.08); border-color: #cbd5e0; }
-
-.toggle-mode-btn {
-  background: #f0fdf4;
-  border: 2px solid #86efac;
-  color: #166534;
+  gap: 6px;
+  background: #0284c7;
+  color: #fff;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 20px;
   font-family: inherit;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
-  padding: 8px 18px;
-  border-radius: 24px;
   cursor: pointer;
+  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.28);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.back-world-btn:hover { background: #0369a1; transform: translateY(-1px); }
+
+.brand-logo {
+  font-size: 30px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12));
+}
+.brand-titles h1 {
+  font-size: 19px;
+  font-weight: 900;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.brand-titles p {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* 階段切換膠囊（進入領域島時顯示） */
+.stage-switcher {
+  display: none;
+  align-items: center;
+  gap: 5px;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 28px;
+  border: 1px solid #cbd5e1;
+}
+.stage-btn {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.stage-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.6); }
+.stage-btn.active {
+  background: var(--white);
+  color: var(--text-main);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.stage-btn.active[data-stage="1"] { color: var(--s1-color); outline: 2px solid var(--s1-color); }
+.stage-btn.active[data-stage="2"] { color: var(--s2-color); outline: 2px solid var(--s2-color); }
+.stage-btn.active[data-stage="3"] { color: var(--s3-color); outline: 2px solid var(--s3-color); }
+
+/* 右側工具群 */
+.top-right-tools {
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 2px 8px rgba(22, 101, 52, 0.12);
-  transition: all 0.2s;
-}
-.toggle-mode-btn:hover {
-  background: #166534;
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(22, 101, 52, 0.22);
+  flex-shrink: 0;
 }
 
-/* 3D 舞台容器 (IsleForge 式三度空間畫布) */
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.search-input {
+  width: 170px;
+  padding: 7px 12px 7px 32px;
+  border-radius: 20px;
+  border: 2px solid #cbd5e1;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  background: #f8fafc;
+  color: var(--text-main);
+  transition: all 0.2s;
+}
+.search-input:focus {
+  outline: none;
+  border-color: #0284c7;
+  background: #fff;
+  width: 220px;
+}
+.search-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.search-dropdown {
+  position: absolute;
+  top: 44px;
+  right: 0;
+  width: 340px;
+  max-height: 420px;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  border: 2px solid #cbd5e1;
+  display: none;
+  z-index: 500;
+  padding: 8px;
+}
+.search-dropdown.open { display: block; }
+.search-item {
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.search-item:hover { background: #f0f9ff; }
+.search-item-title { font-size: 15px; font-weight: 800; color: var(--text-main); }
+.search-item-meta { font-size: 12px; font-weight: 700; color: var(--text-muted); }
+
+.icon-pill-btn {
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 20px;
+  border: 2px solid #cbd5e1;
+  background: var(--white);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-main);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.icon-pill-btn:hover {
+  border-color: #0284c7;
+  color: #0284c7;
+  transform: translateY(-1px);
+}
+.icon-pill-btn.primary-toggle {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #166534;
+}
+.icon-pill-btn.primary-toggle:hover {
+  background: #166534;
+  color: #fff;
+}
+.icon-pill-btn.classic-link {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #92400e;
+}
+.icon-pill-btn.classic-link:hover {
+  background: #b45309;
+  color: #fff;
+}
+
+/* ── 第二列：領域島嶼快速切換列 ── */
+nav.domain-bar {
+  position: fixed;
+  top: 64px; left: 0; right: 0;
+  height: 50px;
+  background: rgba(248, 250, 252, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 18px;
+  overflow-x: auto;
+  z-index: 190;
+  scrollbar-width: none;
+}
+nav.domain-bar::-webkit-scrollbar { display: none; }
+
+.domain-chip {
+  border: 2px solid transparent;
+  background: var(--white);
+  color: var(--text-main);
+  padding: 5px 13px;
+  border-radius: 18px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: all 0.18s;
+  flex-shrink: 0;
+}
+.domain-chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.domain-chip.active {
+  background: #0f172a;
+  color: #fff;
+  border-color: #38bdf8;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.22);
+}
+.domain-chip .chip-count {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.07);
+}
+.domain-chip.active .chip-count {
+  background: rgba(255,255,255,0.22);
+  color: #fff;
+}
+
+/* ── 3D 沙盤主視口 ── */
 #stage-3d {
   position: absolute;
-  top: 68px; left: 0; right: 0; bottom: 0;
+  top: 114px; left: 0; right: 0; bottom: 0;
   overflow: hidden;
   cursor: grab;
 }
@@ -174,13 +314,13 @@ canvas#canvas-3d {
   display: block;
 }
 
-/* 3D 浮動標籤圖層 (追蹤 3D 座標，如同 IsleForge) */
+/* 3D 空間投影膠囊標籤層 */
 #labels-layer {
   position: absolute;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
-  z-index: 10;
+  z-index: 20;
 }
 
 .label-pin {
@@ -188,25 +328,24 @@ canvas#canvas-3d {
   pointer-events: auto;
   transform: translate(-50%, -100%);
   cursor: pointer;
-  transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s;
   white-space: nowrap;
 }
-.label-pin:hover, .label-pin.focused {
-  transform: translate(-50%, -115%) scale(1.12);
-  z-index: 50;
+.label-pin:hover {
+  transform: translate(-50%, -114%) scale(1.12);
+  z-index: 80 !important;
 }
 
 .label-pill {
   background: rgba(255, 255, 255, 0.96);
-  padding: 8px 16px;
-  border-radius: 30px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(0, 0, 0, 0.08);
-  border: 2px solid rgba(255, 255, 255, 0.95);
+  padding: 7px 14px;
+  border-radius: 26px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.16), 0 2px 5px rgba(15, 23, 42, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.98);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   position: relative;
-  transition: all 0.2s;
 }
 .label-pill::after {
   content: "";
@@ -217,7 +356,6 @@ canvas#canvas-3d {
   border-width: 7px 6px 0 6px;
   border-style: solid;
   border-color: rgba(255, 255, 255, 0.96) transparent transparent transparent;
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
 }
 
 .pin-dot {
@@ -226,1104 +364,1655 @@ canvas#canvas-3d {
   border-radius: 50%;
   flex-shrink: 0;
 }
-.stage-1 .pin-dot { background: var(--s1-color); box-shadow: 0 0 0 3px rgba(46,125,50,0.25); }
-.stage-2 .pin-dot { background: var(--s2-color); box-shadow: 0 0 0 3px rgba(21,101,192,0.25); }
-.stage-3 .pin-dot { background: var(--s3-color); box-shadow: 0 0 0 3px rgba(230,81,0,0.25); }
+.stage-1 .pin-dot { background: var(--s1-color); box-shadow: 0 0 0 3px rgba(46,125,50,0.22); }
+.stage-2 .pin-dot { background: var(--s2-color); box-shadow: 0 0 0 3px rgba(21,101,192,0.22); }
+.stage-3 .pin-dot { background: var(--s3-color); box-shadow: 0 0 0 3px rgba(230,81,0,0.22); }
 
 .pin-title {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
   color: var(--text-main);
-  letter-spacing: 0.3px;
 }
 .pin-badge {
   font-size: 11px;
   font-weight: 700;
   color: var(--text-muted);
   background: #f1f5f9;
-  padding: 2px 6px;
-  border-radius: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
 }
 
-/* 中央共學廣場特殊標籤 */
+/* 中央核心與聚落大標籤 */
 .pill-center {
   background: linear-gradient(135deg, #0284c7, #0369a1);
   border: 2px solid #7dd3fc;
+  padding: 9px 18px;
   box-shadow: 0 10px 26px rgba(2, 132, 199, 0.35);
 }
-.pill-center .pin-title { color: #ffffff; }
-.pill-center .pin-dot { background: #facc15; box-shadow: 0 0 0 3px rgba(250,204,21,0.3); }
+.pill-center .pin-title { color: #fff; font-size: 16px; }
+.pill-center .pin-dot { background: #fde047; box-shadow: 0 0 0 3px rgba(253,224,71,0.35); }
 .pill-center::after { border-color: #0369a1 transparent transparent transparent; }
 
-/* 視角與運鏡控制鈕 (右下角) */
-.stage-actions {
+.pill-stage-header {
+  padding: 7px 16px;
+  color: #fff;
+  border-width: 2px;
+}
+.pill-stage-header .pin-title { color: #fff; font-size: 15px; }
+.pill-stage-header .pin-badge { background: rgba(255,255,255,0.24); color: #fff; }
+.pill-s1-hdr { background: var(--s1-color); border-color: #a5d6a7; }
+.pill-s1-hdr::after { border-color: var(--s1-color) transparent transparent transparent; }
+.pill-s2-hdr { background: var(--s2-color); border-color: #90caf9; }
+.pill-s2-hdr::after { border-color: var(--s2-color) transparent transparent transparent; }
+.pill-s3-hdr { background: var(--s3-color); border-color: #ffcc80; }
+.pill-s3-hdr::after { border-color: var(--s3-color) transparent transparent transparent; }
+
+/* 底部單元快速導覽船塢 (Quick Unit Dock - 領域島內顯示全部 30 單元) */
+.unit-quick-dock {
   position: absolute;
-  bottom: 24px;
-  right: 24px;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(94vw, 1180px);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  border: 2px solid #cbd5e1;
+  border-radius: 22px;
+  padding: 10px 16px;
+  box-shadow: var(--shadow-soft);
+  z-index: 40;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+.unit-quick-dock.visible { display: flex; }
+
+.dock-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+.dock-pills-scroll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.dock-unit-btn {
+  border: 2px solid #e2e8f0;
+  background: #f8fafc;
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.16s;
+}
+.dock-unit-btn:hover {
+  transform: translateY(-2px);
+  border-color: #0284c7;
+  background: #f0f9ff;
+}
+.dock-unit-btn.s1 { border-left: 5px solid var(--s1-color); }
+.dock-unit-btn.s2 { border-left: 5px solid var(--s2-color); }
+.dock-unit-btn.s3 { border-left: 5px solid var(--s3-color); }
+
+/* 右下角 3D 鏡頭控制按鈕 */
+.cam-controls {
+  position: absolute;
+  right: 20px;
+  bottom: 115px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  z-index: 30;
+  z-index: 45;
 }
-.action-round-btn {
-  width: 50px;
-  height: 50px;
+.cam-btn {
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  background: var(--white);
-  border: 2px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #cbd5e1;
   box-shadow: var(--shadow-soft);
-  font-size: 22px;
+  font-size: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
-  color: var(--text-main);
 }
-.action-round-btn:hover {
-  transform: scale(1.1);
-  border-color: #3b82f6;
-  color: #3b82f6;
+.cam-btn:hover, .cam-btn.active {
+  background: #0284c7;
+  color: #fff;
+  border-color: #0284c7;
+  transform: scale(1.08);
 }
 
-/* 提示標籤 (左下角) */
-.hud-hint {
+/* 左上角島嶼資訊橫幅 */
+.island-info-banner {
   position: absolute;
-  bottom: 24px;
-  left: 24px;
+  top: 16px;
+  left: 20px;
   background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(8px);
-  padding: 10px 18px;
-  border-radius: 20px;
-  border: 2px solid #e2e8f0;
-  font-size: 14px;
+  backdrop-filter: blur(10px);
+  border: 2px solid #cbd5e1;
+  border-radius: 18px;
+  padding: 12px 18px;
+  box-shadow: var(--shadow-soft);
+  z-index: 35;
+  max-width: 420px;
+  pointer-events: auto;
+}
+.banner-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.banner-desc {
+  font-size: 13px;
   font-weight: 700;
   color: var(--text-muted);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  pointer-events: none;
-  z-index: 30;
+  margin-top: 4px;
+}
+.banner-note {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #b45309;
+  background: #fef3c7;
+  padding: 3px 10px;
+  border-radius: 10px;
+  display: none;
 }
 
-/* 經典清單視圖 (可隨時切換退回) */
-#classic-view {
+/* ── 領域 × 三階段清單模式視圖 (List View) ── */
+#list-view {
   position: absolute;
-  top: 68px; left: 0; right: 0; bottom: 0;
+  top: 114px; left: 0; right: 0; bottom: 0;
   overflow-y: auto;
-  background: var(--bg-color);
-  padding: 36px 20px 80px;
+  background: #f8fafc;
+  padding: 30px 20px 90px;
   display: none;
-  z-index: 20;
+  z-index: 60;
 }
-.classic-content {
-  max-width: 1100px;
+.list-container {
+  max-width: 1200px;
   margin: 0 auto;
 }
-.classic-sec {
+.list-domain-header {
   background: var(--white);
-  border-radius: 20px;
-  padding: 28px 32px;
-  margin-bottom: 28px;
-  box-shadow: var(--shadow-soft);
+  border-radius: 22px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
   border: 2px solid #e2e8f0;
-}
-.classic-sec-head {
+  box-shadow: var(--shadow-soft);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px solid #f1f5f9;
-  padding-bottom: 14px;
-  margin-bottom: 20px;
-}
-.classic-sec-title {
-  font-size: 24px;
-  font-weight: 900;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.classic-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  flex-wrap: wrap;
   gap: 16px;
 }
-.classic-item-card {
-  background: #f8fafc;
+.list-stage-block {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
   border: 2px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 18px 20px;
+  box-shadow: var(--shadow-soft);
+}
+.list-stage-title {
+  font-size: 22px;
+  font-weight: 900;
+  padding-bottom: 12px;
+  margin-bottom: 18px;
+  border-bottom: 2px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.unit-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+.unit-visual-card {
+  background: #fff;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
-.classic-item-card:hover {
-  background: var(--white);
-  border-color: #3b82f6;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(59, 130, 246, 0.12);
+.unit-visual-card:hover {
+  transform: translateY(-4px);
+  border-color: #0284c7;
+  box-shadow: 0 12px 24px rgba(2, 132, 199, 0.14);
 }
-.classic-item-title {
-  font-size: 18px;
+.unit-card-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+.unit-card-body {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.unit-card-sem {
+  font-size: 12px;
   font-weight: 800;
-  color: var(--text-main);
-  margin-bottom: 6px;
-}
-.classic-item-sub {
-  font-size: 13px;
   color: var(--text-muted);
 }
-.classic-item-cta {
-  margin-top: 14px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #2563eb;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.unit-card-name {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--text-main);
 }
 
-/* 抽屜式教材寶箱視窗 (選項 A 核心元件) */
+/* ── 抽屜式教材寶箱視窗 (Option A Modal Drawer) ── */
 .modal-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
   z-index: 2000;
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  opacity: 0;
-  transition: opacity 0.25s ease;
+  padding: 16px;
 }
-.modal-backdrop.active {
-  display: flex;
-  opacity: 1;
-}
+.modal-backdrop.open { display: flex; }
 
-.treasure-drawer {
+.treasure-modal {
   background: var(--white);
   width: 100%;
-  max-width: 660px;
-  border-radius: 28px;
+  max-width: 720px;
+  max-height: 92vh;
+  overflow-y: auto;
+  border-radius: 26px;
   box-shadow: var(--shadow-card);
-  border: 3px solid #e2e8f0;
-  overflow: hidden;
-  transform: scale(0.92) translateY(24px);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  display: flex;
-  flex-direction: column;
+  border: 3px solid #cbd5e1;
+  animation: modalPop 0.26s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.modal-backdrop.active .treasure-drawer {
-  transform: scale(1) translateY(0);
+@keyframes modalPop {
+  from { transform: scale(0.92) translateY(20px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
 }
 
-.drawer-head {
-  padding: 24px 28px 18px;
+.modal-top {
+  padding: 20px 24px;
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  border-bottom: 2px solid #f1f5f9;
-}
-.stage-tag {
-  display: inline-flex;
   align-items: center;
+  gap: 18px;
+  border-bottom: 2px solid #f1f5f9;
+  background: #f8fafc;
+}
+.modal-cover-img {
+  width: 120px;
+  height: 78px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid #cbd5e1;
+  flex-shrink: 0;
+  background: #fff;
+}
+.modal-title-wrap {
+  flex: 1;
+  min-width: 0;
+}
+.modal-badges {
+  display: flex;
+  flex-wrap: wrap;
   gap: 6px;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 800;
   margin-bottom: 6px;
 }
-.tag-s1 { background: var(--s1-light); color: var(--s1-color); }
-.tag-s2 { background: var(--s2-light); color: var(--s2-color); }
-.tag-s3 { background: var(--s3-light); color: var(--s3-color); }
+.m-badge {
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 14px;
+}
+.m-badge-s1 { background: var(--s1-light); color: var(--s1-color); }
+.m-badge-s2 { background: var(--s2-light); color: var(--s2-color); }
+.m-badge-s3 { background: var(--s3-light); color: var(--s3-color); }
+.m-badge-domain { background: #e2e8f0; color: #334155; }
 
-.unit-head-title {
-  font-size: 28px;
+.modal-unit-title {
+  font-size: 26px;
   font-weight: 900;
   color: var(--text-main);
-  line-height: 1.3;
+  line-height: 1.25;
 }
-
-.drawer-close {
+.modal-close-btn {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  border: 2px solid #e2e8f0;
-  background: #f8fafc;
-  font-size: 22px;
+  border: 2px solid #cbd5e1;
+  background: #fff;
+  font-size: 20px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
+  flex-shrink: 0;
   transition: all 0.2s;
 }
-.drawer-close:hover {
+.modal-close-btn:hover {
   background: #ef4444;
-  color: var(--white);
+  color: #fff;
   border-color: #ef4444;
-  transform: rotate(90deg);
 }
 
-.drawer-body {
-  padding: 26px 28px;
-  background: #fcfcfd;
+.modal-content {
+  padding: 22px 24px 26px;
 }
-
-.section-label {
-  font-size: 15px;
+.modal-sec-label {
+  font-size: 14px;
   font-weight: 800;
   color: var(--text-muted);
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
-
-.buttons-grid {
+.treasure-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-  margin-bottom: 22px;
+  gap: 12px;
+  margin-bottom: 18px;
 }
-
-.t-action-btn {
-  background: var(--white);
+.t-card-btn {
+  background: #fff;
   border: 2px solid #e2e8f0;
-  border-radius: 18px;
-  padding: 16px;
+  border-radius: 16px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   text-decoration: none;
   color: var(--text-main);
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  text-align: left;
+  transition: all 0.18s;
 }
-.t-action-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+.t-card-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+  border-color: #0284c7;
 }
-
-.t-btn-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
+.t-card-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
+  font-size: 24px;
   flex-shrink: 0;
 }
-.btn-slides { border-color: #fecaca; }
-.btn-slides:hover { border-color: #ef4444; background: #fff5f5; }
-.btn-slides .t-btn-icon { background: #fee2e2; }
+.t-card-title { font-size: 17px; font-weight: 900; display: block; }
+.t-card-desc { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-top: 2px; display: block; }
 
-.btn-video { border-color: #bbf7d0; }
-.btn-video:hover { border-color: #22c55e; background: #f0fdf4; }
-.btn-video .t-btn-icon { background: #dcfce7; }
-
-.btn-quiz { border-color: #fed7aa; }
-.btn-quiz:hover { border-color: #f97316; background: #fff7ed; }
-.btn-quiz .t-btn-icon { background: #ffedd5; }
-
-.btn-cards { border-color: #bfdbfe; }
-.btn-cards:hover { border-color: #3b82f6; background: #eff6ff; }
-.btn-cards .t-btn-icon { background: #dbeafe; }
-
-.btn-wheel {
-  grid-column: span 2;
-  border-color: #e9d5ff;
-  background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
+.modal-bottom-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.btn-wheel:hover { border-color: #a855f7; background: #f3e8ff; }
-.btn-wheel .t-btn-icon { background: #f3e8ff; }
-
-.t-btn-name {
-  font-size: 18px;
+.nav-adj-btn {
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 2px solid #cbd5e1;
+  background: #f8fafc;
+  font-family: inherit;
+  font-size: 14px;
   font-weight: 800;
-  display: block;
+  color: var(--text-main);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s;
 }
-.t-btn-sub {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
+.nav-adj-btn:hover { background: #e2e8f0; }
 
-.btn-full-launch {
-  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-  color: var(--white);
-  border-radius: 18px;
-  padding: 16px 22px;
+.launch-full-btn {
+  flex: 1;
+  background: linear-gradient(135deg, #0284c7 0%, #1e40af 100%);
+  color: #fff;
+  text-decoration: none;
+  padding: 15px 22px;
+  border-radius: 16px;
+  font-size: 17px;
+  font-weight: 900;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  text-decoration: none;
-  font-size: 17px;
-  font-weight: 800;
-  box-shadow: 0 8px 20px rgba(30, 41, 59, 0.25);
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3);
   transition: all 0.2s;
 }
-.btn-full-launch:hover {
+.launch-full-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(30, 41, 59, 0.35);
+  box-shadow: 0 12px 26px rgba(2, 132, 199, 0.42);
+}
+
+@media (max-width: 820px) {
+  .brand-titles p, .island-info-banner { display: none; }
+  .treasure-grid { grid-template-columns: 1fr; }
+  .search-input { width: 120px; }
+  .search-input:focus { width: 160px; }
 }
 </style>
 </head>
 <body>
 
-<!-- 頂部列 -->
+<!-- 第一列：頂部全域導覽列 -->
 <header class="topbar">
-  <div class="brand">
-    <div class="brand-icon">🏝️</div>
-    <div class="brand-text">
-      <h1>特需生活管理島</h1>
-      <p>3D 黏土微縮沙盤 ｜ 高雄特教國小部</p>
+  <div class="brand-group">
+    <button class="back-world-btn" id="btn-back-world" onclick="enterWorldView()">
+      <span>🌊</span>
+      <span>返回領域群島</span>
+    </button>
+    <div class="brand-logo" id="top-logo">🏝️</div>
+    <div class="brand-titles">
+      <h1 id="top-title">高雄特教國小部｜3D 領域群島總入口</h1>
+      <p id="top-subtitle">10 大領域島嶼 × 三個學習階段 × 240 個互動單元</p>
     </div>
   </div>
 
-  <!-- 階段聚焦切換 -->
-  <div class="stage-tabs">
-    <button class="tab-btn active" data-stage="all" onclick="focusStage('all')">🌐 全島總覽</button>
-    <button class="tab-btn" data-stage="1" onclick="focusStage('1')">🌱 啟蒙村 (S1)</button>
-    <button class="tab-btn" data-stage="2" onclick="focusStage('2')">🌿 實踐鎮 (S2)</button>
-    <button class="tab-btn" data-stage="3" onclick="focusStage('3')">🌳 進階城 (S3)</button>
+  <!-- 階段聚焦切換（領域島內顯示） -->
+  <div class="stage-switcher" id="stage-switcher">
+    <button class="stage-btn active" data-stage="all" onclick="selectStage('all')">🌐 全島總覽</button>
+    <button class="stage-btn" data-stage="1" onclick="selectStage('1')">🌱 第一階段 (10)</button>
+    <button class="stage-btn" data-stage="2" onclick="selectStage('2')">🌿 第二階段 (10)</button>
+    <button class="stage-btn" data-stage="3" onclick="selectStage('3')">🌳 第三階段 (10)</button>
   </div>
 
-  <!-- 右側控制 -->
-  <div class="top-controls">
-    <button class="tod-btn" id="btn-tod" title="切換早晨／夕陽／星夜" onclick="toggleTimeOfDay()">☀️</button>
-    <button class="toggle-mode-btn" onclick="toggleViewMode()">
-      <span id="mode-icon">📋</span>
-      <span id="mode-text">切換經典清單</span>
+  <!-- 右側功能列 -->
+  <div class="top-right-tools">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="search" class="search-input" id="unit-search" placeholder="搜尋 240 單元..." autocomplete="off">
+      <div class="search-dropdown" id="search-results"></div>
+    </div>
+
+    <button class="icon-pill-btn" id="btn-tod" onclick="cycleTimeOfDay()" title="切換白天／夕陽／星夜">☀️ 時段</button>
+    <button class="icon-pill-btn primary-toggle" id="btn-view-mode" onclick="toggleDisplayMode()">
+      <span id="view-mode-icon">📋</span>
+      <span id="view-mode-text">領域清單模式</span>
     </button>
+    <a class="icon-pill-btn classic-link" href="index_classic.html" title="切換回原本依學習階段與學期分類的總入口">
+      <span>🗂️</span>
+      <span>原版學期入口</span>
+    </a>
   </div>
 </header>
 
-<!-- 3D 舞台 (Three.js 核心) -->
-<div id="stage-3d">
+<!-- 第二列：10 大領域島嶼快速導覽列 -->
+<nav class="domain-bar" id="domain-bar"></nav>
+
+<!-- 3D 沙盤主視口 -->
+<main id="stage-3d">
   <canvas id="canvas-3d"></canvas>
   <div id="labels-layer"></div>
 
-  <!-- 視角輔助按鈕 -->
-  <div class="stage-actions">
-    <button class="action-round-btn" onclick="resetCameraView()" title="重置視角">⟲</button>
-    <button class="action-round-btn" id="btn-auto-tour" onclick="toggleAutoTour()" title="播放環島巡航運鏡">🎬</button>
+  <!-- 左上角當前島嶼資訊卡 -->
+  <div class="island-info-banner" id="island-banner">
+    <div class="banner-title" id="banner-title">🌊 特教學習大世界（10 大領域群島）</div>
+    <div class="banner-desc" id="banner-desc">點擊任一領域島嶼，即可進入該領域的「第一、二、三學習階段」立體教材村落！</div>
+    <div class="banner-note" id="banner-note"></div>
   </div>
 
-  <div class="hud-hint">
-    <span>🖱️ 拖曳可 360 度旋轉視角 ｜ 滾輪縮放 ｜ 點擊地標開啟教材寶箱</span>
+  <!-- 右下角鏡頭控制 -->
+  <div class="cam-controls">
+    <button class="cam-btn" id="btn-all-pins" onclick="toggleShowAllPins()" title="切換顯示全部單元標籤／精選標籤" style="display:none;">🏷️</button>
+    <button class="cam-btn" onclick="resetCamera()" title="重置視角">⟲</button>
+    <button class="cam-btn" id="btn-tour" onclick="toggleTour()" title="自動環島巡航運鏡">🎬</button>
   </div>
-</div>
 
-<!-- 經典清單視圖 (隨時無損切換原版) -->
-<div id="classic-view">
-  <div class="classic-content">
-    <div class="classic-sec">
-      <div class="classic-sec-head">
-        <div class="classic-sec-title" style="color: var(--s1-color);">🌱 第一學習階段（基礎探索）</div>
-        <span style="font-weight:700; color:var(--text-muted);">共 10 個單元</span>
-      </div>
-      <div class="classic-cards-grid" id="grid-stage-1"></div>
+  <!-- 底部單元快速導覽船塢（進入領域島時顯示該島 30 單元） -->
+  <div class="unit-quick-dock" id="unit-dock">
+    <div class="dock-header">
+      <span id="dock-title">📍 本島單元快速點選（點擊直接開啟教材寶箱）：</span>
+      <span id="dock-count">共 30 單元</span>
     </div>
-
-    <div class="classic-sec">
-      <div class="classic-sec-head">
-        <div class="classic-sec-title" style="color: var(--s2-color);">🌿 第二學習階段（日常實踐）</div>
-        <span style="font-weight:700; color:var(--text-muted);">共 10 個單元</span>
-      </div>
-      <div class="classic-cards-grid" id="grid-stage-2"></div>
-    </div>
-
-    <div class="classic-sec">
-      <div class="classic-sec-head">
-        <div class="classic-sec-title" style="color: var(--s3-color);">🌳 第三學習階段（進階社區）</div>
-        <span style="font-weight:700; color:var(--text-muted);">共 10 個單元</span>
-      </div>
-      <div class="classic-cards-grid" id="grid-stage-3"></div>
-    </div>
+    <div class="dock-pills-scroll" id="dock-list"></div>
   </div>
-</div>
+</main>
 
-<!-- 抽屜式教材寶箱視窗 (選項 A) -->
-<div class="modal-backdrop" id="treasure-modal" onclick="closeModalOnBackdrop(event)">
-  <div class="treasure-drawer" onclick="event.stopPropagation()">
-    <div class="drawer-head">
-      <div>
-        <div class="stage-tag" id="drawer-tag">🌿 第二階段・第一學期 第2單元</div>
-        <h2 class="unit-head-title" id="drawer-title">會穿脫鞋襪</h2>
+<!-- 領域 × 三階段清單模式視口 -->
+<section id="list-view">
+  <div class="list-container" id="list-container"></div>
+</section>
+
+<!-- 抽屜式教材寶箱視窗 (Option A) -->
+<div class="modal-backdrop" id="treasure-modal" onclick="if(event.target===this)closeModal()">
+  <div class="treasure-modal">
+    <div class="modal-top">
+      <img class="modal-cover-img" id="m-cover" src="" alt="單元封面">
+      <div class="modal-title-wrap">
+        <div class="modal-badges">
+          <span class="m-badge m-badge-domain" id="m-domain-badge">特需生活管理</span>
+          <span class="m-badge m-badge-s2" id="m-stage-badge">🌿 第二階段・二上 第 2 單元</span>
+        </div>
+        <h2 class="modal-unit-title" id="m-title">會穿脫鞋襪</h2>
       </div>
-      <button class="drawer-close" onclick="closeTreasureModal()">✕</button>
+      <button class="modal-close-btn" onclick="closeModal()" aria-label="關閉">✕</button>
     </div>
 
-    <div class="drawer-body">
-      <div class="section-label">🎁 選擇教材項目直達：</div>
-      <div class="buttons-grid">
-        <a class="t-action-btn btn-slides" id="m-btn-slides" href="#" target="_blank">
-          <div class="t-btn-icon">📊</div>
+    <div class="modal-content">
+      <div class="modal-sec-label">🎁 點選下方教材模組（開新分頁進入）：</div>
+      <div class="treasure-grid">
+        <a class="t-card-btn" id="m-link-ppt" href="#" target="_blank">
+          <div class="t-card-icon" style="background:#fee2e2;">📊</div>
           <div>
-            <span class="t-btn-name">70 頁教學簡報</span>
-            <span class="t-btn-sub">⛶ 全螢幕放映・特教大字</span>
+            <span class="t-card-title">70 頁教學簡報</span>
+            <span class="t-card-desc">支援 ⛶ 全螢幕放映・四重點教學</span>
           </div>
         </a>
 
-        <a class="t-action-btn btn-video" id="m-btn-video" href="#" target="_blank">
-          <div class="t-btn-icon">🎬</div>
+        <a class="t-card-btn" id="m-link-video" href="#" target="_blank">
+          <div class="t-card-icon" style="background:#dcfce7;">🎬</div>
           <div>
-            <span class="t-btn-name">主題教學影片</span>
-            <span class="t-btn-sub">5 支短片清單・分段示範</span>
+            <span class="t-card-title">主題教學影片</span>
+            <span class="t-card-desc">主影片 ＋ 4 支重點短片播放清單</span>
           </div>
         </a>
 
-        <a class="t-action-btn btn-quiz" id="m-btn-quiz" href="#" target="_blank">
-          <div class="t-btn-icon">🎯</div>
+        <a class="t-card-btn" id="m-link-quiz" href="#" target="_blank">
+          <div class="t-card-icon" style="background:#ffedd5;">🎯</div>
           <div>
-            <span class="t-btn-name">互動評量遊戲</span>
-            <span class="t-btn-sub">計分兩選一・答錯不重答</span>
+            <span class="t-card-title">互動評量挑戰</span>
+            <span class="t-card-desc">16 題兩選一語音測驗・自動計分</span>
           </div>
         </a>
 
-        <a class="t-action-btn btn-cards" id="m-btn-cards" href="#" target="_blank">
-          <div class="t-btn-icon">🗂️</div>
+        <a class="t-card-btn" id="m-link-cards" href="#" target="_blank">
+          <div class="t-card-icon" style="background:#dbeafe;">🗂️</div>
           <div>
-            <span class="t-btn-name">認知學習圖卡</span>
-            <span class="t-btn-sub">10 組圖卡・雙面 PDF 下載</span>
+            <span class="t-card-title">認知學習圖卡</span>
+            <span class="t-card-desc">10 組核心語詞圖卡・雙面 PDF 下載</span>
           </div>
         </a>
 
-        <a class="t-action-btn btn-wheel" id="m-btn-wheel" href="#" target="_blank">
-          <div class="t-btn-icon">🎡</div>
+        <a class="t-card-btn" id="m-link-wheel" href="#" target="_blank">
+          <div class="t-card-icon" style="background:#f3e8ff;">🎡</div>
           <div>
-            <span class="t-btn-name">幸運課堂大輪盤</span>
-            <span class="t-btn-sub">上台抽籤・語音朗讀・重抽模式</span>
+            <span class="t-card-title">幸運課堂大輪盤</span>
+            <span class="t-card-desc">轉動音效・對應語音・抽過刪除模式</span>
+          </div>
+        </a>
+
+        <a class="t-card-btn" id="m-link-manual" href="#" target="_blank">
+          <div class="t-card-icon" style="background:#fef3c7;">📖</div>
+          <div>
+            <span class="t-card-title">教學使用說明書</span>
+            <span class="t-card-desc">單元教學目標、期程與操作指引</span>
           </div>
         </a>
       </div>
 
-      <a class="btn-full-launch" id="m-btn-site" href="#" target="_blank">
-        <span>🚀 進入此單元完整互動教學網站</span>
-        <span>開啟網站 →</span>
-      </a>
+      <div class="modal-bottom-bar">
+        <button class="nav-adj-btn" id="m-prev-btn" onclick="stepModalUnit(-1)">◀ 上一單元</button>
+        <a class="launch-full-btn" id="m-link-site" href="#" target="_blank">
+          <span>🚀 進入此單元完整互動教學網站</span>
+          <span>立即前往 →</span>
+        </a>
+        <button class="nav-adj-btn" id="m-next-btn" onclick="stepModalUnit(1)">下一單元 ▶</button>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-// 特需生活管理 30 單元真實資料庫 (100% 正式線上網址)
-const LIFE_DATA = {
-  // S1
-  131: { id: 131, stage: 1, sem: "一上", u: 1, name: "校園生活你我他", url: "https://smallda12.github.io/teaching-site-campuslife/" },
-  132: { id: 132, stage: 1, sem: "一上", u: 2, name: "生活公約", url: "https://smallda12.github.io/teaching-site-classrules/" },
-  133: { id: 133, stage: 1, sem: "一上", u: 3, name: "學校的一天", url: "https://smallda12.github.io/teaching-site-schoolday/" },
-  134: { id: 134, stage: 1, sem: "一上", u: 4, name: "學校與家庭", url: "https://smallda12.github.io/teaching-site-schoolhome/" },
-  135: { id: 135, stage: 1, sem: "一上", u: 5, name: "食物ｅ點通", url: "https://smallda12.github.io/teaching-site-foodguide/" },
-  136: { id: 136, stage: 1, sem: "一下", u: 1, name: "用餐囉", url: "https://smallda12.github.io/teaching-site-mealtime/" },
-  137: { id: 137, stage: 1, sem: "一下", u: 2, name: "穿脫衣物", url: "https://smallda12.github.io/teaching-site-dressing/" },
-  138: { id: 138, stage: 1, sem: "一下", u: 3, name: "認識衣物", url: "https://smallda12.github.io/teaching-site-clothes/" },
-  139: { id: 139, stage: 1, sem: "一下", u: 4, name: "廁所大不同", url: "https://smallda12.github.io/teaching-site-restroom/" },
-  140: { id: 140, stage: 1, sem: "一下", u: 5, name: "如廁能力", url: "https://smallda12.github.io/teaching-site-toileting/" },
+// 權威 240 站 × 10 大領域島 × 三學習階段完整資料（由 產出島嶼總入口.py 自動注入）
+const DOMAINS_DATA = [{"id": "selfcare", "name": "特需生活管理", "islandName": "特需生活管理島", "icon": "🏠", "color": "#1565c0", "trimColor": "#42a5f5", "groundColor": "#e3f2fd", "themeDesc": "衣食住行、穿脫洗漱、清潔打掃與自我保護", "landmarkType": "lighthouse_whale", "ownCount": 30, "stage1Note": "", "stages": {"1": [{"uid": 21, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "特需生活管理", "u": 1, "name": "校園生活你我他", "url": "https://smallda12.github.io/teaching-site-campuslife/", "cover": "covers/newselfcare01.webp", "manual": "說明/newselfcare01.html"}, {"uid": 22, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "特需生活管理", "u": 2, "name": "生活公約", "url": "https://smallda12.github.io/teaching-site-classrules/", "cover": "covers/newselfcare02.webp", "manual": "說明/newselfcare02.html"}, {"uid": 23, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "特需生活管理", "u": 3, "name": "學校的一天", "url": "https://smallda12.github.io/teaching-site-schoolday/", "cover": "covers/newselfcare03.webp", "manual": "說明/newselfcare03.html"}, {"uid": 24, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "特需生活管理", "u": 4, "name": "學校與家庭", "url": "https://smallda12.github.io/teaching-site-schoolhome/", "cover": "covers/newselfcare04.webp", "manual": "說明/newselfcare04.html"}, {"uid": 25, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "特需生活管理", "u": 5, "name": "食物ｅ點通", "url": "https://smallda12.github.io/teaching-site-foodguide/", "cover": "covers/newselfcare05.webp", "manual": "說明/newselfcare05.html"}, {"uid": 51, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "特需生活管理", "u": 1, "name": "用餐囉", "url": "https://smallda12.github.io/teaching-site-mealtime/", "cover": "covers/newselfcare01b.webp", "manual": "說明/newselfcare01b.html"}, {"uid": 52, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "特需生活管理", "u": 2, "name": "穿脫衣物", "url": "https://smallda12.github.io/teaching-site-dressing/", "cover": "covers/newselfcare02b.webp", "manual": "說明/newselfcare02b.html"}, {"uid": 53, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "特需生活管理", "u": 3, "name": "認識衣物", "url": "https://smallda12.github.io/teaching-site-clothes/", "cover": "covers/newselfcare03b.webp", "manual": "說明/newselfcare03b.html"}, {"uid": 54, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "特需生活管理", "u": 4, "name": "廁所大不同", "url": "https://smallda12.github.io/teaching-site-restroom/", "cover": "covers/newselfcare04b.webp", "manual": "說明/newselfcare04b.html"}, {"uid": 55, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "特需生活管理", "u": 5, "name": "如廁能力", "url": "https://smallda12.github.io/teaching-site-toileting/", "cover": "covers/newselfcare05b.webp", "manual": "說明/newselfcare05b.html"}], "2": [{"uid": 91, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "特需生活管理", "u": 1, "name": "衣褲鞋襪大解密", "url": "https://smallda12.github.io/teaching-site-stage2-lifeskill-clothes-shoes-socks/", "cover": "covers/twoselfcare01.webp", "manual": "說明/twoselfcare01.html"}, {"uid": 92, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "特需生活管理", "u": 2, "name": "會穿脫鞋襪", "url": "https://smallda12.github.io/teaching-site-stage2-lifeskill-shoe-sock-dressing/", "cover": "covers/twoselfcare02.webp", "manual": "說明/twoselfcare02.html"}, {"uid": 93, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "特需生活管理", "u": 3, "name": "會穿脫衣褲", "url": "https://smallda12.github.io/teaching-site-stage2-lifeskill-clothes-dressing/", "cover": "covers/twoselfcare03.webp", "manual": "說明/twoselfcare03.html"}, {"uid": 94, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "特需生活管理", "u": 4, "name": "服裝儀容糾察隊", "url": "https://smallda12.github.io/teaching-site-lifeskill-clothes-check/", "cover": "covers/twoselfcare04.webp", "manual": "說明/twoselfcare04.html"}, {"uid": 95, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "特需生活管理", "u": 5, "name": "洗洗洗～洗乾淨", "url": "https://smallda12.github.io/teaching-site-lifeskill-wash-clean/", "cover": "covers/twoselfcare05.webp", "manual": "說明/twoselfcare05.html"}, {"uid": 136, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "特需生活管理", "u": 1, "name": "護牙一生", "url": "https://smallda12.github.io/teaching-site-stage2-lifeskill-teeth/", "cover": "covers/twoselfcare01b.webp", "manual": "說明/twoselfcare01b.html"}, {"uid": 137, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "特需生活管理", "u": 2, "name": "清潔基本功", "url": "https://smallda12.github.io/teaching-site-stage2-lifeskill-cleaning/", "cover": "covers/twoselfcare02b.webp", "manual": "說明/twoselfcare02b.html"}, {"uid": 138, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "特需生活管理", "u": 3, "name": "我會掃地", "url": "https://smallda12.github.io/teaching-site-stage2-lifeskill-sweeping/", "cover": "covers/twoselfcare03b.webp", "manual": "說明/twoselfcare03b.html"}, {"uid": 139, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "特需生活管理", "u": 4, "name": "垃圾分類", "url": "https://smallda12.github.io/teaching-site-stage2-lifeskill-garbage-sorting/", "cover": "covers/twoselfcare04b.webp", "manual": "說明/twoselfcare04b.html"}, {"uid": 140, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "特需生活管理", "u": 5, "name": "資源回收", "url": "https://smallda12.github.io/teaching-site-stage2-lifeskill-recycling/", "cover": "covers/twoselfcare05b.webp", "manual": "說明/twoselfcare05b.html"}], "3": [{"uid": 186, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "特需生活管理", "u": 1, "name": "危機總動員", "url": "https://smallda12.github.io/teaching-site-crisis/", "cover": "covers/selfcare01.webp", "manual": "說明/selfcare01.html"}, {"uid": 187, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "特需生活管理", "u": 2, "name": "警報解除", "url": "https://smallda12.github.io/teaching-site-alarm/", "cover": "covers/selfcare02.webp", "manual": "說明/selfcare02.html"}, {"uid": 188, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "特需生活管理", "u": 3, "name": "男生女生~耶！", "url": "https://smallda12.github.io/teaching-site-respect/", "cover": "covers/selfcare03.webp", "manual": "說明/selfcare03.html"}, {"uid": 189, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "特需生活管理", "u": 4, "name": "自我保護觀", "url": "https://smallda12.github.io/teaching-site-selfprotect/", "cover": "covers/selfcare04.webp", "manual": "說明/selfcare04.html"}, {"uid": 190, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "特需生活管理", "u": 5, "name": "便利的交通工具", "url": "https://smallda12.github.io/teaching-site-transport/", "cover": "covers/selfcare05.webp", "manual": "說明/selfcare05.html"}, {"uid": 231, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "特需生活管理", "u": 1, "name": "認識交通標誌與號誌燈", "url": "https://smallda12.github.io/teaching-site-trafficsign/", "cover": "covers/selfcare01b.webp", "manual": "說明/selfcare01b.html"}, {"uid": 232, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "特需生活管理", "u": 2, "name": "健康情報站", "url": "https://smallda12.github.io/teaching-site-healthinfo/", "cover": "covers/selfcare02b.webp", "manual": "說明/selfcare02b.html"}, {"uid": 233, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "特需生活管理", "u": 3, "name": "疾病防治區", "url": "https://smallda12.github.io/teaching-site-disease/", "cover": "covers/selfcare03b.webp", "manual": "說明/selfcare03b.html"}, {"uid": 234, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "特需生活管理", "u": 4, "name": "認識休閒活動", "url": "https://smallda12.github.io/teaching-site-leisure/", "cover": "covers/selfcare04b.webp", "manual": "說明/selfcare04b.html"}, {"uid": 235, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "特需生活管理", "u": 5, "name": "認識社區環境與資源", "url": "https://smallda12.github.io/teaching-site-community/", "cover": "covers/selfcare05b.webp", "manual": "說明/selfcare05b.html"}]}}, {"id": "motor", "name": "特需功能性動作訓練", "islandName": "特需動作訓練島", "icon": "🤸", "color": "#4f5bd5", "trimColor": "#7986cb", "groundColor": "#e8eaf6", "themeDesc": "上肢精細操作、下肢平衡移動、姿勢控制與雙手協調", "landmarkType": "gym_rainbow", "ownCount": 30, "stage1Note": "", "stages": {"1": [{"uid": 26, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "特需功能性動作訓練", "u": 1, "name": "動動你的手", "url": "https://smallda12.github.io/teaching-site-hand-movement/", "cover": "covers/newmotor01.webp", "manual": "說明/newmotor01.html"}, {"uid": 27, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "特需功能性動作訓練", "u": 2, "name": "動動你的腳", "url": "https://smallda12.github.io/teaching-site-foot-movement/", "cover": "covers/newmotor02.webp", "manual": "說明/newmotor02.html"}, {"uid": 28, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "特需功能性動作訓練", "u": 3, "name": "坐好站好我最棒", "url": "https://smallda12.github.io/teaching-site-sitstand/", "cover": "covers/newmotor03.webp", "manual": "說明/newmotor03.html"}, {"uid": 29, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "特需功能性動作訓練", "u": 4, "name": "小小平衡家", "url": "https://smallda12.github.io/teaching-site-balancekids/", "cover": "covers/newmotor04.webp", "manual": "說明/newmotor04.html"}, {"uid": 30, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "特需功能性動作訓練", "u": 5, "name": "我會走路", "url": "https://smallda12.github.io/teaching-site-walkpath/", "cover": "covers/newmotor05.webp", "manual": "說明/newmotor05.html"}, {"uid": 56, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "特需功能性動作訓練", "u": 1, "name": "小手真靈巧", "url": "https://smallda12.github.io/teaching-site-nimblehands/", "cover": "covers/newmotor01b.webp", "manual": "說明/newmotor01b.html"}, {"uid": 57, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "特需功能性動作訓練", "u": 2, "name": "雙腳真強壯", "url": "https://smallda12.github.io/teaching-site-strongfeet/", "cover": "covers/newmotor02b.webp", "manual": "說明/newmotor02b.html"}, {"uid": 58, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "特需功能性動作訓練", "u": 3, "name": "姿勢擺起來", "url": "https://smallda12.github.io/teaching-site-bodyposture/", "cover": "covers/newmotor03b.webp", "manual": "說明/newmotor03b.html"}, {"uid": 59, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "特需功能性動作訓練", "u": 4, "name": "平衡與協調", "url": "https://smallda12.github.io/teaching-site-balancecoord/", "cover": "covers/newmotor04b.webp", "manual": "說明/newmotor04b.html"}, {"uid": 60, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "特需功能性動作訓練", "u": 5, "name": "抓握達人", "url": "https://smallda12.github.io/teaching-site-graspmaster/", "cover": "covers/newmotor05b.webp", "manual": "說明/newmotor05b.html"}], "2": [{"uid": 96, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "特需功能性動作訓練", "u": 1, "name": "上肢控制高手", "url": "https://smallda12.github.io/teaching-site-stage2-motor-upper-limb-control/", "cover": "covers/twomotor01.webp", "manual": "說明/twomotor01.html"}, {"uid": 97, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "特需功能性動作訓練", "u": 2, "name": "下肢力量加油站", "url": "https://smallda12.github.io/teaching-site-stage2-motor-lower-limb-strength/", "cover": "covers/twomotor02.webp", "manual": "說明/twomotor02.html"}, {"uid": 98, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "特需功能性動作訓練", "u": 3, "name": "姿勢一百分", "url": "https://smallda12.github.io/teaching-site-stage2-motor-posture/", "cover": "covers/twomotor03.webp", "manual": "說明/twomotor03.html"}, {"uid": 99, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "特需功能性動作訓練", "u": 4, "name": "手指合作遊戲", "url": "https://smallda12.github.io/teaching-site-stage2-motor-finger-cooperation/", "cover": "covers/twomotor04.webp", "manual": "說明/twomotor04.html"}, {"uid": 100, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "特需功能性動作訓練", "u": 5, "name": "大步向前走", "url": "https://smallda12.github.io/teaching-site-stage2-motor-walk-forward/", "cover": "covers/twomotor05.webp", "manual": "說明/twomotor05.html"}, {"uid": 141, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "特需功能性動作訓練", "u": 1, "name": "上肢應用技巧練習", "url": "https://smallda12.github.io/teaching-site-stage2-motor-upper-limb-application/", "cover": "covers/twomotor01b.webp", "manual": "說明/twomotor01b.html"}, {"uid": 142, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "特需功能性動作訓練", "u": 2, "name": "下肢功能應用練習", "url": "https://smallda12.github.io/teaching-site-stage2-motor-lower-limb-function/", "cover": "covers/twomotor02b.webp", "manual": "說明/twomotor02b.html"}, {"uid": 143, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "特需功能性動作訓練", "u": 3, "name": "動作變身任務", "url": "https://smallda12.github.io/teaching-site-stage2-motor-transform-mission/", "cover": "covers/twomotor03b.webp", "manual": "說明/twomotor03b.html"}, {"uid": 144, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "特需功能性動作訓練", "u": 4, "name": "協調大挑戰", "url": "https://smallda12.github.io/teaching-site-stage2-motor-coordination-challenge/", "cover": "covers/twomotor04b.webp", "manual": "說明/twomotor04b.html"}, {"uid": 145, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "特需功能性動作訓練", "u": 5, "name": "巧手應用王", "url": "https://smallda12.github.io/teaching-site-stage2-motor-dexterous-hands/", "cover": "covers/twomotor05b.webp", "manual": "說明/twomotor05b.html"}], "3": [{"uid": 191, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "特需功能性動作訓練", "u": 1, "name": "上肢綜合練習", "url": "https://smallda12.github.io/teaching-site-armstretch/", "cover": "covers/motor01.webp", "manual": "說明/motor01.html"}, {"uid": 192, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "特需功能性動作訓練", "u": 2, "name": "下肢綜合練習", "url": "https://smallda12.github.io/teaching-site-legsteps/", "cover": "covers/motor02.webp", "manual": "說明/motor02.html"}, {"uid": 193, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "特需功能性動作訓練", "u": 3, "name": "姿勢控制練習", "url": "https://smallda12.github.io/teaching-site-posturectrl/", "cover": "covers/motor03.webp", "manual": "說明/motor03.html"}, {"uid": 194, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "特需功能性動作訓練", "u": 4, "name": "協調遊戲大挑戰", "url": "https://smallda12.github.io/teaching-site-coordination/", "cover": "covers/motor04.webp", "manual": "說明/motor04.html"}, {"uid": 195, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "特需功能性動作訓練", "u": 5, "name": "移動技巧小遊戲", "url": "https://smallda12.github.io/teaching-site-movement/", "cover": "covers/motor05.webp", "manual": "說明/motor05.html"}, {"uid": 236, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "特需功能性動作訓練", "u": 1, "name": "上肢生活應用", "url": "https://smallda12.github.io/teaching-site-upperlimb/", "cover": "covers/motor01b.webp", "manual": "說明/motor01b.html"}, {"uid": 237, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "特需功能性動作訓練", "u": 2, "name": "下肢生活應用", "url": "https://smallda12.github.io/teaching-site-lowerlimb/", "cover": "covers/motor02b.webp", "manual": "說明/motor02b.html"}, {"uid": 238, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "特需功能性動作訓練", "u": 3, "name": "姿勢轉換與應用", "url": "https://smallda12.github.io/teaching-site-posture/", "cover": "covers/motor03b.webp", "manual": "說明/motor03b.html"}, {"uid": 239, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "特需功能性動作訓練", "u": 4, "name": "手部協調與應用", "url": "https://smallda12.github.io/teaching-site-handskill/", "cover": "covers/motor04b.webp", "manual": "說明/motor04b.html"}, {"uid": 240, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "特需功能性動作訓練", "u": 5, "name": "生活獨立我最棒", "url": "https://smallda12.github.io/teaching-site-independent/", "cover": "covers/motor05b.webp", "manual": "說明/motor05b.html"}]}}, {"id": "chinese", "name": "語文", "islandName": "語文溝通島", "icon": "📖", "color": "#8a5a2b", "trimColor": "#ffb74d", "groundColor": "#fff8e1", "themeDesc": "生活語彙、聽說讀寫、繪本故事與人際表達", "landmarkType": "book_tower", "ownCount": 30, "stage1Note": "", "stages": {"1": [{"uid": 1, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "語文", "u": 1, "name": "上學真有趣", "url": "https://smallda12.github.io/teaching-site-school-life/", "cover": "covers/newchinese01.webp", "manual": "說明/newchinese01.html"}, {"uid": 2, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "語文", "u": 2, "name": "我的新朋友", "url": "https://smallda12.github.io/teaching-site-new-friend/", "cover": "covers/newchinese02.webp", "manual": "說明/newchinese02.html"}, {"uid": 3, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "語文", "u": 3, "name": "看！我的新發現", "url": "https://smallda12.github.io/teaching-site-new-discovery/", "cover": "covers/newchinese03.webp", "manual": "說明/newchinese03.html"}, {"uid": 4, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "語文", "u": 4, "name": "神奇故事樹", "url": "https://smallda12.github.io/teaching-site-story-tree/", "cover": "covers/newchinese04.webp", "manual": "說明/newchinese04.html"}, {"uid": 5, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "語文", "u": 5, "name": "天氣的變化", "url": "https://smallda12.github.io/teaching-site-weather-change/", "cover": "covers/newchinese05.webp", "manual": "說明/newchinese05.html"}, {"uid": 31, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "語文", "u": 1, "name": "一起來上學", "url": "https://smallda12.github.io/teaching-site-schoolstart/", "cover": "covers/newchinese01b.webp", "manual": "說明/newchinese01b.html"}, {"uid": 32, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "語文", "u": 2, "name": "我的好朋友", "url": "https://smallda12.github.io/teaching-site-goodfriend/", "cover": "covers/newchinese02b.webp", "manual": "說明/newchinese02b.html"}, {"uid": 33, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "語文", "u": 3, "name": "生日快樂", "url": "https://smallda12.github.io/teaching-site-birthday/", "cover": "covers/newchinese03b.webp", "manual": "說明/newchinese03b.html"}, {"uid": 34, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "語文", "u": 4, "name": "我愛我的家", "url": "https://smallda12.github.io/teaching-site-lovefamily/", "cover": "covers/newchinese04b.webp", "manual": "說明/newchinese04b.html"}, {"uid": 35, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "語文", "u": 5, "name": "美麗的花園", "url": "https://smallda12.github.io/teaching-site-garden/", "cover": "covers/newchinese05b.webp", "manual": "說明/newchinese05b.html"}], "2": [{"uid": 76, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "語文", "u": 1, "name": "勇氣與智慧", "url": "https://smallda12.github.io/teaching-site-stage2-courage-wisdom/", "cover": "covers/twochinese01.webp", "manual": "說明/twochinese01.html"}, {"uid": 77, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "語文", "u": 2, "name": "我的心情", "url": "https://smallda12.github.io/teaching-site-stage2-my-mood/", "cover": "covers/twochinese02.webp", "manual": "說明/twochinese02.html"}, {"uid": 78, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "語文", "u": 3, "name": "福爾摩沙", "url": "https://smallda12.github.io/teaching-site-stage2-formosa/", "cover": "covers/twochinese03.webp", "manual": "說明/twochinese03.html"}, {"uid": 79, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "語文", "u": 4, "name": "語文萬花筒", "url": "https://smallda12.github.io/teaching-site-stage2-language-kaleidoscope/", "cover": "covers/twochinese04.webp", "manual": "說明/twochinese04.html"}, {"uid": 80, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "語文", "u": 5, "name": "勇敢說不", "url": "https://smallda12.github.io/teaching-site-stage2-body-boundaries/", "cover": "covers/twochinese05.webp", "manual": "說明/twochinese05.html"}, {"uid": 121, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "語文", "u": 1, "name": "面對成長", "url": "https://smallda12.github.io/teaching-site-stage2-growing-up/", "cover": "covers/twochinese01b.webp", "manual": "說明/twochinese01b.html"}, {"uid": 122, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "語文", "u": 2, "name": "心情組曲", "url": "https://smallda12.github.io/teaching-site-stage2-mood-suite/", "cover": "covers/twochinese02b.webp", "manual": "說明/twochinese02b.html"}, {"uid": 123, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "語文", "u": 3, "name": "臺灣好風情", "url": "https://smallda12.github.io/teaching-site-stage2-taiwan-scenery/", "cover": "covers/twochinese03b.webp", "manual": "說明/twochinese03b.html"}, {"uid": 124, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "語文", "u": 4, "name": "季節花卉", "url": "https://smallda12.github.io/teaching-site-stage2-tung-blossom/", "cover": "covers/twochinese04b.webp", "manual": "說明/twochinese04b.html"}, {"uid": 125, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "語文", "u": 5, "name": "閱讀交響樂", "url": "https://smallda12.github.io/teaching-site-stage2-reading-symphony/", "cover": "covers/twochinese05b.webp", "manual": "說明/twochinese05b.html"}], "3": [{"uid": 166, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "語文", "u": 1, "name": "作家與作品", "url": "https://smallda12.github.io/teaching-site-detective/", "cover": "covers/chinese01.webp", "manual": "說明/chinese01.html"}, {"uid": 167, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "語文", "u": 2, "name": "拔一條河", "url": "https://smallda12.github.io/teaching-site-tugofwar/", "cover": "covers/chinese02.webp", "manual": "說明/chinese02.html"}, {"uid": 168, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "語文", "u": 3, "name": "讓愛飛翔", "url": "https://smallda12.github.io/teaching-site-letlovefly/", "cover": "covers/chinese03.webp", "manual": "說明/chinese03.html"}, {"uid": 169, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "語文", "u": 4, "name": "自然饗宴", "url": "https://smallda12.github.io/teaching-site-mountain/", "cover": "covers/chinese04.webp", "manual": "說明/chinese04.html"}, {"uid": 170, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "語文", "u": 5, "name": "生活情味", "url": "https://smallda12.github.io/teaching-site-flavor/", "cover": "covers/chinese05.webp", "manual": "說明/chinese05.html"}, {"uid": 211, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "語文", "u": 1, "name": "想像世界", "url": "https://smallda12.github.io/teaching-site-fantasyworld/", "cover": "covers/chinese01b.webp", "manual": "說明/chinese01b.html"}, {"uid": 212, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "語文", "u": 2, "name": "課後時光", "url": "https://smallda12.github.io/teaching-site-afterschool/", "cover": "covers/chinese02b.webp", "manual": "說明/chinese02b.html"}, {"uid": 213, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "語文", "u": 3, "name": "親情點滴", "url": "https://smallda12.github.io/teaching-site-mothersday/", "cover": "covers/chinese03b.webp", "manual": "說明/chinese03b.html"}, {"uid": 214, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "語文", "u": 4, "name": "故宮挖寶趣", "url": "https://smallda12.github.io/teaching-site-palace/", "cover": "covers/chinese04b.webp", "manual": "說明/chinese04b.html"}, {"uid": 215, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "語文", "u": 5, "name": "我的家人", "url": "https://smallda12.github.io/teaching-site-myfamily/", "cover": "covers/chinese05b.webp", "manual": "說明/chinese05b.html"}]}}, {"id": "math", "name": "數學", "islandName": "生活數學島", "icon": "📐", "color": "#2b6cb0", "trimColor": "#64b5f6", "groundColor": "#e1f5fe", "themeDesc": "數與量、時間金錢、幾何圖形與邏輯序列", "landmarkType": "clock_pyramid", "ownCount": 30, "stage1Note": "", "stages": {"1": [{"uid": 6, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "數學", "u": 1, "name": "認識1-10的數", "url": "https://smallda12.github.io/teaching-site-numbers1to10/", "cover": "covers/newmath01.webp", "manual": "說明/newmath01.html"}, {"uid": 7, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "數學", "u": 2, "name": "比長短", "url": "https://smallda12.github.io/teaching-site-comparelength/", "cover": "covers/newmath02.webp", "manual": "說明/newmath02.html"}, {"uid": 8, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "數學", "u": 3, "name": "分類整理", "url": "https://smallda12.github.io/teaching-site-sorting/", "cover": "covers/newmath03.webp", "manual": "說明/newmath03.html"}, {"uid": 9, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "數學", "u": 4, "name": "走走看、畫畫看", "url": "https://smallda12.github.io/teaching-site-linesandcurves/", "cover": "covers/newmath04.webp", "manual": "說明/newmath04.html"}, {"uid": 10, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "數學", "u": 5, "name": "認識形狀", "url": "https://smallda12.github.io/teaching-site-recognize-shapes/", "cover": "covers/newmath05.webp", "manual": "說明/newmath05.html"}, {"uid": 36, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "數學", "u": 1, "name": "認識1-30的數", "url": "https://smallda12.github.io/teaching-site-numbers1to30/", "cover": "covers/newmath01b.webp", "manual": "說明/newmath01b.html"}, {"uid": 37, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "數學", "u": 2, "name": "形狀分類", "url": "https://smallda12.github.io/teaching-site-shapesorting/", "cover": "covers/newmath02b.webp", "manual": "說明/newmath02b.html"}, {"uid": 38, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "數學", "u": 3, "name": "排順序", "url": "https://smallda12.github.io/teaching-site-ordering/", "cover": "covers/newmath03b.webp", "manual": "說明/newmath03b.html"}, {"uid": 39, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "數學", "u": 4, "name": "比多少", "url": "https://smallda12.github.io/teaching-site-moreorless/", "cover": "covers/newmath04b.webp", "manual": "說明/newmath04b.html"}, {"uid": 40, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "數學", "u": 5, "name": "尋寶", "url": "https://smallda12.github.io/teaching-site-treasurehunt/", "cover": "covers/newmath05b.webp", "manual": "說明/newmath05b.html"}], "2": [{"uid": 71, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "數學", "u": 1, "name": "認識位數", "url": "https://smallda12.github.io/teaching-site-stage2-place-value/", "cover": "covers/twomath01.webp", "manual": "說明/twomath01.html"}, {"uid": 72, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "數學", "u": 2, "name": "1-50綜合練習", "url": "https://smallda12.github.io/teaching-site-stage2-number-50/", "cover": "covers/twomath02.webp", "manual": "說明/twomath02.html"}, {"uid": 73, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "數學", "u": 3, "name": "認識重量", "url": "https://smallda12.github.io/teaching-site-stage2-weight/", "cover": "covers/twomath03.webp", "manual": "說明/twomath03.html"}, {"uid": 74, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "數學", "u": 4, "name": "認識計算機", "url": "https://smallda12.github.io/teaching-site-calculator/", "cover": "covers/twomath04.webp", "manual": "說明/twomath04.html"}, {"uid": 75, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "數學", "u": 5, "name": "列表", "url": "https://smallda12.github.io/teaching-site-statistics-table/", "cover": "covers/twomath05.webp", "manual": "說明/twomath05.html"}, {"uid": 116, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "數學", "u": 1, "name": "時間與作息", "url": "https://smallda12.github.io/teaching-site-stage2-math-time-routine/", "cover": "covers/twomath01b.webp", "manual": "說明/twomath01b.html"}, {"uid": 117, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "數學", "u": 2, "name": "液體容量的測量工具", "url": "https://smallda12.github.io/teaching-site-stage2-math-capacity-tool/", "cover": "covers/twomath02b.webp", "manual": "說明/twomath02b.html"}, {"uid": 118, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "數學", "u": 3, "name": "測量液體的實物練習", "url": "https://smallda12.github.io/teaching-site-stage2-math-liquid-measure/", "cover": "covers/twomath03b.webp", "manual": "說明/twomath03b.html"}, {"uid": 119, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "數學", "u": 4, "name": "形狀的角", "url": "https://smallda12.github.io/teaching-site-stage2-math-shapes-angle/", "cover": "covers/twomath04b.webp", "manual": "說明/twomath04b.html"}, {"uid": 120, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "數學", "u": 5, "name": "形狀的邊長", "url": "https://smallda12.github.io/teaching-site-stage2-math-shapes-sides/", "cover": "covers/twomath05b.webp", "manual": "說明/twomath05b.html"}], "3": [{"uid": 161, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "數學", "u": 1, "name": "時間的運算", "url": "https://smallda12.github.io/teaching-site-time/", "cover": "covers/math01.webp", "manual": "說明/math01.html"}, {"uid": 162, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "數學", "u": 2, "name": "重量", "url": "https://smallda12.github.io/teaching-site-weight/", "cover": "covers/math02.webp", "manual": "說明/math02.html"}, {"uid": 163, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "數學", "u": 3, "name": "平面圖形", "url": "https://smallda12.github.io/teaching-site-shapes/", "cover": "covers/math03.webp", "manual": "說明/math03.html"}, {"uid": 164, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "數學", "u": 4, "name": "扇形", "url": "https://smallda12.github.io/teaching-site-sector/", "cover": "covers/math04.webp", "manual": "說明/math04.html"}, {"uid": 165, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "數學", "u": 5, "name": "線對稱圖形", "url": "https://smallda12.github.io/teaching-site-symmetry/", "cover": "covers/math05.webp", "manual": "說明/math05.html"}, {"uid": 206, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "數學", "u": 1, "name": "長方體與正多面體", "url": "https://smallda12.github.io/teaching-site-cuboid-cube/", "cover": "covers/math01b.webp", "manual": "說明/math01b.html"}, {"uid": 207, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "數學", "u": 2, "name": "立體形體-柱體", "url": "https://smallda12.github.io/teaching-site-prism/", "cover": "covers/math02b.webp", "manual": "說明/math02b.html"}, {"uid": 208, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "數學", "u": 3, "name": "立體形體-錐體", "url": "https://smallda12.github.io/teaching-site-pyramid/", "cover": "covers/math03b.webp", "manual": "說明/math03b.html"}, {"uid": 209, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "數學", "u": 4, "name": "立體形體-球體", "url": "https://smallda12.github.io/teaching-site-sphere/", "cover": "covers/math04b.webp", "manual": "說明/math04b.html"}, {"uid": 210, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "數學", "u": 5, "name": "立體形體", "url": "https://smallda12.github.io/teaching-site-solids/", "cover": "covers/math05b.webp", "manual": "說明/math05b.html"}]}}, {"id": "pe", "name": "健體", "islandName": "健康與體育島", "icon": "🏃", "color": "#c2410c", "trimColor": "#ff8a65", "groundColor": "#fbe9e7", "themeDesc": "體能運動遊戲、健康飲食、安全防護與身心活力", "landmarkType": "stadium_torch", "ownCount": 30, "stage1Note": "", "stages": {"1": [{"uid": 16, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "健體", "u": 1, "name": "認識身體", "url": "https://smallda12.github.io/teaching-site-mybody/", "cover": "covers/newpe01.webp", "manual": "說明/newpe01.html"}, {"uid": 17, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "健體", "u": 2, "name": "身體一級棒", "url": "https://smallda12.github.io/teaching-site-bodyfun/", "cover": "covers/newpe02.webp", "manual": "說明/newpe02.html"}, {"uid": 18, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "健體", "u": 3, "name": "我會照顧自己", "url": "https://smallda12.github.io/teaching-site-selfcare/", "cover": "covers/newpe03.webp", "manual": "說明/newpe03.html"}, {"uid": 19, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "健體", "u": 4, "name": "我愛運動", "url": "https://smallda12.github.io/teaching-site-loveexercise/", "cover": "covers/newpe04.webp", "manual": "說明/newpe04.html"}, {"uid": 20, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "健體", "u": 5, "name": "走走跑跑", "url": "https://smallda12.github.io/teaching-site-walkrun/", "cover": "covers/newpe05.webp", "manual": "說明/newpe05.html"}, {"uid": 46, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "健體", "u": 1, "name": "我是身體的好主人", "url": "https://smallda12.github.io/teaching-site-bodyowner/", "cover": "covers/newpe01b.webp", "manual": "說明/newpe01b.html"}, {"uid": 47, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "健體", "u": 2, "name": "身體魔法師", "url": "https://smallda12.github.io/teaching-site-bodymagic/", "cover": "covers/newpe02b.webp", "manual": "說明/newpe02b.html"}, {"uid": 48, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "健體", "u": 3, "name": "安全遊樂園", "url": "https://smallda12.github.io/teaching-site-safeplayground/", "cover": "covers/newpe03b.webp", "manual": "說明/newpe03b.html"}, {"uid": 49, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "健體", "u": 4, "name": "玩球樂趣多", "url": "https://smallda12.github.io/teaching-site-ballfun/", "cover": "covers/newpe04b.webp", "manual": "說明/newpe04b.html"}, {"uid": 50, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "健體", "u": 5, "name": "跳一跳，動一動", "url": "https://smallda12.github.io/teaching-site-jumpmove/", "cover": "covers/newpe05b.webp", "manual": "說明/newpe05b.html"}], "2": [{"uid": 81, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "健體", "u": 1, "name": "拒絕性騷擾與性侵害", "url": "https://smallda12.github.io/teaching-site-stage2-health-boundaries/", "cover": "covers/twope01.webp", "manual": "說明/twope01.html"}, {"uid": 82, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "健體", "u": 2, "name": "手腳並用", "url": "https://smallda12.github.io/teaching-site-stage2-health-coordination/", "cover": "covers/twope02.webp", "manual": "說明/twope02.html"}, {"uid": 83, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "健體", "u": 3, "name": "優良飲食大進擊", "url": "https://smallda12.github.io/teaching-site-stage2-health-nutrition/", "cover": "covers/twope03.webp", "manual": "說明/twope03.html"}, {"uid": 84, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "健體", "u": 4, "name": "運動天地", "url": "https://smallda12.github.io/teaching-site-stage2-health-sports/", "cover": "covers/twope04.webp", "manual": "說明/twope04.html"}, {"uid": 85, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "健體", "u": 5, "name": "戰勝病魔王", "url": "https://smallda12.github.io/teaching-site-stage2-health-illness/", "cover": "covers/twope05.webp", "manual": "說明/twope05.html"}, {"uid": 126, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "健體", "u": 1, "name": "同分享共歡樂", "url": "https://smallda12.github.io/teaching-site-stage2-health-cooperation/", "cover": "covers/twope01b.webp", "manual": "說明/twope01b.html"}, {"uid": 127, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "健體", "u": 2, "name": "足下風雲", "url": "https://smallda12.github.io/teaching-site-stage2-health-football/", "cover": "covers/twope02b.webp", "manual": "說明/twope02b.html"}, {"uid": 128, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "健體", "u": 3, "name": "認識居家、班級、校園、社區危險環境", "url": "https://smallda12.github.io/teaching-site-stage2-health-hazard-awareness/", "cover": "covers/twope03b.webp", "manual": "說明/twope03b.html"}, {"uid": 129, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "健體", "u": 4, "name": "運動萬花筒", "url": "https://smallda12.github.io/teaching-site-stage2-health-movement-kaleidoscope/", "cover": "covers/twope04b.webp", "manual": "說明/twope04b.html"}, {"uid": 130, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "健體", "u": 5, "name": "安全小達人", "url": "https://smallda12.github.io/teaching-site-stage2-health-safety-hero/", "cover": "covers/twope05b.webp", "manual": "說明/twope05b.html"}], "3": [{"uid": 171, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "健體", "u": 1, "name": "我會注意安全", "url": "https://smallda12.github.io/teaching-site-safety/", "cover": "covers/pe01.webp", "manual": "說明/pe01.html"}, {"uid": 172, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "健體", "u": 2, "name": "身體軸心運動", "url": "https://smallda12.github.io/teaching-site-axis/", "cover": "covers/pe02.webp", "manual": "說明/pe02.html"}, {"uid": 173, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "健體", "u": 3, "name": "克服危險", "url": "https://smallda12.github.io/teaching-site-danger/", "cover": "covers/pe03.webp", "manual": "說明/pe03.html"}, {"uid": 174, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "健體", "u": 4, "name": "我會賽跑", "url": "https://smallda12.github.io/teaching-site-race/", "cover": "covers/pe04.webp", "manual": "說明/pe04.html"}, {"uid": 175, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "健體", "u": 5, "name": "飲食上線", "url": "https://smallda12.github.io/teaching-site-food/", "cover": "covers/pe05.webp", "manual": "說明/pe05.html"}, {"uid": 216, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "健體", "u": 1, "name": "飲食面面觀", "url": "https://smallda12.github.io/teaching-site-foodsafety/", "cover": "covers/pe01b.webp", "manual": "說明/pe01b.html"}, {"uid": 217, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "健體", "u": 2, "name": "身體軸心運動-匍匐前進跨走", "url": "https://smallda12.github.io/teaching-site-crawl/", "cover": "covers/pe02b.webp", "manual": "說明/pe02b.html"}, {"uid": 218, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "健體", "u": 3, "name": "運動身體好", "url": "https://smallda12.github.io/teaching-site-exercise/", "cover": "covers/pe03b.webp", "manual": "說明/pe03b.html"}, {"uid": 219, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "健體", "u": 4, "name": "持拍大進擊", "url": "https://smallda12.github.io/teaching-site-badminton/", "cover": "covers/pe04b.webp", "manual": "說明/pe04b.html"}, {"uid": 220, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "健體", "u": 5, "name": "認識傳染疾病與養成運動習慣", "url": "https://smallda12.github.io/teaching-site-handwash/", "cover": "covers/pe05b.webp", "manual": "說明/pe05b.html"}]}}, {"id": "nature", "name": "自然", "islandName": "自然探險島", "icon": "🌱", "color": "#2e7d32", "trimColor": "#81c784", "groundColor": "#e8f5e9", "themeDesc": "動植物生態、天氣變化、奇妙磁力與科學探索", "landmarkType": "windmill_greenhouse", "ownCount": 20, "stage1Note": "國小第一學習階段合科為「🎒 生活課程」（10 單元）", "stages": {"1": [{"uid": 11, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 1, "name": "我的新學校", "url": "https://smallda12.github.io/teaching-site-myschool/", "cover": "covers/newdaily01.webp", "manual": "說明/newdaily01.html", "isSharedDaily": true}, {"uid": 12, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 2, "name": "聲音的世界", "url": "https://smallda12.github.io/teaching-site-soundworld/", "cover": "covers/newdaily02.webp", "manual": "說明/newdaily02.html", "isSharedDaily": true}, {"uid": 13, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 3, "name": "玩具總動員", "url": "https://smallda12.github.io/teaching-site-toystory/", "cover": "covers/newdaily03.webp", "manual": "說明/newdaily03.html", "isSharedDaily": true}, {"uid": 14, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 4, "name": "大樹高小花香", "url": "https://smallda12.github.io/teaching-site-treeflower/", "cover": "covers/newdaily04.webp", "manual": "說明/newdaily04.html", "isSharedDaily": true}, {"uid": 15, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 5, "name": "新年快樂", "url": "https://smallda12.github.io/teaching-site-newyearjoy/", "cover": "covers/newdaily05.webp", "manual": "說明/newdaily05.html", "isSharedDaily": true}, {"uid": 41, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 1, "name": "開學了", "url": "https://smallda12.github.io/teaching-site-newterm/", "cover": "covers/newdaily01b.webp", "manual": "說明/newdaily01b.html", "isSharedDaily": true}, {"uid": 42, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 2, "name": "傳話遊戲", "url": "https://smallda12.github.io/teaching-site-passmessage/", "cover": "covers/newdaily02b.webp", "manual": "說明/newdaily02b.html", "isSharedDaily": true}, {"uid": 43, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 3, "name": "親愛的家人", "url": "https://smallda12.github.io/teaching-site-dearfamily/", "cover": "covers/newdaily03b.webp", "manual": "說明/newdaily03b.html", "isSharedDaily": true}, {"uid": 44, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 4, "name": "快樂一夏", "url": "https://smallda12.github.io/teaching-site-happysummer/", "cover": "covers/newdaily04b.webp", "manual": "說明/newdaily04b.html", "isSharedDaily": true}, {"uid": 45, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 5, "name": "水的遊戲", "url": "https://smallda12.github.io/teaching-site-watergame/", "cover": "covers/newdaily05b.webp", "manual": "說明/newdaily05b.html", "isSharedDaily": true}], "2": [{"uid": 61, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "自然", "u": 1, "name": "認識植物", "url": "https://smallda12.github.io/teaching-site-stage2-plants/", "cover": "covers/twonature01.webp", "manual": "說明/twonature01.html"}, {"uid": 62, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "自然", "u": 2, "name": "校園探險隊", "url": "https://smallda12.github.io/teaching-site-stage2-campus/", "cover": "covers/twonature02.webp", "manual": "說明/twonature02.html"}, {"uid": 63, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "自然", "u": 3, "name": "這是什麼", "url": "https://smallda12.github.io/teaching-site-stage2-seasoning/", "cover": "covers/twonature03.webp", "manual": "說明/twonature03.html"}, {"uid": 64, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "自然", "u": 4, "name": "怎麼不見了", "url": "https://smallda12.github.io/teaching-site-stage2-dissolve/", "cover": "covers/twonature04.webp", "manual": "說明/twonature04.html"}, {"uid": 65, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "自然", "u": 5, "name": "奇妙的磁鐵", "url": "https://smallda12.github.io/teaching-site-magnet/", "cover": "covers/twonature05.webp", "manual": "說明/twonature05.html"}, {"uid": 106, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "自然", "u": 1, "name": "水魔法師", "url": "https://smallda12.github.io/teaching-site-stage2-water/", "cover": "covers/twonature01b.webp", "manual": "說明/twonature01b.html"}, {"uid": 107, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "自然", "u": 2, "name": "愛惜水資源", "url": "https://smallda12.github.io/teaching-site-stage2-savewater/", "cover": "covers/twonature02b.webp", "manual": "說明/twonature02b.html"}, {"uid": 108, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "自然", "u": 3, "name": "認識運輸工具與能源", "url": "https://smallda12.github.io/teaching-site-stage2-transport/", "cover": "covers/twonature03b.webp", "manual": "說明/twonature03b.html"}, {"uid": 109, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "自然", "u": 4, "name": "認識動物", "url": "https://smallda12.github.io/teaching-site-stage2-animals/", "cover": "covers/twonature04b.webp", "manual": "說明/twonature04b.html"}, {"uid": 110, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "自然", "u": 5, "name": "一起來模仿", "url": "https://smallda12.github.io/teaching-site-stage2-imitate/", "cover": "covers/twonature05b.webp", "manual": "說明/twonature05b.html"}], "3": [{"uid": 151, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "自然", "u": 1, "name": "植物小百科", "url": "https://smallda12.github.io/teaching-site-plant/", "cover": "covers/nature01.webp", "manual": "說明/nature01.html"}, {"uid": 152, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "自然", "u": 2, "name": "校園探險家", "url": "https://smallda12.github.io/teaching-site-explorer/", "cover": "covers/nature02.webp", "manual": "說明/nature02.html"}, {"uid": 153, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "自然", "u": 3, "name": "水溶液大觀園", "url": "https://smallda12.github.io/teaching-site-solution/", "cover": "covers/nature03.webp", "manual": "說明/nature03.html"}, {"uid": 154, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "自然", "u": 4, "name": "物質的溶解", "url": "https://smallda12.github.io/teaching-site-dissolve/", "cover": "covers/nature04.webp", "manual": "說明/nature04.html"}, {"uid": 155, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "自然", "u": 5, "name": "熱對物質的影響", "url": "https://smallda12.github.io/teaching-site-heat/", "cover": "covers/nature05.webp", "manual": "說明/nature05.html"}, {"uid": 196, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "自然", "u": 1, "name": "燃燒吧", "url": "https://smallda12.github.io/teaching-site-combustion/", "cover": "covers/nature01b.webp", "manual": "說明/nature01b.html"}, {"uid": 197, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "自然", "u": 2, "name": "小小消防隊", "url": "https://smallda12.github.io/teaching-site-firefighter/", "cover": "covers/nature02b.webp", "manual": "說明/nature02b.html"}, {"uid": 198, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "自然", "u": 3, "name": "動物家族", "url": "https://smallda12.github.io/teaching-site-animal/", "cover": "covers/nature03b.webp", "manual": "說明/nature03b.html"}, {"uid": 199, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "自然", "u": 4, "name": "動物動一動", "url": "https://smallda12.github.io/teaching-site-animal-move/", "cover": "covers/nature04b.webp", "manual": "說明/nature04b.html"}, {"uid": 200, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "自然", "u": 5, "name": "食品保存真奇妙", "url": "https://smallda12.github.io/teaching-site-food-storage/", "cover": "covers/nature05b.webp", "manual": "說明/nature05b.html"}]}}, {"id": "society", "name": "社會", "islandName": "社會生活島", "icon": "🏮", "color": "#c0562e", "trimColor": "#e57373", "groundColor": "#ffebee", "themeDesc": "家庭學校、社區資源、交通旅遊與多元文化", "landmarkType": "gate_town", "ownCount": 20, "stage1Note": "國小第一學習階段合科為「🎒 生活課程」（10 單元）", "stages": {"1": [{"uid": 11, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 1, "name": "我的新學校", "url": "https://smallda12.github.io/teaching-site-myschool/", "cover": "covers/newdaily01.webp", "manual": "說明/newdaily01.html", "isSharedDaily": true}, {"uid": 12, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 2, "name": "聲音的世界", "url": "https://smallda12.github.io/teaching-site-soundworld/", "cover": "covers/newdaily02.webp", "manual": "說明/newdaily02.html", "isSharedDaily": true}, {"uid": 13, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 3, "name": "玩具總動員", "url": "https://smallda12.github.io/teaching-site-toystory/", "cover": "covers/newdaily03.webp", "manual": "說明/newdaily03.html", "isSharedDaily": true}, {"uid": 14, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 4, "name": "大樹高小花香", "url": "https://smallda12.github.io/teaching-site-treeflower/", "cover": "covers/newdaily04.webp", "manual": "說明/newdaily04.html", "isSharedDaily": true}, {"uid": 15, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 5, "name": "新年快樂", "url": "https://smallda12.github.io/teaching-site-newyearjoy/", "cover": "covers/newdaily05.webp", "manual": "說明/newdaily05.html", "isSharedDaily": true}, {"uid": 41, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 1, "name": "開學了", "url": "https://smallda12.github.io/teaching-site-newterm/", "cover": "covers/newdaily01b.webp", "manual": "說明/newdaily01b.html", "isSharedDaily": true}, {"uid": 42, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 2, "name": "傳話遊戲", "url": "https://smallda12.github.io/teaching-site-passmessage/", "cover": "covers/newdaily02b.webp", "manual": "說明/newdaily02b.html", "isSharedDaily": true}, {"uid": 43, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 3, "name": "親愛的家人", "url": "https://smallda12.github.io/teaching-site-dearfamily/", "cover": "covers/newdaily03b.webp", "manual": "說明/newdaily03b.html", "isSharedDaily": true}, {"uid": 44, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 4, "name": "快樂一夏", "url": "https://smallda12.github.io/teaching-site-happysummer/", "cover": "covers/newdaily04b.webp", "manual": "說明/newdaily04b.html", "isSharedDaily": true}, {"uid": 45, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 5, "name": "水的遊戲", "url": "https://smallda12.github.io/teaching-site-watergame/", "cover": "covers/newdaily05b.webp", "manual": "說明/newdaily05b.html", "isSharedDaily": true}], "2": [{"uid": 66, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "社會", "u": 1, "name": "我會遵守班規", "url": "https://smallda12.github.io/teaching-site-stage2-classrules/", "cover": "covers/twosociety01.webp", "manual": "說明/twosociety01.html"}, {"uid": 67, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "社會", "u": 2, "name": "我要做個有禮貌的小孩", "url": "https://smallda12.github.io/teaching-site-stage2-polite/", "cover": "covers/twosociety02.webp", "manual": "說明/twosociety02.html"}, {"uid": 68, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "社會", "u": 3, "name": "我是班上人氣王", "url": "https://smallda12.github.io/teaching-site-stage2-popular/", "cover": "covers/twosociety03.webp", "manual": "說明/twosociety03.html"}, {"uid": 69, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "社會", "u": 4, "name": "我會做教室的整潔工作", "url": "https://smallda12.github.io/teaching-site-stage2-cleanup/", "cover": "covers/twosociety04.webp", "manual": "說明/twosociety04.html"}, {"uid": 70, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "社會", "u": 5, "name": "我會和同學一起合作做資源回收", "url": "https://smallda12.github.io/teaching-site-stage2-recycle/", "cover": "covers/twosociety05.webp", "manual": "說明/twosociety05.html"}, {"uid": 111, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "社會", "u": 1, "name": "每個人都不一樣", "url": "https://smallda12.github.io/teaching-site-stage2-different/", "cover": "covers/twosociety01b.webp", "manual": "說明/twosociety01b.html"}, {"uid": 112, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "社會", "u": 2, "name": "我會輪流和等待", "url": "https://smallda12.github.io/teaching-site-stage2-turns/", "cover": "covers/twosociety02b.webp", "manual": "說明/twosociety02b.html"}, {"uid": 113, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "社會", "u": 3, "name": "我會和同學一起玩", "url": "https://smallda12.github.io/teaching-site-stage2-playtogether/", "cover": "covers/twosociety03b.webp", "manual": "說明/twosociety03b.html"}, {"uid": 114, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "社會", "u": 4, "name": "我會和隊友合作參加競爭性的活動", "url": "https://smallda12.github.io/teaching-site-stage2-teamwork/", "cover": "covers/twosociety04b.webp", "manual": "說明/twosociety04b.html"}, {"uid": 115, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "社會", "u": 5, "name": "我是好幫手", "url": "https://smallda12.github.io/teaching-site-stage2-helper/", "cover": "covers/twosociety05b.webp", "manual": "說明/twosociety05b.html"}], "3": [{"uid": 156, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "社會", "u": 1, "name": "月圓人團圓", "url": "https://smallda12.github.io/teaching-site-moon/", "cover": "covers/society01.webp", "manual": "說明/society01.html"}, {"uid": 157, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "社會", "u": 2, "name": "聖誕快樂", "url": "https://smallda12.github.io/teaching-site-christmas/", "cover": "covers/society02.webp", "manual": "說明/society02.html"}, {"uid": 158, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "社會", "u": 3, "name": "認識火車站", "url": "https://smallda12.github.io/teaching-site-train-station/", "cover": "covers/society03.webp", "manual": "說明/society03.html"}, {"uid": 159, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "社會", "u": 4, "name": "認識機場", "url": "https://smallda12.github.io/teaching-site-airport/", "cover": "covers/society04.webp", "manual": "說明/society04.html"}, {"uid": 160, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "社會", "u": 5, "name": "認識港口", "url": "https://smallda12.github.io/teaching-site-harbor/", "cover": "covers/society05.webp", "manual": "說明/society05.html"}, {"uid": 201, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "社會", "u": 1, "name": "除夕團團圓圓", "url": "https://smallda12.github.io/teaching-site-newyear-eve/", "cover": "covers/society01b.webp", "manual": "說明/society01b.html"}, {"uid": 202, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "社會", "u": 2, "name": "新年到", "url": "https://smallda12.github.io/teaching-site-lunar-newyear/", "cover": "covers/society02b.webp", "manual": "說明/society02b.html"}, {"uid": 203, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "社會", "u": 3, "name": "端午划龍舟", "url": "https://smallda12.github.io/teaching-site-dragon-boat/", "cover": "covers/society03b.webp", "manual": "說明/society03b.html"}, {"uid": 204, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "社會", "u": 4, "name": "認識不同的職業(一)", "url": "https://smallda12.github.io/teaching-site-jobs-doctor-nurse/", "cover": "covers/society04b.webp", "manual": "說明/society04b.html"}, {"uid": 205, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "社會", "u": 5, "name": "認識不同的職業(二)", "url": "https://smallda12.github.io/teaching-site-jobs-workplace/", "cover": "covers/society05b.webp", "manual": "說明/society05b.html"}]}}, {"id": "life", "name": "綜合", "islandName": "綜合活動島", "icon": "🌏", "color": "#00838f", "trimColor": "#4dd0e1", "groundColor": "#e0f7fa", "themeDesc": "桌遊輪流、人際互動、生活美感與環境保護", "landmarkType": "ferris_camp", "ownCount": 20, "stage1Note": "國小第一學習階段合科為「🎒 生活課程」（10 單元）", "stages": {"1": [{"uid": 11, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 1, "name": "我的新學校", "url": "https://smallda12.github.io/teaching-site-myschool/", "cover": "covers/newdaily01.webp", "manual": "說明/newdaily01.html", "isSharedDaily": true}, {"uid": 12, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 2, "name": "聲音的世界", "url": "https://smallda12.github.io/teaching-site-soundworld/", "cover": "covers/newdaily02.webp", "manual": "說明/newdaily02.html", "isSharedDaily": true}, {"uid": 13, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 3, "name": "玩具總動員", "url": "https://smallda12.github.io/teaching-site-toystory/", "cover": "covers/newdaily03.webp", "manual": "說明/newdaily03.html", "isSharedDaily": true}, {"uid": 14, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 4, "name": "大樹高小花香", "url": "https://smallda12.github.io/teaching-site-treeflower/", "cover": "covers/newdaily04.webp", "manual": "說明/newdaily04.html", "isSharedDaily": true}, {"uid": 15, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 5, "name": "新年快樂", "url": "https://smallda12.github.io/teaching-site-newyearjoy/", "cover": "covers/newdaily05.webp", "manual": "說明/newdaily05.html", "isSharedDaily": true}, {"uid": 41, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 1, "name": "開學了", "url": "https://smallda12.github.io/teaching-site-newterm/", "cover": "covers/newdaily01b.webp", "manual": "說明/newdaily01b.html", "isSharedDaily": true}, {"uid": 42, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 2, "name": "傳話遊戲", "url": "https://smallda12.github.io/teaching-site-passmessage/", "cover": "covers/newdaily02b.webp", "manual": "說明/newdaily02b.html", "isSharedDaily": true}, {"uid": 43, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 3, "name": "親愛的家人", "url": "https://smallda12.github.io/teaching-site-dearfamily/", "cover": "covers/newdaily03b.webp", "manual": "說明/newdaily03b.html", "isSharedDaily": true}, {"uid": 44, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 4, "name": "快樂一夏", "url": "https://smallda12.github.io/teaching-site-happysummer/", "cover": "covers/newdaily04b.webp", "manual": "說明/newdaily04b.html", "isSharedDaily": true}, {"uid": 45, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 5, "name": "水的遊戲", "url": "https://smallda12.github.io/teaching-site-watergame/", "cover": "covers/newdaily05b.webp", "manual": "說明/newdaily05b.html", "isSharedDaily": true}], "2": [{"uid": 86, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "綜合", "u": 1, "name": "走路-站站立架(坐輪椅的學生)", "url": "https://smallda12.github.io/teaching-site-stage2-comprehensive-standing-frame/", "cover": "covers/twolife01.webp", "manual": "說明/twolife01.html"}, {"uid": 87, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "綜合", "u": 2, "name": "串珠子-基本動作", "url": "https://smallda12.github.io/teaching-site-stage2-comprehensive-bead-threading/", "cover": "covers/twolife02.webp", "manual": "說明/twolife02.html"}, {"uid": 88, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "綜合", "u": 3, "name": "溝通訓練-認識遊戲規則", "url": "https://smallda12.github.io/teaching-site-stage2-comprehensive-game-rules/", "cover": "covers/twolife03.webp", "manual": "說明/twolife03.html"}, {"uid": 89, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "綜合", "u": 4, "name": "桌遊-參與遊戲", "url": "https://smallda12.github.io/teaching-site-stage2-comprehensive-board-game/", "cover": "covers/twolife04.webp", "manual": "說明/twolife04.html"}, {"uid": 90, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "綜合", "u": 5, "name": "認識情緒", "url": "https://smallda12.github.io/teaching-site-stage2-comprehensive-emotions/", "cover": "covers/twolife05.webp", "manual": "說明/twolife05.html"}, {"uid": 131, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "綜合", "u": 1, "name": "生活美感創意家", "url": "https://smallda12.github.io/teaching-site-stage2-comprehensive-living-aesthetics/", "cover": "covers/twolife01b.webp", "manual": "說明/twolife01b.html"}, {"uid": 132, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "綜合", "u": 2, "name": "串珠子-按順序排列", "url": "https://smallda12.github.io/teaching-site-stage2-comprehensive-bead-sequencing/", "cover": "covers/twolife02b.webp", "manual": "說明/twolife02b.html"}, {"uid": 133, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "綜合", "u": 3, "name": "溝通訓練-輪流表達", "url": "https://smallda12.github.io/teaching-site-stage2-comprehensive-communication-turn-taking/", "cover": "covers/twolife03b.webp", "manual": "說明/twolife03b.html"}, {"uid": 134, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "綜合", "u": 4, "name": "桌遊-輪流參與", "url": "https://smallda12.github.io/teaching-site-stage2-comprehensive-boardgame-turn-taking/", "cover": "covers/twolife04b.webp", "manual": "說明/twolife04b.html"}, {"uid": 135, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "綜合", "u": 5, "name": "環境保護-垃圾分類回收", "url": "https://smallda12.github.io/teaching-site-stage2-comprehensive-recycling/", "cover": "covers/twolife05b.webp", "manual": "說明/twolife05b.html"}], "3": [{"uid": 176, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "綜合", "u": 1, "name": "性別教育-認識青春期", "url": "https://smallda12.github.io/teaching-site-puberty/", "cover": "covers/life01.webp", "manual": "說明/life01.html"}, {"uid": 177, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "綜合", "u": 2, "name": "安全教育-做自己身體的主人", "url": "https://smallda12.github.io/teaching-site-bodysafety/", "cover": "covers/life02.webp", "manual": "說明/life02.html"}, {"uid": 178, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "綜合", "u": 3, "name": "多元文化-台灣客閩", "url": "https://smallda12.github.io/teaching-site-hakka/", "cover": "covers/life03.webp", "manual": "說明/life03.html"}, {"uid": 179, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "綜合", "u": 4, "name": "環保教育-水資源與能源", "url": "https://smallda12.github.io/teaching-site-water/", "cover": "covers/life04.webp", "manual": "說明/life04.html"}, {"uid": 180, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "綜合", "u": 5, "name": "防疫大作戰-病毒傳染", "url": "https://smallda12.github.io/teaching-site-virus/", "cover": "covers/life05.webp", "manual": "說明/life05.html"}, {"uid": 221, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "綜合", "u": 1, "name": "性別教育-欣賞自己與他人", "url": "https://smallda12.github.io/teaching-site-self-appreciation/", "cover": "covers/life01b.webp", "manual": "說明/life01b.html"}, {"uid": 222, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "綜合", "u": 2, "name": "安全教育-遠離危險環境", "url": "https://smallda12.github.io/teaching-site-avoid-danger/", "cover": "covers/life02b.webp", "manual": "說明/life02b.html"}, {"uid": 223, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "綜合", "u": 3, "name": "多元文化-外省與原住民", "url": "https://smallda12.github.io/teaching-site-multicultural/", "cover": "covers/life03b.webp", "manual": "說明/life03b.html"}, {"uid": 224, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "綜合", "u": 4, "name": "環保教育-保護海洋", "url": "https://smallda12.github.io/teaching-site-ocean/", "cover": "covers/life04b.webp", "manual": "說明/life04b.html"}, {"uid": 225, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "綜合", "u": 5, "name": "防疫大作戰-蚊蟲傳染", "url": "https://smallda12.github.io/teaching-site-dengue/", "cover": "covers/life05b.webp", "manual": "說明/life05b.html"}]}}, {"id": "arts", "name": "藝術與人文", "islandName": "藝術創想島", "icon": "🎨", "color": "#8e24aa", "trimColor": "#ba68c8", "groundColor": "#f3e5f5", "themeDesc": "色彩造型、音樂律動、視覺美感與創意手作", "landmarkType": "palette_pavilion", "ownCount": 20, "stage1Note": "國小第一學習階段合科為「🎒 生活課程」（10 單元）", "stages": {"1": [{"uid": 11, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 1, "name": "我的新學校", "url": "https://smallda12.github.io/teaching-site-myschool/", "cover": "covers/newdaily01.webp", "manual": "說明/newdaily01.html", "isSharedDaily": true}, {"uid": 12, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 2, "name": "聲音的世界", "url": "https://smallda12.github.io/teaching-site-soundworld/", "cover": "covers/newdaily02.webp", "manual": "說明/newdaily02.html", "isSharedDaily": true}, {"uid": 13, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 3, "name": "玩具總動員", "url": "https://smallda12.github.io/teaching-site-toystory/", "cover": "covers/newdaily03.webp", "manual": "說明/newdaily03.html", "isSharedDaily": true}, {"uid": 14, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 4, "name": "大樹高小花香", "url": "https://smallda12.github.io/teaching-site-treeflower/", "cover": "covers/newdaily04.webp", "manual": "說明/newdaily04.html", "isSharedDaily": true}, {"uid": 15, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 5, "name": "新年快樂", "url": "https://smallda12.github.io/teaching-site-newyearjoy/", "cover": "covers/newdaily05.webp", "manual": "說明/newdaily05.html", "isSharedDaily": true}, {"uid": 41, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 1, "name": "開學了", "url": "https://smallda12.github.io/teaching-site-newterm/", "cover": "covers/newdaily01b.webp", "manual": "說明/newdaily01b.html", "isSharedDaily": true}, {"uid": 42, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 2, "name": "傳話遊戲", "url": "https://smallda12.github.io/teaching-site-passmessage/", "cover": "covers/newdaily02b.webp", "manual": "說明/newdaily02b.html", "isSharedDaily": true}, {"uid": 43, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 3, "name": "親愛的家人", "url": "https://smallda12.github.io/teaching-site-dearfamily/", "cover": "covers/newdaily03b.webp", "manual": "說明/newdaily03b.html", "isSharedDaily": true}, {"uid": 44, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 4, "name": "快樂一夏", "url": "https://smallda12.github.io/teaching-site-happysummer/", "cover": "covers/newdaily04b.webp", "manual": "說明/newdaily04b.html", "isSharedDaily": true}, {"uid": 45, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 5, "name": "水的遊戲", "url": "https://smallda12.github.io/teaching-site-watergame/", "cover": "covers/newdaily05b.webp", "manual": "說明/newdaily05b.html", "isSharedDaily": true}], "2": [{"uid": 101, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "藝術", "u": 1, "name": "樂來越幸福-鈴鼓演奏", "url": "https://smallda12.github.io/teaching-site-stage2-art-tambourine/", "cover": "covers/twoart01.webp", "manual": "說明/twoart01.html"}, {"uid": 102, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "藝術", "u": 2, "name": "創意點線面-彩色筆描繪", "url": "https://smallda12.github.io/teaching-site-stage2-art-dotsline/", "cover": "covers/twoart02.webp", "manual": "說明/twoart02.html"}, {"uid": 103, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "藝術", "u": 3, "name": "異材質創作-色紙撕貼", "url": "https://smallda12.github.io/teaching-site-stage2-art-tearpaste/", "cover": "covers/twoart03.webp", "manual": "說明/twoart03.html"}, {"uid": 104, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "藝術", "u": 4, "name": "城市中的馬車", "url": "https://smallda12.github.io/teaching-site-stage2-art-carriage/", "cover": "covers/twoart04.webp", "manual": "說明/twoart04.html"}, {"uid": 105, "stage": 2, "sem": "二上", "semFull": "第一學期", "origDomain": "藝術", "u": 5, "name": "唱唱跳跳-慢節奏流行兒歌", "url": "https://smallda12.github.io/teaching-site-stage2-art-singdance/", "cover": "covers/twoart05.webp", "manual": "說明/twoart05.html"}, {"uid": 146, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "藝術", "u": 1, "name": "樂來越幸福-沙鈴演奏", "url": "https://smallda12.github.io/teaching-site-stage2-art-maracas/", "cover": "covers/twoart01b.webp", "manual": "說明/twoart01b.html"}, {"uid": 147, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "藝術", "u": 2, "name": "創意點線面-蠟筆描繪", "url": "https://smallda12.github.io/teaching-site-stage2-art-crayon/", "cover": "covers/twoart02b.webp", "manual": "說明/twoart02b.html"}, {"uid": 148, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "藝術", "u": 3, "name": "異材質創作-壁報紙剪貼", "url": "https://smallda12.github.io/teaching-site-stage2-art-paper-collage/", "cover": "covers/twoart03b.webp", "manual": "說明/twoart03b.html"}, {"uid": 149, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "藝術", "u": 4, "name": "森林狂想曲", "url": "https://smallda12.github.io/teaching-site-stage2-art-forest/", "cover": "covers/twoart04b.webp", "manual": "說明/twoart04b.html"}, {"uid": 150, "stage": 2, "sem": "二下", "semFull": "第二學期", "origDomain": "藝術", "u": 5, "name": "唱唱跳跳-快節奏流行兒歌唱跳", "url": "https://smallda12.github.io/teaching-site-stage2-art-singdance-fast/", "cover": "covers/twoart05b.webp", "manual": "說明/twoart05b.html"}], "3": [{"uid": 181, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "藝文", "u": 1, "name": "樂來越幸福-手搖鈴演奏", "url": "https://smallda12.github.io/teaching-site-handbell/", "cover": "covers/arts01.webp", "manual": "說明/arts01.html"}, {"uid": 182, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "藝文", "u": 2, "name": "創意點線面-廣告顏料描繪", "url": "https://smallda12.github.io/teaching-site-dotline/", "cover": "covers/arts02.webp", "manual": "說明/arts02.html"}, {"uid": 183, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "藝文", "u": 3, "name": "異材質創作-再生藝術", "url": "https://smallda12.github.io/teaching-site-recycleart/", "cover": "covers/arts03.webp", "manual": "說明/arts03.html"}, {"uid": 184, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "藝文", "u": 4, "name": "蝶戀花", "url": "https://smallda12.github.io/teaching-site-butterfly/", "cover": "covers/arts04.webp", "manual": "說明/arts04.html"}, {"uid": 185, "stage": 3, "sem": "三上", "semFull": "第一學期", "origDomain": "藝文", "u": 5, "name": "唱唱跳跳-慢節奏熱門流行舞蹈", "url": "https://smallda12.github.io/teaching-site-slowdance/", "cover": "covers/arts05.webp", "manual": "說明/arts05.html"}, {"uid": 226, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "藝文", "u": 1, "name": "樂來越幸福-醒獅鼓演奏", "url": "https://smallda12.github.io/teaching-site-liondrum/", "cover": "covers/arts01b.webp", "manual": "說明/arts01b.html"}, {"uid": 227, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "藝文", "u": 2, "name": "創意點線面-壓克力顏料描繪", "url": "https://smallda12.github.io/teaching-site-acrylicpaint/", "cover": "covers/arts02b.webp", "manual": "說明/arts02b.html"}, {"uid": 228, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "藝文", "u": 3, "name": "異材質創作-卡點西德拼貼", "url": "https://smallda12.github.io/teaching-site-collage/", "cover": "covers/arts03b.webp", "manual": "說明/arts03b.html"}, {"uid": 229, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "藝文", "u": 4, "name": "動物園", "url": "https://smallda12.github.io/teaching-site-artshow/", "cover": "covers/arts04b.webp", "manual": "說明/arts04b.html"}, {"uid": 230, "stage": 3, "sem": "三下", "semFull": "第二學期", "origDomain": "藝文", "u": 5, "name": "唱唱跳跳-快節奏熱門流行舞蹈", "url": "https://smallda12.github.io/teaching-site-fastdance/", "cover": "covers/arts05b.webp", "manual": "說明/arts05b.html"}]}}, {"id": "daily", "name": "生活課程", "islandName": "生活課程啟蒙島", "icon": "🎒", "color": "#d81b60", "trimColor": "#f06292", "groundColor": "#fce4ec", "themeDesc": "第一學習階段跨領域統整：校園探索、四季自然與生活體驗", "landmarkType": "schoolbag_park", "ownCount": 10, "stage1Note": "", "stages": {"1": [{"uid": 11, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 1, "name": "我的新學校", "url": "https://smallda12.github.io/teaching-site-myschool/", "cover": "covers/newdaily01.webp", "manual": "說明/newdaily01.html"}, {"uid": 12, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 2, "name": "聲音的世界", "url": "https://smallda12.github.io/teaching-site-soundworld/", "cover": "covers/newdaily02.webp", "manual": "說明/newdaily02.html"}, {"uid": 13, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 3, "name": "玩具總動員", "url": "https://smallda12.github.io/teaching-site-toystory/", "cover": "covers/newdaily03.webp", "manual": "說明/newdaily03.html"}, {"uid": 14, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 4, "name": "大樹高小花香", "url": "https://smallda12.github.io/teaching-site-treeflower/", "cover": "covers/newdaily04.webp", "manual": "說明/newdaily04.html"}, {"uid": 15, "stage": 1, "sem": "一上", "semFull": "第一學期", "origDomain": "生活", "u": 5, "name": "新年快樂", "url": "https://smallda12.github.io/teaching-site-newyearjoy/", "cover": "covers/newdaily05.webp", "manual": "說明/newdaily05.html"}, {"uid": 41, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 1, "name": "開學了", "url": "https://smallda12.github.io/teaching-site-newterm/", "cover": "covers/newdaily01b.webp", "manual": "說明/newdaily01b.html"}, {"uid": 42, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 2, "name": "傳話遊戲", "url": "https://smallda12.github.io/teaching-site-passmessage/", "cover": "covers/newdaily02b.webp", "manual": "說明/newdaily02b.html"}, {"uid": 43, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 3, "name": "親愛的家人", "url": "https://smallda12.github.io/teaching-site-dearfamily/", "cover": "covers/newdaily03b.webp", "manual": "說明/newdaily03b.html"}, {"uid": 44, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 4, "name": "快樂一夏", "url": "https://smallda12.github.io/teaching-site-happysummer/", "cover": "covers/newdaily04b.webp", "manual": "說明/newdaily04b.html"}, {"uid": 45, "stage": 1, "sem": "一下", "semFull": "第二學期", "origDomain": "生活", "u": 5, "name": "水的遊戲", "url": "https://smallda12.github.io/teaching-site-watergame/", "cover": "covers/newdaily05b.webp", "manual": "說明/newdaily05b.html"}], "2": [], "3": []}}];
+const DEFAULT_DOMAIN_ID = "selfcare";
 
-  // S2
-  229: { id: 229, stage: 2, sem: "二上", u: 1, name: "衣褲鞋襪大解密", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-clothes-shoes-socks/" },
-  237: { id: 237, stage: 2, sem: "二上", u: 2, name: "會穿脫鞋襪", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-shoe-sock-dressing/" },
-  238: { id: 238, stage: 2, sem: "二上", u: 3, name: "會穿脫衣褲", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-clothes-dressing/" },
-  230: { id: 230, stage: 2, sem: "二上", u: 4, name: "服裝儀容糾察隊", url: "https://smallda12.github.io/teaching-site-lifeskill-clothes-check/" },
-  231: { id: 231, stage: 2, sem: "二上", u: 5, name: "洗洗洗～洗乾淨", url: "https://smallda12.github.io/teaching-site-lifeskill-wash-clean/" },
-  219: { id: 219, stage: 2, sem: "二下", u: 1, name: "護牙一生", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-teeth/" },
-  223: { id: 223, stage: 2, sem: "二下", u: 2, name: "清潔基本功", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-cleaning/" },
-  224: { id: 224, stage: 2, sem: "二下", u: 3, name: "我會掃地", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-sweeping/" },
-  225: { id: 225, stage: 2, sem: "二下", u: 4, name: "垃圾分類", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-garbage-sorting/" },
-  227: { id: 227, stage: 2, sem: "二下", u: 5, name: "資源回收", url: "https://smallda12.github.io/teaching-site-stage2-lifeskill-recycling/" },
+const DOMAIN_MAP = {};
+const UNIT_MAP = {};
+const ALL_UNITS_FLAT = [];
 
-  // S3
-  31: { id: 31, stage: 3, sem: "三上", u: 1, name: "危機總動員", url: "https://smallda12.github.io/teaching-site-crisis/" },
-  32: { id: 32, stage: 3, sem: "三上", u: 2, name: "警報解除", url: "https://smallda12.github.io/teaching-site-alarm/" },
-  36: { id: 36, stage: 3, sem: "三上", u: 3, name: "男生女生~耶！", url: "https://smallda12.github.io/teaching-site-respect/" },
-  37: { id: 37, stage: 3, sem: "三上", u: 4, name: "自我保護觀", url: "https://smallda12.github.io/teaching-site-selfprotect/" },
-  39: { id: 39, stage: 3, sem: "三上", u: 5, name: "便利的交通工具", url: "https://smallda12.github.io/teaching-site-transport/" },
-  82: { id: 82, stage: 3, sem: "三下", u: 1, name: "認識交通標誌與號誌燈", url: "https://smallda12.github.io/teaching-site-trafficsign/" },
-  78: { id: 78, stage: 3, sem: "三下", u: 2, name: "健康情報站", url: "https://smallda12.github.io/teaching-site-healthinfo/" },
-  79: { id: 79, stage: 3, sem: "三下", u: 3, name: "疾病防治區", url: "https://smallda12.github.io/teaching-site-disease/" },
-  80: { id: 80, stage: 3, sem: "三下", u: 4, name: "認識休閒活動", url: "https://smallda12.github.io/teaching-site-leisure/" },
-  81: { id: 81, stage: 3, sem: "三下", u: 5, name: "認識社區環境與資源", url: "https://smallda12.github.io/teaching-site-community/" }
-};
+DOMAINS_DATA.forEach(d => {
+  DOMAIN_MAP[d.id] = d;
+  ["1", "2", "3"].forEach(st => {
+    (d.stages[st] || []).forEach(u => {
+      if (!UNIT_MAP[u.uid]) {
+        UNIT_MAP[u.uid] = u;
+        ALL_UNITS_FLAT.push(u);
+      }
+    });
+  });
+});
+
+// 狀態管理
+let currentMode = "world"; // "world" or domainId
+let currentStageFilter = "all"; // "all", "1", "2", "3"
+let displayView = "3d"; // "3d" or "list"
+let showAll30Pins = false;
+let activeModalUnitList = [];
+let activeModalIndex = 0;
 
 // ==========================================
-// Three.js 3D 微縮沙盤引擎 (IsleForge 架構)
+// Three.js 3D 黏土微縮沙盤引擎
 // ==========================================
-let scene, camera, renderer;
-let islandGroup, labelsContainer;
-let isDragging = false, prevMousePos = { x: 0, y: 0 };
-let spherical = { radius: 38, theta: Math.PI / 4, phi: Math.PI / 3.2 };
-let targetLookAt = new THREE.Vector3(0, 0, 0);
-let currentLookAt = new THREE.Vector3(0, 0, 0);
+let scene, camera, renderer, worldGroup, labelsLayer;
+let isDragging = false, dragMoved = false, prevPointer = { x: 0, y: 0 };
+let spherical = { radius: 42, theta: 0.68, phi: 1.02 };
+let targetLook = new THREE.Vector3(0, 0, 0);
+let currentLook = new THREE.Vector3(0, 0, 0);
 let autoTour = false;
-let todIndex = 0; // 0: day, 1: sunset, 2: night
-let sunLight, hemiLight, dirLight;
-const labelElements = [];
+let todState = 0; // 0: day, 1: sunset, 2: night
+let hemiLight, sunLight, backLight, seaMesh;
+const pinItems = [];
+const spinningMeshes = [];
 
-// 輔助建模工廠 (Low-poly primitives)
-const matCache = {};
-function getMat(color, emissive = 0x000000) {
-  const k = color + '_' + emissive;
-  if (!matCache[k]) {
-    matCache[k] = new THREE.MeshLambertMaterial({
-      color: new THREE.Color(color),
+const matPool = {};
+function mat(hex, emissive = 0x000000) {
+  const key = hex + "_" + emissive;
+  if (!matPool[key]) {
+    matPool[key] = new THREE.MeshLambertMaterial({
+      color: new THREE.Color(hex),
       emissive: new THREE.Color(emissive),
       flatShading: true
     });
   }
-  return matCache[k];
+  return matPool[key];
 }
 
-function makeBox(w, h, d, color, x = 0, y = 0, z = 0, emissive = 0x000000) {
-  const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), getMat(color, emissive));
-  mesh.position.set(x, y + h / 2, z);
-  mesh.castShadow = true; mesh.receiveShadow = true;
-  return mesh;
+function box(w, h, d, color, x = 0, y = 0, z = 0, em = 0x000000) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat(color, em));
+  m.position.set(x, y + h / 2, z);
+  m.castShadow = true; m.receiveShadow = true;
+  return m;
+}
+function cyl(rt, rb, h, color, x = 0, y = 0, z = 0, seg = 8, em = 0x000000) {
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), mat(color, em));
+  m.position.set(x, y + h / 2, z);
+  m.castShadow = true; m.receiveShadow = true;
+  return m;
+}
+function cone(r, h, color, x = 0, y = 0, z = 0, seg = 6) {
+  const m = new THREE.Mesh(new THREE.ConeGeometry(r, h, seg), mat(color));
+  m.position.set(x, y + h / 2, z);
+  m.castShadow = true; m.receiveShadow = true;
+  return m;
+}
+function ball(r, color, x = 0, y = 0, z = 0, seg = 8) {
+  const m = new THREE.Mesh(new THREE.SphereGeometry(r, seg, seg), mat(color));
+  m.position.set(x, y, z);
+  m.castShadow = true;
+  return m;
 }
 
-function makeCyl(rTop, rBot, h, color, x = 0, y = 0, z = 0, segs = 8) {
-  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(rTop, rBot, h, segs), getMat(color));
-  mesh.position.set(x, y + h / 2, z);
-  mesh.castShadow = true; mesh.receiveShadow = true;
-  return mesh;
-}
+// 帶彩色邊框與厚實土層的立體六角地塊（對齊參考圖的精緻鑲邊六角島）
+function createHexPlatform(radius, height, topHex, trimHex, dirtHex, x, z) {
+  const g = new THREE.Group();
+  g.position.set(x, 0, z);
 
-function makeCone(r, h, color, x = 0, y = 0, z = 0, segs = 6) {
-  const mesh = new THREE.Mesh(new THREE.ConeGeometry(r, h, segs), getMat(color));
-  mesh.position.set(x, y + h / 2, z);
-  mesh.castShadow = true; mesh.receiveShadow = true;
-  return mesh;
-}
-
-function makeSphere(r, color, x = 0, y = 0, z = 0) {
-  const mesh = new THREE.Mesh(new THREE.SphereGeometry(r, 8, 6), getMat(color));
-  mesh.position.set(x, y, z);
-  mesh.castShadow = true;
-  return mesh;
-}
-
-// 建立緊湊聚集的 3D 六角基座
-function makeHexTile(r, height, topColor, dirtColor, x, z) {
-  const group = new THREE.Group();
-  group.position.set(x, 0, z);
-
-  // 頂面草地
-  const top = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 0.4, 6), getMat(topColor));
-  top.position.y = height - 0.2;
-  top.receiveShadow = true;
-  group.add(top);
-
-  // 厚實泥土層
-  const cliff = new THREE.Mesh(new THREE.CylinderGeometry(r, r * 0.88, height, 6), getMat(dirtColor));
-  cliff.position.y = height / 2 - 0.2;
+  // 底層岩石與泥土斷面
+  const cliff = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.98, radius * 0.82, height, 6), mat(dirtHex));
+  cliff.position.y = height / 2 - 0.25;
   cliff.castShadow = true; cliff.receiveShadow = true;
-  group.add(cliff);
+  g.add(cliff);
 
-  return { group, topY: height };
+  // 彩色外框鑲邊 (Trim Rim)
+  const rim = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.03, radius * 1.01, 0.34, 6), mat(trimHex));
+  rim.position.y = height - 0.32;
+  rim.castShadow = true; rim.receiveShadow = true;
+  g.add(rim);
+
+  // 頂層草皮／鋪面
+  const top = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.96, radius * 0.96, 0.26, 6), mat(topHex));
+  top.position.y = height - 0.18;
+  top.receiveShadow = true;
+  g.add(top);
+
+  return { group: g, topY: height - 0.05 };
 }
 
-// 建立可愛小樹
-function makeTree(x, y, z, s = 1, isPine = false) {
+function createTree(x, y, z, scale = 1, type = 0) {
   const g = new THREE.Group();
   g.position.set(x, y, z);
-  g.add(makeCyl(0.12 * s, 0.15 * s, 0.6 * s, "#8d6e63", 0, 0, 0, 5));
-  if (isPine) {
-    g.add(makeCone(0.7 * s, 1.0 * s, "#2e7d32", 0, 0.4 * s, 0, 5));
-    g.add(makeCone(0.55 * s, 0.8 * s, "#43a047", 0, 0.9 * s, 0, 5));
-    g.add(makeCone(0.38 * s, 0.6 * s, "#66bb6a", 0, 1.4 * s, 0, 5));
+  g.add(cyl(0.1 * scale, 0.14 * scale, 0.55 * scale, "#795548", 0, 0, 0, 5));
+  if (type % 2 === 0) {
+    // 針葉松樹
+    g.add(cone(0.65 * scale, 0.95 * scale, "#2e7d32", 0, 0.38 * scale, 0, 6));
+    g.add(cone(0.5 * scale, 0.8 * scale, "#43a047", 0, 0.85 * scale, 0, 6));
+    g.add(cone(0.34 * scale, 0.6 * scale, "#66bb6a", 0, 1.3 * scale, 0, 6));
   } else {
-    g.add(makeSphere(0.6 * s, "#4caf50", 0, 0.8 * s, 0));
-    g.add(makeSphere(0.4 * s, "#81c784", 0.25 * s, 1.1 * s, 0.1 * s));
+    // 圓球繪本樹
+    g.add(ball(0.56 * scale, "#66bb6a", 0, 0.82 * scale, 0, 7));
+    g.add(ball(0.38 * scale, "#81c784", 0.24 * scale, 1.05 * scale, 0.12 * scale, 6));
   }
   return g;
 }
 
-// 建立可愛小公仔 (NPC Mascot)
-function makeChibiMascot(x, y, z, shirtColor = "#1976d2", capColor = "#ffa000") {
+function createMascot(x, y, z, bodyColor, hatColor) {
   const g = new THREE.Group();
   g.position.set(x, y, z);
-  // 身體衣服
-  g.add(makeCyl(0.32, 0.35, 0.6, shirtColor, 0, 0, 0, 6));
-  // 圓圓頭部
-  g.add(makeSphere(0.35, "#ffcc80", 0, 0.85, 0));
-  // 帽子或耳朵
-  g.add(makeCone(0.3, 0.35, capColor, 0, 1.1, 0, 5));
+  g.add(cyl(0.28, 0.32, 0.52, bodyColor, 0, 0, 0, 7));
+  g.add(ball(0.32, "#ffe0b2", 0, 0.72, 0, 8));
+  g.add(cone(0.26, 0.32, hatColor, 0, 0.96, 0, 6));
+  // 耳朵或小手
+  g.add(ball(0.1, bodyColor, -0.32, 0.35, 0, 5));
+  g.add(ball(0.1, bodyColor, 0.32, 0.35, 0, 5));
   return g;
 }
 
-// 建立特色建築
-function makeCottage(x, y, z, wallColor, roofColor, isWindmill = false) {
+function createStreetLamp(x, y, z) {
   const g = new THREE.Group();
   g.position.set(x, y, z);
-  // 牆面
-  g.add(makeBox(1.8, 1.2, 1.6, wallColor, 0, 0, 0));
-  // 屋頂
-  const roof = makeCone(1.4, 1.0, roofColor, 0, 1.2, 0, 4);
-  roof.rotation.y = Math.PI / 4;
-  g.add(roof);
-  // 窗戶與門
-  g.add(makeBox(0.4, 0.6, 0.05, "#8d6e63", 0, 0, 0.82));
-  g.add(makeBox(0.4, 0.4, 0.05, "#ffffff", 0.5, 0.4, 0.82, 0xffeb3b));
+  g.add(cyl(0.05, 0.07, 1.35, "#546e7a", 0, 0, 0, 6));
+  const bulb = ball(0.18, "#fff59d", 0, 1.42, 0, 6);
+  bulb.material = mat("#fff59d", 0xfbc02d);
+  g.add(bulb);
+  return g;
+}
 
-  if (isWindmill) {
-    const mill = makeCyl(0.06, 0.06, 1.8, "#5d4037", 0, 1.6, 0.9);
-    mill.rotation.z = Math.PI / 4;
-    g.add(mill);
-    const mill2 = makeCyl(0.06, 0.06, 1.8, "#5d4037", 0, 1.6, 0.9);
-    mill2.rotation.z = -Math.PI / 4;
-    g.add(mill2);
+function createBench(x, y, z, rotY = 0) {
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+  g.rotation.y = rotY;
+  g.add(box(0.85, 0.18, 0.32, "#8d6e63", 0, 0.08, 0));
+  g.add(box(0.85, 0.25, 0.08, "#6d4c41", 0, 0.22, -0.12));
+  return g;
+}
+
+// 多樣化微縮建築生成器（讓 30 個單元建築造型豐富緊湊）
+function createUnitBuilding(x, y, z, styleIdx, roofColor, wallColor = "#ffffff") {
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+  const kind = styleIdx % 5;
+
+  if (kind === 0) {
+    // 經典繪本斜頂小屋
+    g.add(box(1.45, 1.05, 1.3, wallColor, 0, 0, 0));
+    const r = cone(1.18, 0.85, roofColor, 0, 1.05, 0, 4);
+    r.rotation.y = Math.PI / 4;
+    g.add(r);
+    g.add(box(0.32, 0.52, 0.05, "#795548", 0, 0, 0.66));
+    g.add(box(0.32, 0.32, 0.05, "#fff9c4", 0.4, 0.38, 0.66, 0xfdd835));
+  } else if (kind === 1) {
+    // 雙層小鐘樓學堂
+    g.add(box(1.5, 0.95, 1.25, wallColor, 0, 0, 0));
+    g.add(box(0.85, 0.75, 0.85, wallColor, 0, 0.95, 0));
+    const r = cone(0.75, 0.7, roofColor, 0, 1.7, 0, 4);
+    r.rotation.y = Math.PI / 4;
+    g.add(r);
+    g.add(ball(0.18, "#ffd54f", 0, 1.32, 0.45, 6));
+  } else if (kind === 2) {
+    // 荷蘭小風車工坊
+    g.add(cyl(0.62, 0.78, 1.45, wallColor, 0, 0, 0, 8));
+    g.add(cone(0.75, 0.65, roofColor, 0, 1.45, 0, 8));
+    const blades = new THREE.Group();
+    blades.position.set(0, 1.15, 0.72);
+    blades.add(box(1.5, 0.14, 0.04, "#5d4037", 0, -0.07, 0));
+    blades.add(box(0.14, 1.5, 0.04, "#5d4037", 0, -0.75, 0));
+    g.add(blades);
+    spinningMeshes.push(blades);
+  } else if (kind === 3) {
+    // 希臘柱小涼亭／視覺館
+    g.add(box(1.55, 0.2, 1.35, "#eceff1", 0, 0, 0));
+    [[-0.55, -0.45], [0.55, -0.45], [-0.55, 0.45], [0.55, 0.45]].forEach(([px, pz]) => {
+      g.add(cyl(0.1, 0.1, 0.95, wallColor, px, 0.2, pz, 6));
+    });
+    const r = cone(1.22, 0.7, roofColor, 0, 1.15, 0, 4);
+    r.rotation.y = Math.PI / 4;
+    g.add(r);
+  } else {
+    // 圓頂天文／圓塔屋
+    g.add(cyl(0.72, 0.75, 1.05, wallColor, 0, 0, 0, 10));
+    g.add(ball(0.72, roofColor, 0, 1.05, 0, 10));
+    g.add(box(0.34, 0.5, 0.1, "#5d4037", 0, 0, 0.72));
   }
   return g;
 }
 
-function makeLighthouse(x, y, z) {
+// 各領域專屬中央主題地標 (Domain Landmark Centerpiece)
+function createDomainMonument(type, primaryColor, trimColor, yBase) {
   const g = new THREE.Group();
-  g.position.set(x, y, z);
-  g.add(makeCyl(0.8, 1.1, 3.2, "#ffffff", 0, 0, 0, 8));
-  g.add(makeCyl(0.9, 0.9, 0.5, "#d32f2f", 0, 2.0, 0, 8));
-  g.add(makeCyl(0.65, 0.65, 0.6, "#ffeb3b", 0, 3.2, 0, 8, 0xffd54f));
-  g.add(makeCone(0.85, 0.7, "#d32f2f", 0, 3.8, 0, 8));
+  g.position.set(0, yBase, 0);
+
+  // 圓形石砌底座與紅旗
+  g.add(cyl(2.2, 2.4, 0.22, "#e2e8f0", 0, 0, 0, 12));
+  g.add(cyl(0.06, 0.06, 2.8, "#94a3b8", -1.5, 0.2, -1.0, 6));
+  g.add(box(0.75, 0.45, 0.04, "#ef4444", -1.12, 2.45, -1.0));
+
+  if (type === "lighthouse_whale") {
+    // 水池＋小白鯨＋紅白燈塔
+    g.add(cyl(1.65, 1.7, 0.15, "#38bdf8", 0, 0.18, 0, 14));
+    const whale = ball(0.62, "#0284c7", 0.35, 0.65, 0.2, 10);
+    whale.scale.set(1.35, 0.85, 1.0);
+    g.add(whale);
+    g.add(cyl(0.55, 0.75, 2.5, "#ffffff", -0.65, 0.2, -0.3, 8));
+    g.add(cyl(0.62, 0.62, 0.45, "#ef4444", -0.65, 1.6, -0.3, 8));
+    g.add(cone(0.68, 0.65, "#ef4444", -0.65, 2.7, -0.3, 8));
+  } else if (type === "gym_rainbow") {
+    // 彩虹階梯與平衡木館
+    g.add(box(1.8, 0.4, 1.1, "#ef5350", 0, 0.2, 0));
+    g.add(box(1.4, 0.4, 0.9, "#ffca28", 0, 0.6, 0));
+    g.add(box(1.0, 0.4, 0.7, "#42a5f5", 0, 1.0, 0));
+    g.add(ball(0.48, "#ab47bc", 0, 1.75, 0, 10));
+  } else if (type === "book_tower") {
+    // 敞開的立體巨型繪本書台
+    g.add(box(1.9, 0.35, 1.3, "#d97706", 0, 0.2, 0));
+    const pageL = box(0.85, 0.15, 1.15, "#fffbeb", -0.44, 0.6, 0);
+    pageL.rotation.z = 0.22;
+    const pageR = box(0.85, 0.15, 1.15, "#fffbeb", 0.44, 0.6, 0);
+    pageR.rotation.z = -0.22;
+    g.add(pageL, pageR);
+    g.add(cyl(0.38, 0.45, 1.9, primaryColor, 0, 0.5, -0.65, 8));
+    g.add(cone(0.52, 0.65, trimColor, 0, 2.4, -0.65, 8));
+  } else if (type === "clock_pyramid") {
+    // 幾何金字塔與時鐘塔
+    g.add(cone(1.15, 1.7, "#f59e0b", -0.45, 0.2, 0.2, 4));
+    g.add(box(0.95, 2.2, 0.95, primaryColor, 0.55, 0.2, -0.25));
+    g.add(ball(0.34, "#fef08a", 0.55, 1.85, 0.26, 8));
+    g.add(cone(0.75, 0.75, trimColor, 0.55, 2.4, -0.25, 4));
+  } else if (type === "ferris_camp") {
+    // 彩色摩天輪地標
+    g.add(box(0.2, 1.8, 0.2, "#475569", -0.35, 0.2, 0));
+    g.add(box(0.2, 1.8, 0.2, "#475569", 0.35, 0.2, 0));
+    const wheel = new THREE.Mesh(new THREE.TorusGeometry(1.1, 0.09, 6, 16), mat(primaryColor));
+    wheel.position.set(0, 1.95, 0);
+    g.add(wheel);
+    spinningMeshes.push(wheel);
+  } else {
+    // 精緻圓頂主題城堡地標
+    g.add(box(1.75, 1.1, 1.45, "#ffffff", 0, 0.2, 0));
+    g.add(cyl(0.68, 0.75, 1.2, primaryColor, 0, 1.3, 0, 10));
+    g.add(cone(0.88, 0.85, trimColor, 0, 2.5, 0, 10));
+  }
+
   return g;
 }
 
-// 建立 3D 島嶼完整世界
-function build3DWorld() {
-  islandGroup = new THREE.Group();
-  scene.add(islandGroup);
-
-  // 1. 中央大廣場 (Central Plaza)
-  const cTile = makeHexTile(5.4, 2.0, "#fdfbf7", "#8d6e63", 0, 0);
-  islandGroup.add(cTile.group);
-
-  // 噴水池水面與白鯨雕塑
-  const waterPool = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.4, 0.1, 16), getMat("#29b6f6"));
-  waterPool.position.set(0, cTile.topY + 0.05, 0);
-  islandGroup.add(waterPool);
-
-  const whaleStatue = makeSphere(0.7, "#0288d1", 0, cTile.topY + 0.7, 0);
-  whaleStatue.scale.set(1.4, 0.8, 1.0);
-  islandGroup.add(whaleStatue);
-
-  // 旗桿與小長椅
-  islandGroup.add(makeCyl(0.06, 0.06, 2.8, "#cfd8dc", -1.8, cTile.topY, -1.2));
-  islandGroup.add(makeBox(0.8, 0.5, 0.04, "#ef5350", -1.4, cTile.topY + 2.0, -1.2));
-  islandGroup.add(makeBox(1.2, 0.25, 0.35, "#795548", 1.8, cTile.topY, 1.4));
-
-  registerLabel("🌟 生活管理共學廣場", new THREE.Vector3(0, cTile.topY + 2.2, 0), "center", 0);
-
-  // 2. 第一階段聚落：啟蒙村 (左上方緊湊聚集)
-  const s1Tile = makeHexTile(5.0, 2.4, "#dcedc8", "#795548", -6.8, -4.5);
-  islandGroup.add(s1Tile.group);
-
-  // 建築：生活公約屋、校園小學校、洗手與更衣亭
-  islandGroup.add(makeCottage(-8.0, s1Tile.topY, -4.5, "#ffffff", "#ef5350"));
-  islandGroup.add(makeCottage(-5.8, s1Tile.topY, -6.2, "#fff8e1", "#42a5f5"));
-  islandGroup.add(makeCottage(-5.2, s1Tile.topY, -3.2, "#f1f8e9", "#66bb6a", true));
-  islandGroup.add(makeTree(-8.8, s1Tile.topY, -2.5, 1.1, true));
-  islandGroup.add(makeTree(-4.2, s1Tile.topY, -7.0, 0.9));
-  islandGroup.add(makeChibiMascot(-6.6, s1Tile.topY, -3.8, "#2e7d32", "#ffd54f"));
-
-  // 註冊 S1 代表單元標籤
-  registerLabel("校園生活你我他", new THREE.Vector3(-8.0, s1Tile.topY + 2.4, -4.5), "stage-1", 131, "一上 U1");
-  registerLabel("生活公約", new THREE.Vector3(-5.8, s1Tile.topY + 2.4, -6.2), "stage-1", 132, "一上 U2");
-  registerLabel("穿脫衣物", new THREE.Vector3(-5.2, s1Tile.topY + 2.4, -3.2), "stage-1", 137, "一下 U2");
-
-  // 3. 第二階段聚落：實踐鎮 (右上方緊湊聚集 - 核心焦點)
-  const s2Tile = makeHexTile(5.2, 2.2, "#e1f5fe", "#6d4c41", 7.2, -4.2);
-  islandGroup.add(s2Tile.group);
-
-  // 建築：護牙一生鐘樓、鞋襪自理屋、掃地清潔工坊
-  islandGroup.add(makeLighthouse(6.0, s2Tile.topY, -5.8));
-  islandGroup.add(makeCottage(8.8, s2Tile.topY, -4.0, "#ffffff", "#1976d2"));
-  islandGroup.add(makeCottage(6.5, s2Tile.topY, -2.6, "#fffde7", "#f57c00"));
-  islandGroup.add(makeCottage(9.2, s2Tile.topY, -6.5, "#e8f5e9", "#43a047"));
-  islandGroup.add(makeTree(5.0, s2Tile.topY, -2.0, 1.2));
-  islandGroup.add(makeTree(10.2, s2Tile.topY, -3.5, 0.8, true));
-  islandGroup.add(makeChibiMascot(8.0, s2Tile.topY, -2.8, "#1565c0", "#ffca28"));
-
-  // 註冊 S2 代表單元標籤
-  registerLabel("⭐ 會穿脫鞋襪", new THREE.Vector3(8.8, s2Tile.topY + 2.4, -4.0), "stage-2", 237, "二上 U2");
-  registerLabel("護牙一生", new THREE.Vector3(6.0, s2Tile.topY + 4.6, -5.8), "stage-2", 219, "二下 U1");
-  registerLabel("我會掃地", new THREE.Vector3(6.5, s2Tile.topY + 2.4, -2.6), "stage-2", 224, "二下 U3");
-  registerLabel("資源回收", new THREE.Vector3(9.2, s2Tile.topY + 2.4, -6.5), "stage-2", 227, "二下 U5");
-
-  // 4. 第三階段聚落：進階城 (下方緊湊聚集)
-  const s3Tile = makeHexTile(5.6, 1.8, "#ffe0b2", "#5d4037", 0, 7.5);
-  islandGroup.add(s3Tile.group);
-
-  // 建築：交通安全塔、社區服務所、健康休閒中心
-  islandGroup.add(makeLighthouse(-2.8, s3Tile.topY, 7.2));
-  islandGroup.add(makeCottage(1.2, s3Tile.topY, 6.8, "#ffffff", "#ab47bc"));
-  islandGroup.add(makeCottage(-0.5, s3Tile.topY, 9.2, "#f9fbe7", "#e65100"));
-  islandGroup.add(makeCottage(3.2, s3Tile.topY, 8.5, "#e0f2f1", "#00897b"));
-  islandGroup.add(makeTree(-3.8, s3Tile.topY, 9.2, 1.3, true));
-  islandGroup.add(makeTree(2.5, s3Tile.topY, 5.8, 1.0));
-  islandGroup.add(makeChibiMascot(1.5, s3Tile.topY, 8.6, "#e65100", "#4fc3f7"));
-
-  // 註冊 S3 代表單元標籤
-  registerLabel("交通標誌與號誌", new THREE.Vector3(-2.8, s3Tile.topY + 4.6, 7.2), "stage-3", 82, "三下 U1");
-  registerLabel("危機總動員", new THREE.Vector3(1.2, s3Tile.topY + 2.4, 6.8), "stage-3", 31, "三上 U1");
-  registerLabel("認識社區環境", new THREE.Vector3(3.2, s3Tile.topY + 2.4, 8.5), "stage-3", 81, "三下 U5");
-
-  // 5. 連接木橋與海面上漂浮的小玩具船
-  const bridgeMat = getMat("#bcaaa4");
-  const b1 = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.25, 1.4), bridgeMat);
-  b1.position.set(-3.6, 1.9, -2.4); b1.rotation.y = 0.6;
-  islandGroup.add(b1);
-
-  const b2 = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.25, 1.4), bridgeMat);
-  b2.position.set(3.8, 1.9, -2.2); b2.rotation.y = -0.6;
-  islandGroup.add(b2);
-
-  const b3 = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.25, 2.6), bridgeMat);
-  b3.position.set(0, 1.7, 4.0);
-  islandGroup.add(b3);
-
-  // 海上可愛小紅船
-  const boat = new THREE.Group();
-  boat.position.set(-11.5, 0.1, 4.5);
-  boat.rotation.y = -0.5;
-  boat.add(makeBox(1.4, 0.4, 0.8, "#d32f2f", 0, 0, 0));
-  boat.add(makeCone(0.5, 1.2, "#ffffff", 0, 0.4, 0, 3));
-  islandGroup.add(boat);
+function clearThreeWorld() {
+  if (worldGroup) {
+    scene.remove(worldGroup);
+  }
+  worldGroup = new THREE.Group();
+  scene.add(worldGroup);
+  labelsLayer.innerHTML = "";
+  pinItems.length = 0;
+  spinningMeshes.length = 0;
 }
 
-// 註冊 3D 浮動標籤
-function registerLabel(title, worldPos, type, unitId, badge = "") {
-  const pin = document.createElement("div");
-  pin.className = `label-pin ${type}`;
-
-  const isCenter = type === "center";
-  pin.innerHTML = `
-    <div class="label-pill ${isCenter ? 'pill-center' : ''}">
-      <div class="pin-dot"></div>
-      <span class="pin-title">${title}</span>
-      ${badge ? `<span class="pin-badge">${badge}</span>` : ''}
-    </div>
-  `;
-
-  pin.onclick = (e) => {
+function add3DPin(htmlContent, worldVec, extraClass, onClickFn, isAlwaysVisible = true) {
+  const el = document.createElement("div");
+  el.className = "label-pin " + (extraClass || "");
+  el.innerHTML = htmlContent;
+  el.onclick = (e) => {
     e.stopPropagation();
-    if (unitId) openTreasureModal(unitId);
-    else focusStage("all");
+    if (!dragMoved && onClickFn) onClickFn();
   };
-
-  labelsContainer.appendChild(pin);
-  labelElements.push({ el: pin, pos: worldPos });
+  labelsLayer.appendChild(el);
+  pinItems.push({ el, pos: worldVec, always: isAlwaysVisible });
 }
 
-// 更新浮動標籤螢幕投影座標
-function updateLabelsPosition() {
-  const width = window.innerWidth;
-  const height = window.innerHeight - 68;
+// ==========================================
+// 場景一：🌊 10 大領域群島大世界 (World Archipelago)
+// ==========================================
+function buildWorldArchipelagoScene() {
+  clearThreeWorld();
 
-  labelElements.forEach(item => {
+  // 中央總廣場島
+  const centerHex = createHexPlatform(4.8, 2.3, "#fdfbf7", "#38bdf8", "#8d6e63", 0, 0);
+  worldGroup.add(centerHex.group);
+  worldGroup.add(createDomainMonument("book_tower", "#0284c7", "#38bdf8", centerHex.topY));
+  worldGroup.add(createTree(-2.6, centerHex.topY, 1.5, 1.1, 0));
+  worldGroup.add(createTree(2.5, centerHex.topY, -1.4, 1.0, 1));
+  worldGroup.add(createMascot(1.6, centerHex.topY, 1.8, "#0284c7", "#fde047"));
+
+  add3DPin(
+    `<div class="label-pill pill-center"><div class="pin-dot"></div><span class="pin-title">🏫 特教教材共學總廣場</span><span class="pin-badge" style="background:rgba(255,255,255,0.22);color:#fff;">240 站</span></div>`,
+    new THREE.Vector3(0, centerHex.topY + 3.4, 0),
+    "",
+    () => resetCamera(),
+    true
+  );
+
+  // 10 座領域島嶼緊密圍繞（內圈 5 座 ＋ 外嵌圈 5 座，形成緊湊六角群島沙盤）
+  const coords = [
+    { x: -6.8, z: -4.2, h: 2.1 },
+    { x: 0.0,  z: -7.8, h: 2.2 },
+    { x: 6.8,  z: -4.2, h: 2.1 },
+    { x: 6.6,  z: 4.0,  h: 2.0 },
+    { x: -6.6, z: 4.0,  h: 2.0 },
+    { x: -12.2, z: 0.0, h: 1.85 },
+    { x: -4.2, z: -12.2, h: 1.9 },
+    { x: 4.4,  z: -12.2, h: 1.9 },
+    { x: 12.2, z: 0.0,  h: 1.85 },
+    { x: 0.0,  z: 8.6,  h: 1.85 }
+  ];
+
+  DOMAINS_DATA.forEach((d, idx) => {
+    const c = coords[idx];
+    const plat = createHexPlatform(3.6, c.h, d.groundColor, d.trimColor, "#795548", c.x, c.z);
+    worldGroup.add(plat.group);
+
+    // 島上緊湊建築群（主屋＋副屋＋樹木＋長椅＋吉祥物）
+    const mainBld = createDomainMonument(d.landmarkType, d.color, d.trimColor, plat.topY);
+    mainBld.scale.set(0.78, 0.78, 0.78);
+    plat.group.add(mainBld);
+
+    plat.group.add(createUnitBuilding(-1.35, plat.topY, 0.9, idx, d.color));
+    plat.group.add(createUnitBuilding(1.35, plat.topY, 0.85, idx + 1, d.trimColor));
+    plat.group.add(createTree(-1.8, plat.topY, -1.2, 0.95, idx));
+    plat.group.add(createTree(1.75, plat.topY, -1.1, 0.85, idx + 1));
+    plat.group.add(createMascot(0.0, plat.topY, 1.95, d.color, "#ffd54f"));
+    plat.group.add(createStreetLamp(-0.9, plat.topY, 1.85));
+
+    // 連接步道木橋
+    const angle = Math.atan2(c.z, c.x);
+    const dist = Math.hypot(c.x, c.z);
+    const bridge = box(dist * 0.45, 0.2, 1.0, "#bcaaa4", c.x * 0.5, 1.65, c.z * 0.5);
+    bridge.rotation.y = -angle;
+    worldGroup.add(bridge);
+
+    // 領域島浮動膠囊標籤
+    add3DPin(
+      `<div class="label-pill" style="border-color:${d.trimColor};">
+        <span style="font-size:18px;">${d.icon}</span>
+        <span class="pin-title">${d.islandName}</span>
+        <span class="pin-badge">${d.ownCount}站</span>
+      </div>`,
+      new THREE.Vector3(c.x, plat.topY + 2.8, c.z),
+      "",
+      () => enterDomainIsland(d.id),
+      true
+    );
+  });
+
+  // 海面小帆船點綴
+  [[-15, 7], [15, 6.5], [-13, -9]].forEach(([bx, bz], i) => {
+    const boat = new THREE.Group();
+    boat.position.set(bx, 0.1, bz);
+    boat.rotation.y = i * 1.1;
+    boat.add(box(1.3, 0.35, 0.75, "#ef4444", 0, 0, 0));
+    boat.add(cone(0.48, 1.15, "#ffffff", 0, 0.35, 0, 3));
+    worldGroup.add(boat);
+  });
+}
+
+// ==========================================
+// 場景二：🏝️ 單一領域獨立 3D 導覽島（對應三個學習階段）
+// ==========================================
+function buildDomainIslandScene(domainId) {
+  clearThreeWorld();
+  const d = DOMAIN_MAP[domainId];
+  if (!d) return;
+
+  // 1. 中央領域主題廣場 (緊密核心六角地塊)
+  const centerHex = createHexPlatform(4.6, 2.2, "#fdfbf7", d.trimColor, "#795548", 0, 0);
+  worldGroup.add(centerHex.group);
+  worldGroup.add(createDomainMonument(d.landmarkType, d.color, d.trimColor, centerHex.topY));
+  worldGroup.add(createBench(-1.7, centerHex.topY, 1.5, 0.5));
+  worldGroup.add(createBench(1.7, centerHex.topY, 1.5, -0.5));
+  worldGroup.add(createStreetLamp(-2.1, centerHex.topY, 0.2));
+  worldGroup.add(createStreetLamp(2.1, centerHex.topY, 0.2));
+  worldGroup.add(createMascot(0, centerHex.topY, 2.2, d.color, "#fde047"));
+
+  add3DPin(
+    `<div class="label-pill pill-center">
+      <span>${d.icon}</span>
+      <span class="pin-title">${d.islandName}共學廣場</span>
+    </div>`,
+    new THREE.Vector3(0, centerHex.topY + 3.2, 0),
+    "",
+    () => selectStage("all"),
+    true
+  );
+
+  // 三個學習階段的雙六角緊湊聚落配置
+  const stageConfigs = [
+    {
+      stage: "1",
+      title: "🌱 第一階段：啟蒙村",
+      topColor: "#e8f5e9",
+      trimColor: "#43a047",
+      roofA: "#ef5350",
+      roofB: "#66bb6a",
+      hexA: { x: -5.8, z: -3.6, r: 4.3, h: 2.35 },
+      hexB: { x: -9.8, z: -1.8, r: 3.9, h: 2.55 },
+      hdrPos: new THREE.Vector3(-7.6, 5.3, -4.6),
+      hdrClass: "pill-s1-hdr"
+    },
+    {
+      stage: "2",
+      title: "🌿 第二階段：實踐鎮",
+      topColor: "#e3f2fd",
+      trimColor: "#1e88e5",
+      roofA: "#1e88e5",
+      roofB: "#ffa726",
+      hexA: { x: 5.8, z: -3.6, r: 4.3, h: 2.35 },
+      hexB: { x: 9.8, z: -1.8, r: 3.9, h: 2.55 },
+      hdrPos: new THREE.Vector3(7.6, 5.3, -4.6),
+      hdrClass: "pill-s2-hdr"
+    },
+    {
+      stage: "3",
+      title: "🌳 第三階段：進階城",
+      topColor: "#fff3e0",
+      trimColor: "#fb8c00",
+      roofA: "#ab47bc",
+      roofB: "#fb8c00",
+      hexA: { x: -2.5, z: 5.8, r: 4.3, h: 1.95 },
+      hexB: { x: 2.5,  z: 5.8, r: 4.3, h: 2.05 },
+      hdrPos: new THREE.Vector3(0, 4.9, 8.8),
+      hdrClass: "pill-s3-hdr"
+    }
+  ];
+
+  // 在每個六角地塊上的 5 個緊湊槽位（讓 5 棟單元小屋高低錯落擠在一起）
+  const localSlots = [
+    { dx: -1.35, dz: -1.1 },
+    { dx: 1.35,  dz: -1.1 },
+    { dx: 0.0,   dz: 0.15 },
+    { dx: -1.45, dz: 1.25 },
+    { dx: 1.45,  dz: 1.25 }
+  ];
+
+  stageConfigs.forEach(sc => {
+    const units = d.stages[sc.stage] || [];
+    const pA = createHexPlatform(sc.hexA.r, sc.hexA.h, sc.topColor, sc.trimColor, "#795548", sc.hexA.x, sc.hexA.z);
+    const pB = createHexPlatform(sc.hexB.r, sc.hexB.h, sc.topColor, sc.trimColor, "#6d4c41", sc.hexB.x, sc.hexB.z);
+    worldGroup.add(pA.group, pB.group);
+
+    // 階段聚落主標題膠囊
+    add3DPin(
+      `<div class="label-pill pill-stage-header ${sc.hdrClass}">
+        <span class="pin-title">${sc.title}</span>
+        <span class="pin-badge">${units.length} 單元</span>
+      </div>`,
+      sc.hdrPos,
+      `stage-hdr-${sc.stage}`,
+      () => selectStage(sc.stage),
+      true
+    );
+
+    // 擺放該階段的 10 個單元立體建築（前 5 個上學期在 hexA，後 5 個下學期在 hexB）
+    units.forEach((u, idx) => {
+      const isSecondHalf = idx >= 5;
+      const hex = isSecondHalf ? sc.hexB : sc.hexA;
+      const topY = isSecondHalf ? pB.topY : pA.topY;
+      const slot = localSlots[idx % 5];
+      const wx = hex.x + slot.dx;
+      const wz = hex.z + slot.dz;
+
+      const roofColor = isSecondHalf ? sc.roofB : sc.roofA;
+      const bld = createUnitBuilding(wx, topY, wz, idx, roofColor);
+      bld.scale.set(0.76, 0.76, 0.76);
+      worldGroup.add(bld);
+
+      // 全島總覽時預設顯示每學期前 2 個代表單元標籤；點進該階段或開啟「全部標籤」時 10 個全開
+      const isFeatured = (idx % 5 === 0) || (idx % 5 === 1);
+      add3DPin(
+        `<div class="label-pill">
+          <div class="pin-dot"></div>
+          <span class="pin-title">${u.name}</span>
+          <span class="pin-badge">${u.sem}U${u.u}</span>
+        </div>`,
+        new THREE.Vector3(wx, topY + 1.85, wz),
+        `stage-${sc.stage} unit-pin`,
+        () => openUnitModal(u.uid),
+        isFeatured
+      );
+    });
+
+    // 聚落裝飾（小樹、街燈、小吉祥物、木椅緊密穿插）
+    worldGroup.add(createTree(sc.hexA.x - 2.4, pA.topY, sc.hexA.z, 0.9, 0));
+    worldGroup.add(createTree(sc.hexB.x + 2.3, pB.topY, sc.hexB.z - 0.5, 0.95, 1));
+    worldGroup.add(createMascot(sc.hexA.x + 0.2, pA.topY, sc.hexA.z + 2.1, sc.trimColor, "#ffd54f"));
+    worldGroup.add(createStreetLamp(sc.hexB.x, pB.topY, sc.hexB.z - 2.1));
+  });
+
+  // 海面玩具紅帆船
+  const boat = new THREE.Group();
+  boat.position.set(-12.5, 0.1, 4.2);
+  boat.rotation.y = -0.4;
+  boat.add(box(1.3, 0.35, 0.75, "#e53935", 0, 0, 0));
+  boat.add(cone(0.5, 1.15, "#ffffff", 0, 0.35, 0, 3));
+  worldGroup.add(boat);
+}
+
+// ==========================================
+// 導覽切換與 UI 連動
+// ==========================================
+function renderDomainBar() {
+  const bar = document.getElementById("domain-bar");
+  let html = `
+    <button class="domain-chip ${currentMode === 'world' ? 'active' : ''}" onclick="enterWorldView()">
+      <span>🌊</span>
+      <span>10 大領域群島總覽</span>
+      <span class="chip-count">240站</span>
+    </button>
+  `;
+  DOMAINS_DATA.forEach(d => {
+    const active = currentMode === d.id ? "active" : "";
+    html += `
+      <button class="domain-chip ${active}" onclick="enterDomainIsland('${d.id}')">
+        <span>${d.icon}</span>
+        <span>${d.islandName}</span>
+        <span class="chip-count">${d.ownCount}</span>
+      </button>
+    `;
+  });
+  bar.innerHTML = html;
+}
+
+function enterWorldView(pushHash = true) {
+  currentMode = "world";
+  currentStageFilter = "all";
+  if (pushHash) history.replaceState(null, "", "#world");
+
+  document.getElementById("btn-back-world").style.display = "none";
+  document.getElementById("stage-switcher").style.display = "none";
+  document.getElementById("unit-dock").classList.remove("visible");
+  document.getElementById("btn-all-pins").style.display = "none";
+
+  document.getElementById("top-logo").innerText = "🏝️";
+  document.getElementById("top-title").innerText = "高雄特教國小部｜3D 領域群島總入口";
+  document.getElementById("top-subtitle").innerText = "10 大領域島嶼 × 三個學習階段 × 240 個互動單元";
+
+  document.getElementById("banner-title").innerText = "🌊 特教學習大世界（10 大領域群島）";
+  document.getElementById("banner-desc").innerText = "點擊海面上任一座領域島嶼，即可進入該領域的「第一、二、三學習階段」立體教材聚落！";
+  document.getElementById("banner-note").style.display = "none";
+
+  renderDomainBar();
+  buildWorldArchipelagoScene();
+  targetLook.set(0, 0, 0);
+  spherical.radius = 42;
+  spherical.phi = 1.0;
+
+  if (displayView === "list") renderListView();
+}
+
+function enterDomainIsland(domainId, pushHash = true) {
+  const d = DOMAIN_MAP[domainId];
+  if (!d) return;
+  currentMode = domainId;
+  currentStageFilter = "all";
+  if (pushHash) history.replaceState(null, "", `#domain=${domainId}`);
+
+  document.getElementById("btn-back-world").style.display = "inline-flex";
+  document.getElementById("stage-switcher").style.display = "flex";
+  document.getElementById("unit-dock").classList.add("visible");
+  document.getElementById("btn-all-pins").style.display = "flex";
+
+  document.getElementById("top-logo").innerText = d.icon;
+  document.getElementById("top-title").innerText = `${d.islandName}｜三個學習階段導覽`;
+  document.getElementById("top-subtitle").innerText = d.themeDesc;
+
+  document.getElementById("banner-title").innerText = `${d.icon} ${d.islandName}`;
+  document.getElementById("banner-desc").innerText = d.themeDesc;
+  const noteEl = document.getElementById("banner-note");
+  if (d.stage1Note) {
+    noteEl.innerText = "💡 " + d.stage1Note;
+    noteEl.style.display = "block";
+  } else {
+    noteEl.style.display = "none";
+  }
+
+  renderDomainBar();
+  buildDomainIslandScene(domainId);
+  selectStage("all");
+
+  if (displayView === "list") renderListView();
+}
+
+function selectStage(stage) {
+  currentStageFilter = stage;
+  document.querySelectorAll(".stage-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.stage === stage);
+  });
+
+  if (stage === "all") {
+    targetLook.set(0, 0, 0);
+    spherical.radius = 36;
+    spherical.phi = 1.02;
+  } else if (stage === "1") {
+    targetLook.set(-7.6, 2.2, -2.8);
+    spherical.radius = 21;
+    spherical.theta = 0.85;
+  } else if (stage === "2") {
+    targetLook.set(7.6, 2.2, -2.8);
+    spherical.radius = 21;
+    spherical.theta = -0.85;
+  } else if (stage === "3") {
+    targetLook.set(0, 1.9, 5.8);
+    spherical.radius = 21;
+    spherical.theta = 0.15;
+  }
+
+  renderQuickDock();
+}
+
+function renderQuickDock() {
+  if (currentMode === "world") return;
+  const d = DOMAIN_MAP[currentMode];
+  const dockList = document.getElementById("dock-list");
+  const dockTitle = document.getElementById("dock-title");
+  const dockCount = document.getElementById("dock-count");
+
+  let units = [];
+  if (currentStageFilter === "all") {
+    units = [...(d.stages["1"] || []), ...(d.stages["2"] || []), ...(d.stages["3"] || [])];
+    dockTitle.innerText = `📍 ${d.islandName}・全部階段單元快速點選：`;
+  } else {
+    units = d.stages[currentStageFilter] || [];
+    const stNames = { "1": "🌱 第一階段（啟蒙村）", "2": "🌿 第二階段（實踐鎮）", "3": "🌳 第三階段（進階城）" };
+    dockTitle.innerText = `📍 ${stNames[currentStageFilter]} 單元清單：`;
+  }
+  dockCount.innerText = `共 ${units.length} 單元`;
+
+  dockList.innerHTML = units.map(u => `
+    <button class="dock-unit-btn s${u.stage}" onclick="openUnitModal(${u.uid})">
+      <span style="color:var(--text-muted);font-size:12px;">${u.sem}U${u.u}</span>
+      <span>${u.name}</span>
+    </button>
+  `).join("");
+}
+
+function toggleShowAllPins() {
+  showAll30Pins = !showAll30Pins;
+  document.getElementById("btn-all-pins").classList.toggle("active", showAll30Pins);
+}
+
+// ==========================================
+// 🎁 教材寶箱視窗 (Option A)
+// ==========================================
+function openUnitModal(uid) {
+  const u = UNIT_MAP[uid];
+  if (!u) return;
+
+  // 建立同領域的上下單元切換序列
+  if (currentMode !== "world" && DOMAIN_MAP[currentMode]) {
+    const d = DOMAIN_MAP[currentMode];
+    activeModalUnitList = [...(d.stages["1"] || []), ...(d.stages["2"] || []), ...(d.stages["3"] || [])];
+  } else {
+    activeModalUnitList = ALL_UNITS_FLAT;
+  }
+  activeModalIndex = activeModalUnitList.findIndex(item => item.uid === uid);
+
+  document.getElementById("m-cover").src = u.cover;
+  document.getElementById("m-domain-badge").innerText = u.origDomain;
+
+  const stLabel = u.stage === 1 ? "🌱 第一階段" : u.stage === 2 ? "🌿 第二階段" : "🌳 第三階段";
+  const stBadge = document.getElementById("m-stage-badge");
+  stBadge.innerText = `${stLabel}・${u.sem} 第 ${u.u} 單元`;
+  stBadge.className = `m-badge m-badge-s${u.stage}`;
+
+  document.getElementById("m-title").innerText = u.name;
+
+  document.getElementById("m-link-ppt").href = `${u.url}#teaching`;
+  document.getElementById("m-link-video").href = `${u.url}#videos`;
+  document.getElementById("m-link-quiz").href = `${u.url}#quizzes`;
+  document.getElementById("m-link-cards").href = `${u.url}#flashcards`;
+  document.getElementById("m-link-wheel").href = `${u.url}#teaching`;
+  document.getElementById("m-link-manual").href = u.manual;
+  document.getElementById("m-link-site").href = u.url;
+
+  document.getElementById("treasure-modal").classList.add("open");
+}
+
+function stepModalUnit(dir) {
+  if (!activeModalUnitList.length) return;
+  activeModalIndex = (activeModalIndex + dir + activeModalUnitList.length) % activeModalUnitList.length;
+  openUnitModal(activeModalUnitList[activeModalIndex].uid);
+}
+
+function closeModal() {
+  document.getElementById("treasure-modal").classList.remove("open");
+}
+
+// ==========================================
+// 📋 領域 × 三階段清單模式
+// ==========================================
+function toggleDisplayMode() {
+  const stage3d = document.getElementById("stage-3d");
+  const listView = document.getElementById("list-view");
+  const icon = document.getElementById("view-mode-icon");
+  const text = document.getElementById("view-mode-text");
+
+  if (displayView === "3d") {
+    displayView = "list";
+    stage3d.style.display = "none";
+    listView.style.display = "block";
+    icon.innerText = "🏝️";
+    text.innerText = "返回 3D 島嶼";
+    renderListView();
+  } else {
+    displayView = "3d";
+    stage3d.style.display = "block";
+    listView.style.display = "none";
+    icon.innerText = "📋";
+    text.innerText = "領域清單模式";
+    onResize();
+  }
+}
+
+function renderListView() {
+  const container = document.getElementById("list-container");
+  const targetDomains = currentMode === "world" ? DOMAINS_DATA : [DOMAIN_MAP[currentMode]];
+
+  container.innerHTML = targetDomains.map(d => {
+    const stagesHtml = ["1", "2", "3"].map(st => {
+      const units = d.stages[st] || [];
+      if (!units.length) return "";
+      const stTitle = st === "1" ? "🌱 第一學習階段（基礎啟蒙）" : st === "2" ? "🌿 第二學習階段（日常實踐）" : "🌳 第三學習階段（進階挑戰）";
+      const stColor = st === "1" ? "var(--s1-color)" : st === "2" ? "var(--s2-color)" : "var(--s3-color)";
+      const note = (st === "1" && d.stage1Note) ? `<span style="font-size:13px;color:#b45309;">（${d.stage1Note}）</span>` : "";
+
+      const cards = units.map(u => `
+        <div class="unit-visual-card" onclick="openUnitModal(${u.uid})">
+          <img class="unit-card-thumb" src="${u.cover}" alt="${u.name}" loading="lazy">
+          <div class="unit-card-body">
+            <span class="unit-card-sem">${u.origDomain}｜${u.sem} 第 ${u.u} 單元</span>
+            <span class="unit-card-name">${u.name}</span>
+          </div>
+        </div>
+      `).join("");
+
+      return `
+        <div class="list-stage-block">
+          <div class="list-stage-title" style="color:${stColor};">
+            <span>${stTitle} ${note}</span>
+            <span style="font-size:15px;color:var(--text-muted);">共 ${units.length} 單元</span>
+          </div>
+          <div class="unit-cards-grid">${cards}</div>
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <div class="list-domain-header">
+        <div>
+          <h2 style="font-size:26px;font-weight:900;">${d.icon} ${d.islandName}</h2>
+          <p style="color:var(--text-muted);font-weight:700;margin-top:4px;">${d.themeDesc}</p>
+        </div>
+        <button class="icon-pill-btn primary-toggle" onclick="displayView='3d';document.getElementById('stage-3d').style.display='block';document.getElementById('list-view').style.display='none';document.getElementById('view-mode-icon').innerText='📋';document.getElementById('view-mode-text').innerText='領域清單模式';enterDomainIsland('${d.id}');onResize();">
+          🏝️ 進入此領域 3D 島嶼
+        </button>
+      </div>
+      ${stagesHtml}
+    `;
+  }).join("<hr style='margin:40px 0;border:none;border-top:3px dashed #cbd5e1;'>");
+}
+
+// ==========================================
+// 🔍 全域 240 單元即時搜尋
+// ==========================================
+function setupSearch() {
+  const input = document.getElementById("unit-search");
+  const dropdown = document.getElementById("search-results");
+
+  input.addEventListener("input", () => {
+    const q = input.value.trim().toLowerCase();
+    if (!q) {
+      dropdown.classList.remove("open");
+      return;
+    }
+    const matches = ALL_UNITS_FLAT.filter(u =>
+      u.name.toLowerCase().includes(q) ||
+      u.origDomain.toLowerCase().includes(q) ||
+      u.sem.includes(q)
+    ).slice(0, 15);
+
+    if (!matches.length) {
+      dropdown.innerHTML = `<div style="padding:12px;color:var(--text-muted);font-weight:700;">找不到符合「${q}」的單元</div>`;
+    } else {
+      dropdown.innerHTML = matches.map(u => `
+        <div class="search-item" onclick="openUnitModal(${u.uid});document.getElementById('search-results').classList.remove('open');">
+          <div>
+            <div class="search-item-title">${u.name}</div>
+            <div class="search-item-meta">${u.origDomain}｜第${u.stage}階段・${u.sem} 第 ${u.u} 單元</div>
+          </div>
+          <span style="color:#0284c7;font-weight:800;">開啟 →</span>
+        </div>
+      `).join("");
+    }
+    dropdown.classList.add("open");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".search-box")) {
+      dropdown.classList.remove("open");
+    }
+  });
+}
+
+// ==========================================
+// Three.js 初始化與動畫迴圈
+// ==========================================
+function initThreeEngine() {
+  const stageEl = document.getElementById("stage-3d");
+  const canvas = document.getElementById("canvas-3d");
+  labelsLayer = document.getElementById("labels-layer");
+
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color("#e6f2f5");
+
+  camera = new THREE.PerspectiveCamera(38, stageEl.clientWidth / stageEl.clientHeight, 0.5, 300);
+
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setSize(stageEl.clientWidth, stageEl.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  hemiLight = new THREE.HemisphereLight(0xffffff, 0xcbe4ec, 0.72);
+  scene.add(hemiLight);
+
+  sunLight = new THREE.DirectionalLight(0xfffbeb, 0.92);
+  sunLight.position.set(26, 42, 24);
+  sunLight.castShadow = true;
+  sunLight.shadow.mapSize.width = 2048;
+  sunLight.shadow.mapSize.height = 2048;
+  sunLight.shadow.camera.near = 10;
+  sunLight.shadow.camera.far = 95;
+  const d = 24;
+  sunLight.shadow.camera.left = -d;
+  sunLight.shadow.camera.right = d;
+  sunLight.shadow.camera.top = d;
+  sunLight.shadow.camera.bottom = -d;
+  sunLight.shadow.bias = -0.0005;
+  scene.add(sunLight);
+
+  backLight = new THREE.DirectionalLight(0xbae6fd, 0.32);
+  backLight.position.set(-20, 18, -18);
+  scene.add(backLight);
+
+  // 海平面
+  seaMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(220, 220, 1, 1),
+    new THREE.MeshLambertMaterial({ color: 0xbae6fd, transparent: true, opacity: 0.55 })
+  );
+  seaMesh.rotation.x = -Math.PI / 2;
+  seaMesh.position.y = -0.15;
+  seaMesh.receiveShadow = true;
+  scene.add(seaMesh);
+
+  // 滑鼠與觸控事件
+  stageEl.addEventListener("pointerdown", e => {
+    isDragging = true;
+    dragMoved = false;
+    autoTour = false;
+    document.getElementById("btn-tour").classList.remove("active");
+    prevPointer = { x: e.clientX, y: e.clientY };
+  });
+  window.addEventListener("pointermove", e => {
+    if (!isDragging) return;
+    const dx = e.clientX - prevPointer.x;
+    const dy = e.clientY - prevPointer.y;
+    if (Math.hypot(dx, dy) > 4) dragMoved = true;
+    prevPointer = { x: e.clientX, y: e.clientY };
+    spherical.theta -= dx * 0.0065;
+    spherical.phi = Math.max(0.32, Math.min(1.38, spherical.phi - dy * 0.0065));
+  });
+  window.addEventListener("pointerup", () => { isDragging = false; });
+  stageEl.addEventListener("wheel", e => {
+    spherical.radius = Math.max(15, Math.min(68, spherical.radius + e.deltaY * 0.028));
+  }, { passive: true });
+  window.addEventListener("resize", onResize);
+
+  // 根據初始 Hash 或預設領域載入
+  applyRouteFromHash();
+  window.addEventListener("hashchange", applyRouteFromHash);
+
+  animateLoop();
+}
+
+function applyRouteFromHash() {
+  const h = location.hash.replace(/^#/, "");
+  if (h.startsWith("domain=")) {
+    const domId = h.split("=")[1];
+    if (DOMAIN_MAP[domId]) {
+      enterDomainIsland(domId, false);
+      return;
+    }
+  }
+  if (DEFAULT_DOMAIN_ID && DOMAIN_MAP[DEFAULT_DOMAIN_ID] && !h) {
+    enterDomainIsland(DEFAULT_DOMAIN_ID, false);
+    return;
+  }
+  enterWorldView(false);
+}
+
+function onResize() {
+  const stageEl = document.getElementById("stage-3d");
+  if (!stageEl || stageEl.clientWidth === 0) return;
+  camera.aspect = stageEl.clientWidth / stageEl.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(stageEl.clientWidth, stageEl.clientHeight);
+}
+
+function resetCamera() {
+  if (currentMode === "world") {
+    targetLook.set(0, 0, 0);
+    spherical.radius = 42;
+    spherical.theta = 0.68;
+    spherical.phi = 1.0;
+  } else {
+    selectStage("all");
+  }
+}
+
+function toggleTour() {
+  autoTour = !autoTour;
+  document.getElementById("btn-tour").classList.toggle("active", autoTour);
+}
+
+function cycleTimeOfDay() {
+  todState = (todState + 1) % 3;
+  const btn = document.getElementById("btn-tod");
+  if (todState === 0) {
+    btn.innerText = "☀️ 時段";
+    scene.background.set("#e6f2f5");
+    seaMesh.material.color.set("#bae6fd");
+    hemiLight.color.setHex(0xffffff);
+    sunLight.color.setHex(0xfffbeb);
+    sunLight.intensity = 0.92;
+  } else if (todState === 1) {
+    btn.innerText = "🌅 夕陽";
+    scene.background.set("#ffedd5");
+    seaMesh.material.color.set("#fdba74");
+    hemiLight.color.setHex(0xfed7aa);
+    sunLight.color.setHex(0xf97316);
+    sunLight.intensity = 1.05;
+  } else {
+    btn.innerText = "🌙 星夜";
+    scene.background.set("#0f172a");
+    seaMesh.material.color.set("#1e293b");
+    hemiLight.color.setHex(0x334155);
+    sunLight.color.setHex(0x38bdf8);
+    sunLight.intensity = 0.48;
+  }
+}
+
+function updateLabelsProjection() {
+  const stageEl = document.getElementById("stage-3d");
+  const w = stageEl.clientWidth;
+  const h = stageEl.clientHeight;
+
+  pinItems.forEach(item => {
+    // 在領域島內根據階段篩選決定顯示邏輯
+    if (currentMode !== "world" && item.el.classList.contains("unit-pin")) {
+      const belongStage = item.el.classList.contains("stage-1") ? "1" :
+                          item.el.classList.contains("stage-2") ? "2" : "3";
+      if (currentStageFilter === "all") {
+        if (!item.always && !showAll30Pins) {
+          item.el.style.display = "none";
+          return;
+        }
+        item.el.style.opacity = "1";
+      } else {
+        if (belongStage !== currentStageFilter) {
+          item.el.style.display = "none";
+          return;
+        }
+        item.el.style.opacity = "1";
+      }
+    }
+
     const v = item.pos.clone();
+    if (worldGroup) v.y += worldGroup.position.y;
     v.project(camera);
 
-    // 視錐裁剪判斷
     if (v.z > 1) {
       item.el.style.display = "none";
       return;
     }
 
     item.el.style.display = "block";
-    const x = (v.x * 0.5 + 0.5) * width;
-    const y = (-(v.y * 0.5) + 0.5) * height;
+    const x = (v.x * 0.5 + 0.5) * w;
+    const y = (-(v.y * 0.5) + 0.5) * h;
     item.el.style.left = `${x}px`;
     item.el.style.top = `${y}px`;
+    item.el.style.zIndex = String(Math.floor((1 - v.z) * 100));
   });
 }
 
-// 初始化 Three.js 場景
-function initThree() {
-  const container = document.getElementById("stage-3d");
-  const canvas = document.getElementById("canvas-3d");
-  labelsContainer = document.getElementById("labels-layer");
-
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color("#e8f4f8");
-
-  const aspect = container.clientWidth / container.clientHeight;
-  camera = new THREE.PerspectiveCamera(40, aspect, 0.5, 300);
-  updateCameraPos();
-
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setSize(container.clientWidth, container.clientHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-  // 柔和光照系統 (Day Mode)
-  hemiLight = new THREE.HemisphereLight(0xffffff, 0xcfe8ef, 0.65);
-  scene.add(hemiLight);
-
-  sunLight = new THREE.DirectionalLight(0xfffaed, 0.95);
-  sunLight.position.set(24, 38, 20);
-  sunLight.castShadow = true;
-  sunLight.shadow.mapSize.width = 2048;
-  sunLight.shadow.mapSize.height = 2048;
-  sunLight.shadow.camera.near = 10;
-  sunLight.shadow.camera.far = 80;
-  sunLight.shadow.camera.left = -22;
-  sunLight.shadow.camera.right = 22;
-  sunLight.shadow.camera.top = 22;
-  sunLight.shadow.camera.bottom = -22;
-  sunLight.shadow.bias = -0.0005;
-  scene.add(sunLight);
-
-  dirLight = new THREE.DirectionalLight(0xb0e0e6, 0.3);
-  dirLight.position.set(-16, 20, -16);
-  scene.add(dirLight);
-
-  // 海平面微波
-  const seaGeo = new THREE.PlaneGeometry(180, 180, 24, 24);
-  const seaMat = new THREE.MeshLambertMaterial({ color: 0x81d4fa, transparent: true, opacity: 0.65 });
-  const seaMesh = new THREE.Mesh(seaGeo, seaMat);
-  seaMesh.rotation.x = -Math.PI / 2;
-  seaMesh.position.y = -0.05;
-  seaMesh.receiveShadow = true;
-  scene.add(seaMesh);
-
-  build3DWorld();
-
-  // 綁定手勢與滑鼠拖曳旋轉
-  container.addEventListener("pointerdown", onPointerDown);
-  window.addEventListener("pointermove", onPointerMove);
-  window.addEventListener("pointerup", onPointerUp);
-  container.addEventListener("wheel", onWheel, { passive: true });
-  window.addEventListener("resize", onWindowResize);
-
-  animate();
-}
-
-function updateCameraPos() {
-  const x = spherical.radius * Math.sin(spherical.phi) * Math.sin(spherical.theta);
-  const y = spherical.radius * Math.cos(spherical.phi);
-  const z = spherical.radius * Math.sin(spherical.phi) * Math.cos(spherical.theta);
-  camera.position.set(x + currentLookAt.x, y + currentLookAt.y, z + currentLookAt.z);
-  camera.lookAt(currentLookAt);
-}
-
-function onPointerDown(e) {
-  isDragging = true;
-  autoTour = false;
-  document.getElementById("btn-auto-tour").classList.remove("active");
-  prevMousePos = { x: e.clientX, y: e.clientY };
-}
-
-function onPointerMove(e) {
-  if (!isDragging) return;
-  const dx = e.clientX - prevMousePos.x;
-  const dy = e.clientY - prevMousePos.y;
-  prevMousePos = { x: e.clientX, y: e.clientY };
-
-  spherical.theta -= dx * 0.007;
-  spherical.phi = Math.max(0.2, Math.min(Math.PI / 2.1, spherical.phi - dy * 0.007));
-}
-
-function onPointerUp() { isDragging = false; }
-
-function onWheel(e) {
-  spherical.radius = Math.max(16, Math.min(65, spherical.radius + e.deltaY * 0.03));
-}
-
-function onWindowResize() {
-  const container = document.getElementById("stage-3d");
-  camera.aspect = container.clientWidth / container.clientHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(container.clientWidth, container.clientHeight);
-}
-
-// 聚焦階段平滑運鏡
-function focusStage(stage) {
-  autoTour = false;
-  document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.stage === stage));
-
-  if (stage === "all") {
-    targetLookAt.set(0, 0, 0);
-    spherical.radius = 38;
-    spherical.phi = Math.PI / 3.2;
-  } else if (stage === "1") {
-    targetLookAt.set(-6.8, 2.0, -4.5);
-    spherical.radius = 24;
-    spherical.theta = 0.9;
-  } else if (stage === "2") {
-    targetLookAt.set(7.2, 2.0, -4.2);
-    spherical.radius = 24;
-    spherical.theta = -0.8;
-  } else if (stage === "3") {
-    targetLookAt.set(0, 1.8, 7.5);
-    spherical.radius = 25;
-    spherical.theta = Math.PI * 0.95;
-  }
-}
-
-function resetCameraView() {
-  focusStage("all");
-}
-
-function toggleAutoTour() {
-  autoTour = !autoTour;
-  document.getElementById("btn-auto-tour").classList.toggle("active", autoTour);
-}
-
-// 切換日夜模式
-function toggleTimeOfDay() {
-  todIndex = (todIndex + 1) % 3;
-  const btn = document.getElementById("btn-tod");
-
-  if (todIndex === 0) { // 白天
-    btn.innerText = "☀️";
-    scene.background = new THREE.Color("#e8f4f8");
-    hemiLight.color.setHex(0xffffff);
-    hemiLight.groundColor.setHex(0xcfe8ef);
-    sunLight.color.setHex(0xfffaed);
-    sunLight.intensity = 0.95;
-  } else if (todIndex === 1) { // 夕陽
-    btn.innerText = "🌅";
-    scene.background = new THREE.Color("#fed7aa");
-    hemiLight.color.setHex(0xffedd5);
-    hemiLight.groundColor.setHex(0xfb923c);
-    sunLight.color.setHex(0xf97316);
-    sunLight.intensity = 1.1;
-  } else { // 星夜
-    btn.innerText = "🌙";
-    scene.background = new THREE.Color("#0f172a");
-    hemiLight.color.setHex(0x1e293b);
-    hemiLight.groundColor.setHex(0x020617);
-    sunLight.color.setHex(0x38bdf8);
-    sunLight.intensity = 0.45;
-  }
-}
-
-// 動畫主循環
-function animate() {
-  requestAnimationFrame(animate);
+function animateLoop() {
+  requestAnimationFrame(animateLoop);
 
   if (autoTour) {
-    spherical.theta += 0.004;
+    spherical.theta += 0.0038;
   }
 
-  // 平滑插值相機目標
-  currentLookAt.lerp(targetLookAt, 0.08);
-  updateCameraPos();
+  currentLook.lerp(targetLook, 0.08);
+  const cx = spherical.radius * Math.sin(spherical.phi) * Math.sin(spherical.theta);
+  const cy = spherical.radius * Math.cos(spherical.phi);
+  const cz = spherical.radius * Math.sin(spherical.phi) * Math.cos(spherical.theta);
+  camera.position.set(cx + currentLook.x, cy + currentLook.y, cz + currentLook.z);
+  camera.lookAt(currentLook);
 
-  // 微幅漂浮呼吸動態
-  if (islandGroup) {
-    islandGroup.position.y = Math.sin(Date.now() * 0.0015) * 0.15;
+  const t = Date.now() * 0.0016;
+  if (worldGroup) {
+    worldGroup.position.y = Math.sin(t) * 0.14;
   }
+  spinningMeshes.forEach(m => { m.rotation.z += 0.015; });
 
   renderer.render(scene, camera);
-  updateLabelsPosition();
+  updateLabelsProjection();
 }
 
-// ==========================================
-// 業務視圖切換與教材寶箱視窗 (選項 A)
-// ==========================================
-let currentView = "3d";
-
-function toggleViewMode() {
-  const stage3d = document.getElementById("stage-3d");
-  const classicView = document.getElementById("classic-view");
-  const btnText = document.getElementById("mode-text");
-  const btnIcon = document.getElementById("mode-icon");
-
-  if (currentView === "3d") {
-    currentView = "classic";
-    stage3d.style.display = "none";
-    classicView.style.display = "block";
-    btnText.innerText = "切換 3D 島嶼";
-    btnIcon.innerText = "🏝️";
-    renderClassicView();
-  } else {
-    currentView = "3d";
-    stage3d.style.display = "block";
-    classicView.style.display = "none";
-    btnText.innerText = "切換經典清單";
-    btnIcon.innerText = "📋";
-    onWindowResize();
-  }
-}
-
-// 開啟教材寶箱
-function openTreasureModal(unitId) {
-  const unit = LIFE_DATA[unitId];
-  if (!unit) return;
-
-  const modal = document.getElementById("treasure-modal");
-  const title = document.getElementById("drawer-title");
-  const tag = document.getElementById("drawer-tag");
-  const btnSlides = document.getElementById("m-btn-slides");
-  const btnVideo = document.getElementById("m-btn-video");
-  const btnQuiz = document.getElementById("m-btn-quiz");
-  const btnCards = document.getElementById("m-btn-cards");
-  const btnWheel = document.getElementById("m-btn-wheel");
-  const btnSite = document.getElementById("m-btn-site");
-
-  title.innerText = unit.name;
-  const stageName = unit.stage === 1 ? "🌱 第一階段" : unit.stage === 2 ? "🌿 第二階段" : "🌳 第三階段";
-  tag.innerText = `${stageName}・${unit.sem} 第 ${unit.u} 單元`;
-  tag.className = `stage-tag tag-s${unit.stage}`;
-
-  // 綁定真實直達 URL 路由
-  btnSlides.href = `${unit.url}#teaching`;
-  btnVideo.href = `${unit.url}#videos`;
-  btnQuiz.href = `${unit.url}#quizzes`;
-  btnCards.href = `${unit.url}#flashcards`;
-  btnWheel.href = `${unit.url}#teaching`;
-  btnSite.href = unit.url;
-
-  modal.classList.add("active");
-}
-
-function closeTreasureModal() {
-  document.getElementById("treasure-modal").classList.remove("active");
-}
-
-function closeModalOnBackdrop(e) {
-  if (e.target.id === "treasure-modal") closeTreasureModal();
-}
-
-window.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeTreasureModal();
+window.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeModal();
 });
 
-// 渲染經典列表 (30 單元全開)
-function renderClassicView() {
-  const g1 = document.getElementById("grid-stage-1");
-  const g2 = document.getElementById("grid-stage-2");
-  const g3 = document.getElementById("grid-stage-3");
-  g1.innerHTML = ""; g2.innerHTML = ""; g3.innerHTML = "";
-
-  Object.values(LIFE_DATA).forEach(unit => {
-    const card = document.createElement("div");
-    card.className = "classic-item-card";
-    card.onclick = () => openTreasureModal(unit.id);
-    card.innerHTML = `
-      <div>
-        <div class="classic-item-title">${unit.name}</div>
-        <div class="classic-item-sub">${unit.sem} 第 ${unit.u} 單元</div>
-      </div>
-      <div class="classic-item-cta">
-        <span>開啟教材寶箱</span>
-        <span>→</span>
-      </div>
-    `;
-
-    if (unit.stage === 1) g1.appendChild(card);
-    else if (unit.stage === 2) g2.appendChild(card);
-    else if (unit.stage === 3) g3.appendChild(card);
-  });
-}
-
-// 頁面就緒啟動
 window.addEventListener("DOMContentLoaded", () => {
-  initThree();
+  setupSearch();
+  initThreeEngine();
 });
 </script>
 </body>
