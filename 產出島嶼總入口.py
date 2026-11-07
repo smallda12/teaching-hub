@@ -30,7 +30,7 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PROTO_DIR = os.path.join(os.path.dirname( os.path.dirname(ROOT)), "島嶼網站原型_生活管理")
 
-# 10 大領域島設定（將二階「藝術」與三階「藝文」整合為同一座「藝術與人文島」，確保跨階段螺旋連貫）
+# 10 大領域島設定（每座島具備專屬地標、專屬三階段聚落名稱、專屬地貌色系與領域代表屬性）
 DOMAIN_CONFIG = [
     {
         "id": "selfcare",
@@ -43,7 +43,17 @@ DOMAIN_CONFIG = [
         "themeDesc": "衣食住行、穿脫洗漱、清潔打掃與自我保護",
         "landmarkType": "lighthouse_whale",
         "sourceDomains": ["特需生活管理"],
-        "shareStage1Daily": False
+        "shareStage1Daily": False,
+        "stageTitles": {
+            "1": "🌱 第一階段：自理啟蒙村（飲食・穿衣・如廁）",
+            "2": "🌿 第二階段：整潔實踐鎮（鞋襪・護牙・回收）",
+            "3": "🌳 第三階段：獨立生活城（防災・交通・健康）"
+        },
+        "stagePalettes": {
+            "1": {"top": "#e3f2fd", "trim": "#29b6f6", "roofA": "#ef5350", "roofB": "#26a69a"},
+            "2": {"top": "#e0f7fa", "trim": "#00acc1", "roofA": "#1e88e5", "roofB": "#ffa726"},
+            "3": {"top": "#e8eaf6", "trim": "#3949ab", "roofA": "#5c6bc0", "roofB": "#ec407a"}
+        }
     },
     {
         "id": "motor",
@@ -56,7 +66,17 @@ DOMAIN_CONFIG = [
         "themeDesc": "上肢精細操作、下肢平衡移動、姿勢控制與雙手協調",
         "landmarkType": "gym_rainbow",
         "sourceDomains": ["特需功能性動作訓練"],
-        "shareStage1Daily": False
+        "shareStage1Daily": False,
+        "stageTitles": {
+            "1": "🌱 第一階段：感統啟蒙村（小手抓握・雙腳站走）",
+            "2": "🌿 第二階段：協調實踐鎮（手指合作・動作變身）",
+            "3": "🌳 第三階段：靈巧動作城（上下肢綜合・生活獨立）"
+        },
+        "stagePalettes": {
+            "1": {"top": "#ede7f6", "trim": "#7e57c2", "roofA": "#ab47bc", "roofB": "#42a5f5"},
+            "2": {"top": "#e8eaf6", "trim": "#5c6bc0", "roofA": "#5c6bc0", "roofB": "#ff7043"},
+            "3": {"top": "#f3e5f5", "trim": "#8e24aa", "roofA": "#7b1fa2", "roofB": "#26c6da"}
+        }
     },
     {
         "id": "chinese",
@@ -69,7 +89,17 @@ DOMAIN_CONFIG = [
         "themeDesc": "生活語彙、聽說讀寫、繪本故事與人際表達",
         "landmarkType": "book_tower",
         "sourceDomains": ["語文"],
-        "shareStage1Daily": False
+        "shareStage1Daily": False,
+        "stageTitles": {
+            "1": "🌱 第一階段：語彙啟蒙村（新朋友・故事樹）",
+            "2": "🌿 第二階段：閱讀實踐鎮（心情組曲・台灣風情）",
+            "3": "🌳 第三階段：文學表達城（作家作品・故宮挖寶）"
+        },
+        "stagePalettes": {
+            "1": {"top": "#fff8e1", "trim": "#ffb300", "roofA": "#d84315", "roofB": "#fb8c00"},
+            "2": {"top": "#fff3e0", "trim": "#fb8c00", "roofA": "#8d6e63", "roofB": "#f4511e"},
+            "3": {"top": "#fbe9e7", "trim": "#e64a19", "roofA": "#6d4c41", "roofB": "#d81b60"}
+        }
     },
     {
         "id": "math",
@@ -82,7 +112,17 @@ DOMAIN_CONFIG = [
         "themeDesc": "數與量、時間金錢、幾何圖形與邏輯序列",
         "landmarkType": "clock_pyramid",
         "sourceDomains": ["數學"],
-        "shareStage1Daily": False
+        "shareStage1Daily": False,
+        "stageTitles": {
+            "1": "🌱 第一階段：數數啟蒙村（1-30數字・形狀分類）",
+            "2": "🌿 第二階段：量測實踐鎮（重量容量・時間計算機）",
+            "3": "🌳 第三階段：幾何邏輯城（平面扇形・立體多面體）"
+        },
+        "stagePalettes": {
+            "1": {"top": "#e1f5fe", "trim": "#039be5", "roofA": "#0288d1", "roofB": "#fbc02d"},
+            "2": {"top": "#e0f2f1", "trim": "#00897b", "roofA": "#0097a7", "roofB": "#ffb300"},
+            "3": {"top": "#e8eaf6", "trim": "#3f51b5", "roofA": "#303f9f", "roofB": "#f57c00"}
+        }
     },
     {
         "id": "pe",
@@ -95,7 +135,17 @@ DOMAIN_CONFIG = [
         "themeDesc": "體能運動遊戲、健康飲食、安全防護與身心活力",
         "landmarkType": "stadium_torch",
         "sourceDomains": ["健體"],
-        "shareStage1Daily": False
+        "shareStage1Daily": False,
+        "stageTitles": {
+            "1": "🌱 第一階段：活力啟蒙村（認識身體・玩球跑跳）",
+            "2": "🌿 第二階段：運動實踐鎮（優良飲食・足下風雲）",
+            "3": "🌳 第三階段：健康競技城（軸心持拍・防疫運動）"
+        },
+        "stagePalettes": {
+            "1": {"top": "#fbe9e7", "trim": "#ff7043", "roofA": "#e53935", "roofB": "#fb8c00"},
+            "2": {"top": "#fff3e0", "trim": "#ffa726", "roofA": "#f4511e", "roofB": "#43a047"},
+            "3": {"top": "#ffebee", "trim": "#e53935", "roofA": "#c62828", "roofB": "#00897b"}
+        }
     },
     {
         "id": "nature",
@@ -108,7 +158,17 @@ DOMAIN_CONFIG = [
         "themeDesc": "動植物生態、天氣變化、奇妙磁力與科學探索",
         "landmarkType": "windmill_greenhouse",
         "sourceDomains": ["自然"],
-        "shareStage1Daily": True
+        "shareStage1Daily": True,
+        "stageTitles": {
+            "1": "🌱 第一階段：自然啟蒙村（大樹花香・水的遊戲）",
+            "2": "🌿 第二階段：生態實踐鎮（植物動物・磁鐵水資源）",
+            "3": "🌳 第三階段：科學探索城（水溶液熱學・燃燒消防）"
+        },
+        "stagePalettes": {
+            "1": {"top": "#e8f5e9", "trim": "#66bb6a", "roofA": "#43a047", "roofB": "#fdd835"},
+            "2": {"top": "#f1f8e9", "trim": "#7cb342", "roofA": "#2e7d32", "roofB": "#29b6f6"},
+            "3": {"top": "#e0f2f1", "trim": "#26a69a", "roofA": "#00695c", "roofB": "#ef5350"}
+        }
     },
     {
         "id": "society",
@@ -121,7 +181,17 @@ DOMAIN_CONFIG = [
         "themeDesc": "家庭學校、社區資源、交通旅遊與多元文化",
         "landmarkType": "gate_town",
         "sourceDomains": ["社會"],
-        "shareStage1Daily": True
+        "shareStage1Daily": True,
+        "stageTitles": {
+            "1": "🌱 第一階段：家園啟蒙村（新學校・親愛家人）",
+            "2": "🌿 第二階段：社區實踐鎮（班規禮貌・輪流合作）",
+            "3": "🌳 第三階段：文化交通城（火車機場・節慶職業）"
+        },
+        "stagePalettes": {
+            "1": {"top": "#ffebee", "trim": "#ef5350", "roofA": "#d32f2f", "roofB": "#ffa000"},
+            "2": {"top": "#fbe9e7", "trim": "#ff8a65", "roofA": "#c62828", "roofB": "#5c6bc0"},
+            "3": {"top": "#fff8e1", "trim": "#ffca28", "roofA": "#b71c1c", "roofB": "#00897b"}
+        }
     },
     {
         "id": "life",
@@ -134,7 +204,17 @@ DOMAIN_CONFIG = [
         "themeDesc": "桌遊輪流、人際互動、生活美感與環境保護",
         "landmarkType": "ferris_camp",
         "sourceDomains": ["綜合"],
-        "shareStage1Daily": True
+        "shareStage1Daily": True,
+        "stageTitles": {
+            "1": "🌱 第一階段：共遊啟蒙村（玩具聲音・快樂一夏）",
+            "2": "🌿 第二階段：互動實踐鎮（串珠桌遊・輪流表達）",
+            "3": "🌳 第三階段：多元永續城（客閩原民・海洋防疫）"
+        },
+        "stagePalettes": {
+            "1": {"top": "#e0f7fa", "trim": "#26c6da", "roofA": "#0097a7", "roofB": "#ec407a"},
+            "2": {"top": "#e0f2f1", "trim": "#26a69a", "roofA": "#00838f", "roofB": "#ab47bc"},
+            "3": {"top": "#e8f5e9", "trim": "#4caf50", "roofA": "#00695c", "roofB": "#ffa726"}
+        }
     },
     {
         "id": "arts",
@@ -147,7 +227,17 @@ DOMAIN_CONFIG = [
         "themeDesc": "色彩造型、音樂律動、視覺美感與創意手作",
         "landmarkType": "palette_pavilion",
         "sourceDomains": ["藝術", "藝文"],
-        "shareStage1Daily": True
+        "shareStage1Daily": True,
+        "stageTitles": {
+            "1": "🌱 第一階段：感官啟蒙村（聲音世界・色彩探索）",
+            "2": "🌿 第二階段：創意實踐鎮（鈴鼓沙鈴・彩筆剪貼）",
+            "3": "🌳 第三階段：展演藝術城（醒獅手搖鈴・再生藝術）"
+        },
+        "stagePalettes": {
+            "1": {"top": "#fce4ec", "trim": "#f06292", "roofA": "#ec407a", "roofB": "#ab47bc"},
+            "2": {"top": "#f3e5f5", "trim": "#ba68c8", "roofA": "#8e24aa", "roofB": "#29b6f6"},
+            "3": {"top": "#ede7f6", "trim": "#9575cd", "roofA": "#6a1b9a", "roofB": "#ffb300"}
+        }
     },
     {
         "id": "daily",
@@ -160,9 +250,105 @@ DOMAIN_CONFIG = [
         "themeDesc": "第一學習階段跨領域統整：校園探索、四季自然與生活體驗",
         "landmarkType": "schoolbag_park",
         "sourceDomains": ["生活"],
-        "shareStage1Daily": False
+        "shareStage1Daily": False,
+        "stageTitles": {
+            "1": "🌱 第一階段：生活體驗村（新學校・玩具・家人・水遊戲）",
+            "2": "🌿 第二階段銜接：自然與社會探索",
+            "3": "🌳 第三階段銜接：綜合與藝文創想"
+        },
+        "stagePalettes": {
+            "1": {"top": "#fce4ec", "trim": "#f06292", "roofA": "#d81b60", "roofB": "#ffb300"},
+            "2": {"top": "#fff8e1", "trim": "#ffd54f", "roofA": "#f57c00", "roofB": "#43a047"},
+            "3": {"top": "#e1f5fe", "trim": "#4fc3f7", "roofA": "#0288d1", "roofB": "#ab47bc"}
+        }
     }
 ]
+
+
+def classify_unit_attributes(name: str, orig_domain: str):
+    """根據單元名稱與領域，自動賦予專屬 3D 模型類別 (propType)、代表圖示 (topicEmoji) 與屬性標籤 (attrTag)。"""
+    n = name
+
+    # 1. 潔牙洗漱與身體清潔
+    if any(k in n for k in ["護牙", "洗洗", "清潔基本功"]):
+        return "tooth_clean", "🦷", "潔牙洗漱"
+    if any(k in n for k in ["廁所", "如廁"]):
+        return "tooth_clean", "🚽", "如廁自理"
+
+    # 2. 衣物鞋襪穿脫與儀容
+    if any(k in n for k in ["衣", "鞋", "襪", "服裝", "穿脫"]):
+        return "clothes_shoe", "👕", "穿脫儀容"
+
+    # 3. 掃地、垃圾分類與資源回收
+    if any(k in n for k in ["掃地", "垃圾", "回收", "整潔"]):
+        return "recycle_bin", "♻️", "打掃回收"
+
+    # 4. 交通工具、車站機場港口與號誌
+    if any(k in n for k in ["交通", "號誌", "火車", "機場", "港口", "馬車", "運輸"]):
+        return "traffic_car", "🚦", "交通運輸"
+
+    # 5. 飲食、用餐与食品營養
+    if any(k in n for k in ["食物", "用餐", "飲食", "食品"]):
+        return "food_health", "🍱", "健康飲食"
+
+    # 6. 樂器演奏、唱歌跳舞與音樂
+    if any(k in n for k in ["鈴鼓", "沙鈴", "手搖鈴", "醒獅鼓", "唱唱跳跳", "音樂", "交響樂", "聲音"]):
+        return "music_drum", "🥁", "音樂律動"
+
+    # 7. 繪畫、剪貼、拼貼與視覺美感
+    if any(k in n for k in ["彩色筆", "蠟筆", "顏料", "撕貼", "剪貼", "拼貼", "再生藝術", "美感", "故宮"]):
+        return "art_palette", "🎨", "視覺創作"
+
+    # 8. 串珠、桌遊與玩具遊戲
+    if any(k in n for k in ["串珠", "桌遊", "玩具", "尋寶", "遊戲規則"]):
+        return "game_bead_fest", "🎲", "桌遊串珠"
+
+    # 9. 節慶、文化與民俗
+    if any(k in n for k in ["新年", "除夕", "月圓", "聖誕", "端午", "龍舟", "生日", "客閩", "原住民", "福爾摩沙", "臺灣"]):
+        return "game_bead_fest", "🏮", "節慶文化"
+
+    # 10. 磁鐵、燃燒、消防、水與科學實驗
+    if any(k in n for k in ["磁鐵", "燃燒", "消防", "水溶液", "溶解", "熱對物質", "水魔法", "水資源", "水的遊戲"]):
+        return "science_lab", "🧲", "科學實驗"
+
+    # 11. 植物、花卉、森林與四季天氣
+    if any(k in n for k in ["植物", "花", "大樹", "森林", "天氣", "一夏", "海洋"]):
+        return "nature_plant", "🌻", "生態自然"
+
+    # 12. 動物與昆蟲
+    if any(k in n for k in ["動物", "蝶", "蚊蟲"]):
+        return "animal_zoo", "🐾", "動物探索"
+
+    # 13. 幾何形狀、立體形體與空間
+    if any(k in n for k in ["形狀", "圖形", "扇形", "長方體", "柱體", "錐體", "球體", "立體形體", "角", "邊長"]):
+        return "math_shape", "📐", "幾何形體"
+
+    # 14. 數字、時間、重量、容量與計算機
+    if any(k in n for k in ["的數", "綜合練習", "位數", "時間", "重量", "容量", "測量", "計算機", "長短", "多少", "順序", "分類", "列表"]):
+        return "math_clock_num", "⏰", "數與量測"
+
+    # 15. 上肢、小手、手指與抓握
+    if any(k in n for k in ["上肢", "你的手", "小手", "手指", "抓握", "巧手", "手部", "手腳並用"]):
+        return "hand_grip", "✋", "上肢精細"
+
+    # 16. 下肢、雙腳、走路、平衡與姿勢
+    if any(k in n for k in ["下肢", "你的腳", "雙腳", "走路", "向前走", "平衡", "姿勢", "站立架", "動作變身", "移動技巧", "協調", "生活獨立"]):
+        return "foot_balance", "🦶", "平衡移動"
+
+    # 17. 球類、賽跑、持拍與運動體能
+    if any(k in n for k in ["玩球", "足下", "持拍", "賽跑", "走走跑跑", "跳一跳", "軸心運動", "運動"]):
+        return "sport_ball", "⚽", "球類體能"
+
+    # 18. 安全防護、危機警報與防疫衛教
+    if any(k in n for k in ["安全", "危險", "危機", "警報", "病魔", "防疫", "疾病", "健康情報", "自我保護", "拒絕", "勇敢說不", "青春期", "男生女生", "身體"]):
+        return "safety_med", "🛡️", "安全衛教"
+
+    # 19. 語文故事、人際家庭與校園探索
+    if orig_domain == "語文" or any(k in n for k in ["故事", "閱讀", "作家", "語文", "想像", "傳話"]):
+        return "book_story", "📖", "繪本閱讀"
+
+    return "book_story", "🏫", "校園人際"
+
 
 
 def load_all_240_units():
@@ -190,6 +376,7 @@ def load_all_240_units():
                 manual = u.get("說明", "").replace("../", "")
                 assert cover and os.path.exists(os.path.join(ROOT, cover)), f"🛑 缺封面：{orig_domain} {u['名']}"
                 assert manual and os.path.exists(os.path.join(ROOT, manual)), f"🛑 缺說明書：{orig_domain} {u['名']}"
+                prop_type, topic_emoji, attr_tag = classify_unit_attributes(u["名"], orig_domain)
                 all_units.append({
                     "uid": uid_counter,
                     "stage": stage,
@@ -200,7 +387,10 @@ def load_all_240_units():
                     "name": u["名"],
                     "url": u["網址"],
                     "cover": cover,
-                    "manual": manual
+                    "manual": manual,
+                    "propType": prop_type,
+                    "topicEmoji": topic_emoji,
+                    "attrTag": attr_tag
                 })
                 uid_counter += 1
     assert len(all_units) == 240, f"🛑 總站數應為 240，實際為 {len(all_units)}"
@@ -226,6 +416,28 @@ def build_domains_payload(all_units):
             s1 = [dict(u, isSharedDaily=True) for u in daily_stage1_units]
             stage1_note = "國小第一學習階段合科為「🎒 生活課程」（10 單元）"
 
+        # 統計該領域所有單元的屬性標籤與代表單元（供群島總覽與領域島屬性切換使用）
+        all_domain_units = s1 + s2 + s3
+        attr_counts = {}
+        for u in all_domain_units:
+            tag = u["attrTag"]
+            if tag not in attr_counts:
+                attr_counts[tag] = {"tag": tag, "emoji": u["topicEmoji"], "count": 0}
+            attr_counts[tag]["count"] += 1
+        attr_summary = sorted(attr_counts.values(), key=lambda x: -x["count"])
+
+        # 挑選 3 個最具代表性的不同屬性單元，顯示在群島大世界的領域島周圍小屋上
+        featured_units = []
+        seen_tags = set()
+        for u in own_units:
+            if u["attrTag"] not in seen_tags:
+                featured_units.append(u)
+                seen_tags.add(u["attrTag"])
+            if len(featured_units) >= 3:
+                break
+        while len(featured_units) < 3 and len(own_units) > len(featured_units):
+            featured_units.append(own_units[len(featured_units) * 2 % len(own_units)])
+
         domains_data.append({
             "id": cfg["id"],
             "name": cfg["name"],
@@ -238,6 +450,10 @@ def build_domains_payload(all_units):
             "landmarkType": cfg["landmarkType"],
             "ownCount": own_count,
             "stage1Note": stage1_note,
+            "stageTitles": cfg["stageTitles"],
+            "stagePalettes": cfg["stagePalettes"],
+            "attrSummary": attr_summary,
+            "featuredUnits": featured_units,
             "stages": {
                 "1": s1,
                 "2": s2,
@@ -642,6 +858,14 @@ canvas#canvas-3d {
   font-weight: 800;
   color: var(--text-main);
 }
+.pin-attr-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1px 7px;
+  border-radius: 8px;
+}
 .pin-badge {
   font-size: 11px;
   font-weight: 700;
@@ -649,6 +873,23 @@ canvas#canvas-3d {
   background: #f1f5f9;
   padding: 1px 6px;
   border-radius: 8px;
+}
+
+.pill-world-sub {
+  padding: 4px 10px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.93);
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+  gap: 5px;
+}
+.pill-world-sub .pin-title {
+  font-size: 12px;
+  font-weight: 800;
+}
+.pill-world-sub::after {
+  border-width: 5px 5px 0 5px;
+  bottom: -5px;
 }
 
 /* 中央核心與聚落大標籤 */
@@ -780,7 +1021,7 @@ canvas#canvas-3d {
   padding: 12px 18px;
   box-shadow: var(--shadow-soft);
   z-index: 35;
-  max-width: 420px;
+  max-width: 470px;
   pointer-events: auto;
 }
 .banner-title {
@@ -806,6 +1047,37 @@ canvas#canvas-3d {
   padding: 3px 10px;
   border-radius: 10px;
   display: none;
+}
+.banner-attr-bar {
+  margin-top: 9px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.attr-chip {
+  border: 1.5px solid #cbd5e1;
+  background: #f8fafc;
+  color: #334155;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.16s;
+}
+.attr-chip:hover {
+  border-color: #0284c7;
+  background: #e0f2fe;
+}
+.attr-chip.active {
+  background: #0284c7;
+  color: #fff;
+  border-color: #0284c7;
+  box-shadow: 0 3px 8px rgba(2, 132, 199, 0.25);
 }
 
 /* ── 領域 × 三階段清單模式視圖 (List View) ── */
@@ -1133,16 +1405,17 @@ canvas#canvas-3d {
   <canvas id="canvas-3d"></canvas>
   <div id="labels-layer"></div>
 
-  <!-- 左上角當前島嶼資訊卡 -->
+  <!-- 左上角當前島嶼資訊卡（含領域專屬屬性快速切換列） -->
   <div class="island-info-banner" id="island-banner">
     <div class="banner-title" id="banner-title">🌊 特教學習大世界（10 大領域群島）</div>
     <div class="banner-desc" id="banner-desc">點擊任一領域島嶼，即可進入該領域的「第一、二、三學習階段」立體教材村落！</div>
     <div class="banner-note" id="banner-note"></div>
+    <div class="banner-attr-bar" id="banner-attrs"></div>
   </div>
 
   <!-- 右下角鏡頭控制 -->
   <div class="cam-controls">
-    <button class="cam-btn" id="btn-all-pins" onclick="toggleShowAllPins()" title="切換顯示全部單元標籤／精選標籤" style="display:none;">🏷️</button>
+    <button class="cam-btn" id="btn-all-pins" onclick="toggleShowAllPins()" title="切換顯示全部單元標籤／精選標籤">🏷️</button>
     <button class="cam-btn" onclick="resetCamera()" title="重置視角">⟲</button>
     <button class="cam-btn" id="btn-tour" onclick="toggleTour()" title="自動環島巡航運鏡">🎬</button>
   </div>
@@ -1171,6 +1444,7 @@ canvas#canvas-3d {
         <div class="modal-badges">
           <span class="m-badge m-badge-domain" id="m-domain-badge">特需生活管理</span>
           <span class="m-badge m-badge-s2" id="m-stage-badge">🌿 第二階段・二上 第 2 單元</span>
+          <span class="m-badge" id="m-attr-badge" style="background:#e0f2fe;color:#0369a1;">👕 穿脫儀容</span>
         </div>
         <h2 class="modal-unit-title" id="m-title">會穿脫鞋襪</h2>
       </div>
@@ -1348,6 +1622,8 @@ function createHexPlatform(radius, height, topHex, trimHex, dirtHex, x, z) {
   return { group: g, topY: height - 0.05 };
 }
 
+let currentAttrFilter = "all"; // 領域島內依單元屬性篩選 ("all" 或 attrTag)
+
 function createTree(x, y, z, scale = 1, type = 0) {
   const g = new THREE.Group();
   g.position.set(x, y, z);
@@ -1361,6 +1637,184 @@ function createTree(x, y, z, scale = 1, type = 0) {
     // 圓球繪本樹
     g.add(ball(0.56 * scale, "#66bb6a", 0, 0.82 * scale, 0, 7));
     g.add(ball(0.38 * scale, "#81c784", 0.24 * scale, 1.05 * scale, 0.12 * scale, 6));
+  }
+  return g;
+}
+
+// 依 10 大領域切換專屬植被與地貌樹種（讓每座領域島一眼看出不同生態與主題氛圍）
+function createDomainFoliage(domainId, x, y, z, scale = 1, idx = 0) {
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+
+  if (domainId === "selfcare") {
+    // 水藍潔淨泡泡樹＆薄荷圓球樹
+    g.add(cyl(0.1 * scale, 0.13 * scale, 0.52 * scale, "#8d6e63", 0, 0, 0, 6));
+    g.add(ball(0.52 * scale, idx % 2 === 0 ? "#4dd0e1" : "#81c784", 0, 0.82 * scale, 0, 8));
+    g.add(ball(0.34 * scale, "#e0f7fa", 0.26 * scale, 1.12 * scale, 0.15 * scale, 7));
+    g.add(ball(0.22 * scale, "#ffffff", -0.22 * scale, 1.25 * scale, -0.1 * scale, 6));
+  } else if (domainId === "motor") {
+    // 感統彈跳彩球樹（三色活力圓球串）
+    g.add(cyl(0.09 * scale, 0.12 * scale, 0.5 * scale, "#5c6bc0", 0, 0, 0, 6));
+    g.add(ball(0.48 * scale, "#ab47bc", 0, 0.72 * scale, 0, 8));
+    g.add(ball(0.38 * scale, "#ffca28", 0.12 * scale, 1.2 * scale, 0, 8));
+    g.add(ball(0.28 * scale, "#29b6f6", -0.1 * scale, 1.58 * scale, 0, 8));
+  } else if (domainId === "chinese") {
+    // 金秋銀杏書香樹（結著紅蘋果果實）
+    g.add(cyl(0.11 * scale, 0.15 * scale, 0.58 * scale, "#6d4c41", 0, 0, 0, 6));
+    g.add(ball(0.58 * scale, "#ffb300", 0, 0.86 * scale, 0, 7));
+    g.add(ball(0.42 * scale, "#ffd54f", 0.25 * scale, 1.1 * scale, 0.14 * scale, 7));
+    g.add(ball(0.14 * scale, "#e53935", -0.32 * scale, 0.92 * scale, 0.28 * scale, 6));
+  } else if (domainId === "math") {
+    // 幾何積木樹（正方體樹冠與金字塔樹冠）
+    g.add(cyl(0.1 * scale, 0.13 * scale, 0.55 * scale, "#546e7a", 0, 0, 0, 6));
+    if (idx % 2 === 0) {
+      g.add(box(0.85 * scale, 0.85 * scale, 0.85 * scale, "#29b6f6", 0, 0.52 * scale, 0));
+      g.add(box(0.55 * scale, 0.55 * scale, 0.55 * scale, "#ffca28", 0.22 * scale, 1.15 * scale, 0.15 * scale));
+    } else {
+      g.add(cone(0.68 * scale, 1.15 * scale, "#26a69a", 0, 0.5 * scale, 0, 4));
+    }
+  } else if (domainId === "pe") {
+    // 陽光運動棕櫚椰子樹
+    g.add(cyl(0.09 * scale, 0.15 * scale, 1.15 * scale, "#8d6e63", 0, 0, 0, 6));
+    for (let a = 0; a < 5; a++) {
+      const leaf = box(0.75 * scale, 0.1 * scale, 0.28 * scale, "#66bb6a", Math.cos(a * 1.25) * 0.35 * scale, 1.12 * scale, Math.sin(a * 1.25) * 0.35 * scale);
+      leaf.rotation.y = -a * 1.25;
+      g.add(leaf);
+    }
+    g.add(ball(0.14 * scale, "#fb8c00", 0.12 * scale, 1.02 * scale, 0.12 * scale, 6));
+  } else if (domainId === "nature") {
+    // 巨型向日葵＆生態雨林大樹
+    if (idx % 2 === 0) {
+      g.add(cyl(0.08 * scale, 0.1 * scale, 0.85 * scale, "#43a047", 0, 0, 0, 6));
+      g.add(cyl(0.48 * scale, 0.48 * scale, 0.14 * scale, "#fdd835", 0, 0.85 * scale, 0, 10));
+      g.add(cyl(0.24 * scale, 0.24 * scale, 0.18 * scale, "#5d4037", 0, 0.86 * scale, 0, 8));
+    } else {
+      return createTree(x, y, z, scale * 1.12, 0);
+    }
+  } else if (domainId === "society") {
+    // 台灣紅燈籠櫻花樹
+    g.add(cyl(0.11 * scale, 0.15 * scale, 0.58 * scale, "#5d4037", 0, 0, 0, 6));
+    g.add(ball(0.58 * scale, "#f48fb1", 0, 0.86 * scale, 0, 7));
+    g.add(ball(0.4 * scale, "#f8bbd0", 0.24 * scale, 1.1 * scale, 0.12 * scale, 7));
+    g.add(ball(0.16 * scale, "#d32f2f", -0.35 * scale, 0.62 * scale, 0.22 * scale, 6));
+  } else if (domainId === "arts") {
+    // 粉紫馬卡龍調色樹
+    g.add(cyl(0.1 * scale, 0.13 * scale, 0.55 * scale, "#795548", 0, 0, 0, 6));
+    g.add(ball(0.54 * scale, "#ce93d8", 0, 0.82 * scale, 0, 8));
+    g.add(ball(0.38 * scale, "#f48fb1", 0.24 * scale, 1.12 * scale, 0.15 * scale, 7));
+    g.add(ball(0.3 * scale, "#fff59d", -0.2 * scale, 1.18 * scale, -0.12 * scale, 7));
+  } else {
+    return createTree(x, y, z, scale, idx);
+  }
+  return g;
+}
+
+// 依單元名稱與屬性 (propType) 自動建立 18 種立體微縮主題標誌（直接擺在該單元建築旁或屋頂前！）
+function createUnitTopicProp(propType, x = 0, y = 0, z = 0, scale = 1) {
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+  g.scale.set(scale, scale, scale);
+
+  if (propType === "tooth_clean") {
+    // 🦷 立體大白牙齒＋水藍潔淨泡泡
+    g.add(cyl(0.38, 0.42, 0.14, "#f48fb1", 0, 0, 0, 8));
+    g.add(box(0.46, 0.52, 0.36, "#ffffff", 0, 0.14, 0));
+    g.add(ball(0.24, "#ffffff", -0.14, 0.66, 0, 7));
+    g.add(ball(0.24, "#ffffff", 0.14, 0.66, 0, 7));
+    g.add(ball(0.18, "#4dd0e1", 0.32, 0.45, 0.2, 6));
+  } else if (propType === "clothes_shoe") {
+    // 👕 迷你彩色T恤展示架＋小紅鞋
+    g.add(cyl(0.06, 0.08, 0.75, "#8d6e63", 0, 0, 0, 6));
+    g.add(box(0.52, 0.48, 0.22, "#29b6f6", 0, 0.32, 0));
+    g.add(box(0.82, 0.18, 0.2, "#4fc3f7", 0, 0.58, 0));
+    g.add(box(0.28, 0.18, 0.38, "#ef5350", 0.35, 0, 0.25));
+  } else if (propType === "recycle_bin") {
+    // ♻️ 藍綠黃三色分類回收桶組
+    g.add(cyl(0.18, 0.14, 0.48, "#1e88e5", -0.34, 0, 0, 7));
+    g.add(cyl(0.18, 0.14, 0.48, "#43a047", 0, 0, 0, 7));
+    g.add(cyl(0.18, 0.14, 0.48, "#fdd835", 0.34, 0, 0, 7));
+  } else if (propType === "traffic_car") {
+    // 🚦 立體紅綠燈號誌桿＋迷你小車
+    g.add(cyl(0.05, 0.06, 0.95, "#37474f", -0.25, 0, 0, 6));
+    g.add(box(0.24, 0.56, 0.18, "#263238", -0.25, 0.55, 0));
+    g.add(ball(0.07, "#ef5350", -0.25, 0.98, 0.1, 6));
+    g.add(ball(0.07, "#ffee58", -0.25, 0.82, 0.1, 6));
+    g.add(ball(0.07, "#66bb6a", -0.25, 0.66, 0.1, 6));
+    g.add(box(0.48, 0.28, 0.34, "#ff7043", 0.22, 0.06, 0.15));
+  } else if (propType === "food_health") {
+    // 🍱 美味餐盤＋紅蘋果與橘胡蘿蔔
+    g.add(cyl(0.45, 0.4, 0.1, "#ffffff", 0, 0, 0, 10));
+    g.add(ball(0.22, "#e53935", -0.12, 0.24, 0, 8));
+    g.add(cone(0.14, 0.42, "#fb8c00", 0.18, 0.1, 0.08, 6));
+  } else if (propType === "hand_grip") {
+    // ✋ 彩色疊疊樂精細積木塔＋抓握環
+    g.add(box(0.42, 0.24, 0.42, "#ef5350", 0, 0, 0));
+    g.add(box(0.34, 0.24, 0.34, "#ffca28", 0, 0.24, 0));
+    g.add(box(0.26, 0.24, 0.26, "#29b6f6", 0, 0.48, 0));
+  } else if (propType === "foot_balance") {
+    // 🦶 感統平衡木＋紅白跨欄架
+    g.add(box(0.85, 0.14, 0.24, "#ffb74d", 0, 0.16, 0));
+    g.add(box(0.14, 0.16, 0.24, "#8d6e63", -0.32, 0, 0));
+    g.add(box(0.14, 0.16, 0.24, "#8d6e63", 0.32, 0, 0));
+    g.add(ball(0.22, "#ab47bc", 0, 0.48, 0, 8));
+  } else if (propType === "book_story") {
+    // 📖 立體敞開故事繪本台
+    g.add(box(0.65, 0.14, 0.48, "#8d6e63", 0, 0, 0));
+    g.add(box(0.56, 0.12, 0.42, "#fff9c4", 0, 0.14, 0));
+    g.add(cone(0.2, 0.45, "#ffb300", 0, 0.26, 0, 5));
+  } else if (propType === "nature_plant") {
+    // 🌻 盛開向日葵花盆與綠芽
+    g.add(cyl(0.26, 0.2, 0.32, "#bf360c", 0, 0, 0, 7));
+    g.add(cyl(0.05, 0.05, 0.45, "#43a047", 0, 0.32, 0, 6));
+    g.add(ball(0.25, "#fdd835", 0, 0.78, 0, 8));
+  } else if (propType === "animal_zoo") {
+    // 🐾 可愛立體小動物雕像
+    g.add(ball(0.28, "#ffb74d", 0, 0.26, 0, 8));
+    g.add(ball(0.22, "#ffe082", 0, 0.56, 0.1, 8));
+    g.add(cone(0.1, 0.22, "#f57c00", -0.14, 0.72, 0.1, 5));
+    g.add(cone(0.1, 0.22, "#f57c00", 0.14, 0.72, 0.1, 5));
+  } else if (propType === "science_lab") {
+    // 🧲 紅藍雙極磁鐵＋實驗燒瓶
+    g.add(box(0.16, 0.55, 0.16, "#e53935", -0.18, 0, 0));
+    g.add(box(0.16, 0.55, 0.16, "#1e88e5", 0.18, 0, 0));
+    g.add(box(0.52, 0.16, 0.16, "#eceff1", 0, 0.52, 0));
+  } else if (propType === "math_shape") {
+    // 📐 金字塔＋正方體＋圓球幾何組
+    g.add(cone(0.32, 0.55, "#ffb300", -0.18, 0, 0, 4));
+    g.add(box(0.34, 0.34, 0.34, "#29b6f6", 0.22, 0, 0.1));
+    g.add(ball(0.2, "#ec407a", 0.05, 0.52, -0.1, 8));
+  } else if (propType === "math_clock_num") {
+    // ⏰ 立體黃金時鐘座
+    g.add(cyl(0.34, 0.34, 0.14, "#0288d1", 0, 0.35, 0, 10));
+    g.add(ball(0.26, "#fff9c4", 0, 0.38, 0.08, 8));
+    g.add(box(0.45, 0.16, 0.26, "#fbc02d", 0, 0, 0));
+  } else if (propType === "sport_ball") {
+    // ⚽ 運動球類與迷你球門
+    g.add(ball(0.26, "#ff7043", -0.15, 0.26, 0, 8));
+    g.add(ball(0.22, "#ffffff", 0.22, 0.22, 0.12, 8));
+  } else if (propType === "safety_med") {
+    // 🛡️ 紅十字健康安全盾牌座
+    g.add(box(0.52, 0.58, 0.16, "#ffffff", 0, 0.08, 0));
+    g.add(box(0.34, 0.12, 0.2, "#e53935", 0, 0.31, 0));
+    g.add(box(0.12, 0.34, 0.2, "#e53935", 0, 0.2, 0));
+  } else if (propType === "music_drum") {
+    // 🥁 立體紅金擊樂鼓座
+    g.add(cyl(0.34, 0.34, 0.38, "#e53935", 0, 0, 0, 10));
+    g.add(cyl(0.36, 0.36, 0.08, "#fff8e1", 0, 0.38, 0, 10));
+    g.add(ball(0.14, "#ffd54f", 0, 0.62, 0, 6));
+  } else if (propType === "art_palette") {
+    // 🎨 立體三色大蠟筆與調色台
+    g.add(cyl(0.1, 0.1, 0.55, "#ef5350", -0.22, 0, 0, 6));
+    g.add(cone(0.1, 0.2, "#ef5350", -0.22, 0.55, 0, 6));
+    g.add(cyl(0.1, 0.1, 0.62, "#ffca28", 0, 0, 0, 6));
+    g.add(cone(0.1, 0.2, "#ffca28", 0, 0.62, 0, 6));
+    g.add(cyl(0.1, 0.1, 0.5, "#ab47bc", 0.22, 0, 0, 6));
+    g.add(cone(0.1, 0.2, "#ab47bc", 0.22, 0.5, 0, 6));
+  } else {
+    // 🎲 桌遊大骰子與紅燈籠串珠
+    g.add(box(0.42, 0.42, 0.42, "#ffffff", -0.12, 0, 0));
+    g.add(ball(0.08, "#e53935", -0.12, 0.22, 0.22, 6));
+    g.add(ball(0.22, "#ef5350", 0.24, 0.52, 0, 8));
   }
   return g;
 }
@@ -1446,8 +1900,8 @@ function createRoadBridge(x1, z1, r1, x2, z2, r2, yHeight = 1.95) {
   return g;
 }
 
-// 多樣化微縮建築生成器（讓 30 個單元建築造型豐富緊湊）
-function createUnitBuilding(x, y, z, styleIdx, roofColor, wallColor = "#ffffff") {
+// 多樣化微縮建築生成器（除建築本體外，可根據該單元的 propType 在庭院前擺放專屬立體主題道具！）
+function createUnitBuilding(x, y, z, styleIdx, roofColor, wallColor = "#ffffff", propType = "") {
   const g = new THREE.Group();
   g.position.set(x, y, z);
   const kind = styleIdx % 5;
@@ -1493,10 +1947,15 @@ function createUnitBuilding(x, y, z, styleIdx, roofColor, wallColor = "#ffffff")
     g.add(ball(0.72, roofColor, 0, 1.05, 0, 10));
     g.add(box(0.34, 0.5, 0.1, "#5d4037", 0, 0, 0.72));
   }
+
+  // 若有傳入單元專屬 propType，於建築右前方庭院擺放該單元的立體微縮模型！
+  if (propType) {
+    g.add(createUnitTopicProp(propType, 0.92, 0.02, 0.68, 0.95));
+  }
   return g;
 }
 
-// 各領域專屬中央主題地標 (Domain Landmark Centerpiece)
+// 10 大領域專屬中央主題地標 (全部 10 種領域地標皆獨立建模，造型鮮明不重複)
 function createDomainMonument(type, primaryColor, trimColor, yBase) {
   const g = new THREE.Group();
   g.position.set(0, yBase, 0);
@@ -1507,7 +1966,7 @@ function createDomainMonument(type, primaryColor, trimColor, yBase) {
   g.add(box(0.75, 0.45, 0.04, "#ef4444", -1.12, 2.45, -1.0));
 
   if (type === "lighthouse_whale") {
-    // 水池＋小白鯨＋紅白燈塔
+    // 🏠 特需生活管理島：水池＋小白鯨＋紅白燈塔＋潔白大牙齒
     g.add(cyl(1.65, 1.7, 0.15, "#38bdf8", 0, 0.18, 0, 14));
     const whale = ball(0.62, "#0284c7", 0.35, 0.65, 0.2, 10);
     whale.scale.set(1.35, 0.85, 1.0);
@@ -1515,41 +1974,83 @@ function createDomainMonument(type, primaryColor, trimColor, yBase) {
     g.add(cyl(0.55, 0.75, 2.5, "#ffffff", -0.65, 0.2, -0.3, 8));
     g.add(cyl(0.62, 0.62, 0.45, "#ef4444", -0.65, 1.6, -0.3, 8));
     g.add(cone(0.68, 0.65, "#ef4444", -0.65, 2.7, -0.3, 8));
+    g.add(createUnitTopicProp("tooth_clean", 0.95, 0.22, -0.55, 1.2));
   } else if (type === "gym_rainbow") {
-    // 彩虹階梯與平衡木館
-    g.add(box(1.8, 0.4, 1.1, "#ef5350", 0, 0.2, 0));
-    g.add(box(1.4, 0.4, 0.9, "#ffca28", 0, 0.6, 0));
-    g.add(box(1.0, 0.4, 0.7, "#42a5f5", 0, 1.0, 0));
-    g.add(ball(0.48, "#ab47bc", 0, 1.75, 0, 10));
+    // 🤸 特需動作訓練島：彩虹階梯與感統平衡木館＋大龍球
+    g.add(box(1.9, 0.42, 1.2, "#ef5350", 0, 0.2, 0));
+    g.add(box(1.45, 0.42, 0.95, "#ffca28", 0, 0.62, 0));
+    g.add(box(1.05, 0.42, 0.75, "#42a5f5", 0, 1.04, 0));
+    g.add(ball(0.56, "#ab47bc", 0, 1.88, 0, 10));
+    g.add(box(2.2, 0.16, 0.32, "#26a69a", 0, 0.35, 1.15));
   } else if (type === "book_tower") {
-    // 敞開的立體巨型繪本書台
-    g.add(box(1.9, 0.35, 1.3, "#d97706", 0, 0.2, 0));
-    const pageL = box(0.85, 0.15, 1.15, "#fffbeb", -0.44, 0.6, 0);
+    // 📖 語文溝通島：敞開的立體巨型繪本書台＋魔法鵝毛筆尖鐘塔
+    g.add(box(1.95, 0.35, 1.35, "#d97706", 0, 0.2, 0));
+    const pageL = box(0.88, 0.16, 1.18, "#fffbeb", -0.45, 0.6, 0);
     pageL.rotation.z = 0.22;
-    const pageR = box(0.85, 0.15, 1.15, "#fffbeb", 0.44, 0.6, 0);
+    const pageR = box(0.88, 0.16, 1.18, "#fffbeb", 0.45, 0.6, 0);
     pageR.rotation.z = -0.22;
     g.add(pageL, pageR);
-    g.add(cyl(0.38, 0.45, 1.9, primaryColor, 0, 0.5, -0.65, 8));
-    g.add(cone(0.52, 0.65, trimColor, 0, 2.4, -0.65, 8));
+    g.add(cyl(0.4, 0.48, 1.95, primaryColor, 0, 0.5, -0.65, 8));
+    g.add(cone(0.55, 0.72, trimColor, 0, 2.45, -0.65, 8));
   } else if (type === "clock_pyramid") {
-    // 幾何金字塔與時鐘塔
-    g.add(cone(1.15, 1.7, "#f59e0b", -0.45, 0.2, 0.2, 4));
-    g.add(box(0.95, 2.2, 0.95, primaryColor, 0.55, 0.2, -0.25));
-    g.add(ball(0.34, "#fef08a", 0.55, 1.85, 0.26, 8));
-    g.add(cone(0.75, 0.75, trimColor, 0.55, 2.4, -0.25, 4));
+    // 📐 生活數學島：黃金幾何金字塔＋時鐘高塔＋算盤立柱
+    g.add(cone(1.2, 1.8, "#f59e0b", -0.48, 0.2, 0.22, 4));
+    g.add(box(0.98, 2.3, 0.98, primaryColor, 0.58, 0.2, -0.25));
+    g.add(ball(0.36, "#fef08a", 0.58, 1.9, 0.28, 8));
+    g.add(cone(0.78, 0.8, trimColor, 0.58, 2.5, -0.25, 4));
+  } else if (type === "stadium_torch") {
+    // 🏃 健康與體育島：奧運聖火高塔＋紅白PU跑道競技館＋頒獎台
+    g.add(cyl(1.75, 1.85, 0.35, "#ef5350", 0, 0.2, 0, 12));
+    g.add(cyl(1.3, 1.35, 0.35, "#ffffff", 0, 0.55, 0, 12));
+    g.add(cyl(0.35, 0.55, 1.85, "#ffd54f", 0, 0.9, -0.35, 8));
+    g.add(cone(0.52, 0.95, "#ff5722", 0, 2.75, -0.35, 7));
+    g.add(ball(0.35, "#ffca28", 0.65, 1.15, 0.55, 8));
+  } else if (type === "windmill_greenhouse") {
+    // 🌱 自然探險島：轉動生態大風車＋翠綠玻璃溫室＋U型大磁鐵
+    g.add(box(1.55, 1.05, 1.25, "#a5d6a7", 0.45, 0.2, 0.15));
+    g.add(cyl(0.62, 0.62, 1.25, "#81c784", 0.45, 1.25, 0.15, 8));
+    g.add(cyl(0.45, 0.62, 2.2, "#ffffff", -0.65, 0.2, -0.35, 8));
+    g.add(cone(0.58, 0.65, "#2e7d32", -0.65, 2.4, -0.35, 8));
+    const blades = new THREE.Group();
+    blades.position.set(-0.65, 1.85, 0.22);
+    blades.add(box(1.9, 0.16, 0.05, "#43a047", 0, 0, 0));
+    blades.add(box(0.16, 1.9, 0.05, "#43a047", 0, 0, 0));
+    g.add(blades);
+    spinningMeshes.push(blades);
+    g.add(createUnitTopicProp("science_lab", 0.85, 0.22, 0.95, 1.15));
+  } else if (type === "gate_town") {
+    // 🏮 社會生活島：台灣紅磚古城門樓（燕尾飛簷）＋雙側紅燈籠＋紅綠燈
+    g.add(box(0.55, 1.45, 0.95, "#c62828", -0.72, 0.2, 0));
+    g.add(box(0.55, 1.45, 0.95, "#c62828", 0.72, 0.2, 0));
+    g.add(box(2.15, 0.55, 1.15, "#b71c1c", 0, 1.45, 0));
+    const roof = cone(1.65, 0.85, "#ffb300", 0, 2.0, 0, 4);
+    roof.rotation.y = Math.PI / 4;
+    g.add(roof);
+    g.add(ball(0.24, "#ef5350", -0.95, 1.35, 0.6, 8));
+    g.add(ball(0.24, "#ef5350", 0.95, 1.35, 0.6, 8));
   } else if (type === "ferris_camp") {
-    // 彩色摩天輪地標
-    g.add(box(0.2, 1.8, 0.2, "#475569", -0.35, 0.2, 0));
-    g.add(box(0.2, 1.8, 0.2, "#475569", 0.35, 0.2, 0));
-    const wheel = new THREE.Mesh(new THREE.TorusGeometry(1.1, 0.09, 6, 16), mat(primaryColor));
-    wheel.position.set(0, 1.95, 0);
+    // 🌏 綜合活動島：彩色摩天輪＋童軍露營三角帳篷與營火
+    g.add(box(0.2, 1.9, 0.2, "#475569", -0.35, 0.2, -0.2));
+    g.add(box(0.2, 1.9, 0.2, "#475569", 0.35, 0.2, -0.2));
+    const wheel = new THREE.Mesh(new THREE.TorusGeometry(1.15, 0.1, 6, 16), mat(primaryColor));
+    wheel.position.set(0, 2.05, -0.2);
     g.add(wheel);
     spinningMeshes.push(wheel);
+    g.add(cone(0.72, 1.05, "#ffa726", 0.75, 0.2, 0.65, 4));
+  } else if (type === "palette_pavilion") {
+    // 🎨 藝術創想島：七彩調色盤音樂館＋三支巨型彩色畫筆塔
+    g.add(cyl(1.65, 1.75, 0.32, "#ce93d8", 0, 0.2, 0, 12));
+    g.add(cyl(0.95, 1.05, 1.1, "#ffffff", -0.25, 0.52, -0.15, 10));
+    g.add(ball(0.98, "#8e24aa", -0.25, 1.62, -0.15, 10));
+    g.add(createUnitTopicProp("art_palette", 0.85, 0.52, 0.45, 1.45));
   } else {
-    // 精緻圓頂主題城堡地標
-    g.add(box(1.75, 1.1, 1.45, "#ffffff", 0, 0.2, 0));
-    g.add(cyl(0.68, 0.75, 1.2, primaryColor, 0, 1.3, 0, 10));
-    g.add(cone(0.88, 0.85, trimColor, 0, 2.5, 0, 10));
+    // 🎒 生活課程啟蒙島：巨型立體紅黃小書包樂園＋公園溜滑梯
+    g.add(box(1.45, 1.55, 1.05, "#d81b60", -0.25, 0.2, 0));
+    g.add(box(1.52, 0.75, 1.12, "#ffca28", -0.25, 1.15, 0.05));
+    g.add(box(0.95, 0.55, 0.35, "#f06292", -0.25, 0.35, 0.55));
+    const slide = box(0.45, 1.45, 0.18, "#29b6f6", 0.95, 0.2, 0.35);
+    slide.rotation.z = -0.55;
+    g.add(slide);
   }
 
   return g;
@@ -1566,16 +2067,17 @@ function clearThreeWorld() {
   spinningMeshes.length = 0;
 }
 
-function add3DPin(htmlContent, worldVec, extraClass, onClickFn, isAlwaysVisible = true) {
+function add3DPin(htmlContent, worldVec, extraClass, onClickFn, isAlwaysVisible = true, attrTag = "") {
   const el = document.createElement("div");
   el.className = "label-pin " + (extraClass || "");
+  if (attrTag) el.dataset.attr = attrTag;
   el.innerHTML = htmlContent;
   el.onclick = (e) => {
     e.stopPropagation();
     if (!dragMoved && onClickFn) onClickFn();
   };
   labelsLayer.appendChild(el);
-  pinItems.push({ el, pos: worldVec, always: isAlwaysVisible });
+  pinItems.push({ el, pos: worldVec, always: isAlwaysVisible, attrTag });
 }
 
 // ==========================================
@@ -1603,21 +2105,27 @@ function buildWorldArchipelagoScene() {
 
   // 10 座領域島嶼大幅拉開空間距離（遍布整個畫面視野，不擠在中央，並以跨海道路橋樑彼此相連）
   const coords = [
-    { x: -17.5, z: -9.5,  h: 2.15, r: 4.0, bridgeFrom: -1 }, // 0: 特需生活管理島（內環左前）
-    { x: 0.0,   z: -18.5, h: 2.20, r: 4.0, bridgeFrom: -1 }, // 1: 功能性動作島（內環正北）
-    { x: 17.5,  z: -9.5,  h: 2.15, r: 4.0, bridgeFrom: -1 }, // 2: 語文繪本島（內環右前）
-    { x: 16.5,  z: 9.5,   h: 2.10, r: 4.0, bridgeFrom: -1 }, // 3: 健體活力島（內環右後）
-    { x: -16.5, z: 9.5,   h: 2.10, r: 4.0, bridgeFrom: -1 }, // 4: 數學邏輯島（內環左後）
-    { x: -32.5, z: -1.0,  h: 2.00, r: 3.9, bridgeFrom: 0  }, // 5: 自然探索島（外環極左）
-    { x: -14.5, z: -25.5, h: 2.05, r: 3.9, bridgeFrom: 1  }, // 6: 社會文化島（外環左北）
-    { x: 14.5,  z: -25.5, h: 2.05, r: 3.9, bridgeFrom: 1  }, // 7: 綜合實踐島（外環右北）
-    { x: 32.5,  z: -1.0,  h: 2.00, r: 3.9, bridgeFrom: 2  }, // 8: 藝術人文島（外環極右）
-    { x: 0.0,   z: 20.5,  h: 2.05, r: 3.9, bridgeFrom: 4  }  // 9: 生活啟蒙島（外環正南）
+    { x: -17.5, z: -9.5,  h: 2.15, r: 4.2, bridgeFrom: -1 }, // 0: 特需生活管理島（內環左前）
+    { x: 0.0,   z: -18.5, h: 2.20, r: 4.2, bridgeFrom: -1 }, // 1: 功能性動作島（內環正北）
+    { x: 17.5,  z: -9.5,  h: 2.15, r: 4.2, bridgeFrom: -1 }, // 2: 語文繪本島（內環右前）
+    { x: 16.5,  z: 9.5,   h: 2.10, r: 4.2, bridgeFrom: -1 }, // 3: 數學邏輯島（內環右後）
+    { x: -16.5, z: 9.5,   h: 2.10, r: 4.2, bridgeFrom: -1 }, // 4: 健體活力島（內環左後）
+    { x: -32.5, z: -1.0,  h: 2.00, r: 4.1, bridgeFrom: 0  }, // 5: 自然探索島（外環極左）
+    { x: -14.5, z: -25.5, h: 2.05, r: 4.1, bridgeFrom: 1  }, // 6: 社會文化島（外環左北）
+    { x: 14.5,  z: -25.5, h: 2.05, r: 4.1, bridgeFrom: 1  }, // 7: 綜合實踐島（外環右北）
+    { x: 32.5,  z: -1.0,  h: 2.00, r: 4.1, bridgeFrom: 2  }, // 8: 藝術人文島（外環極右）
+    { x: 0.0,   z: 20.5,  h: 2.05, r: 4.1, bridgeFrom: 4  }  // 9: 生活啟蒙島（外環正南）
   ];
 
   // 額外環狀聯絡道路（讓外環與內環形成四通八達的跨海公路網）
   const extraLinks = [
     [4, 5], [2, 7], [0, 6], [3, 8], [3, 9]
+  ];
+
+  const subBldOffsets = [
+    { dx: -1.95, dz: 1.45 },
+    { dx: 1.95,  dz: 1.45 },
+    { dx: 0.0,   dz: -1.95 }
   ];
 
   DOMAINS_DATA.forEach((d, idx) => {
@@ -1629,17 +2137,39 @@ function buildWorldArchipelagoScene() {
     plat.group.add(box(c.r * 1.45, 0.06, 0.72, "#f5ebe0", 0, plat.topY, 0));
     plat.group.add(box(0.72, 0.06, c.r * 1.45, "#f5ebe0", 0, plat.topY, 0));
 
-    // 島上精緻聚落（主地標＋兩棟小屋＋樹木＋吉祥物＋街燈，彼此保持清晰間距）
+    // 1. 該領域專屬中央地標
     const mainBld = createDomainMonument(d.landmarkType, d.color, d.trimColor, plat.topY);
     mainBld.scale.set(0.76, 0.76, 0.76);
     plat.group.add(mainBld);
 
-    plat.group.add(createUnitBuilding(-1.85, plat.topY, 1.35, idx, d.color));
-    plat.group.add(createUnitBuilding(1.85, plat.topY, 1.35, idx + 1, d.trimColor));
-    plat.group.add(createTree(-2.25, plat.topY, -1.55, 0.95, idx));
-    plat.group.add(createTree(2.25, plat.topY, -1.5, 0.9, idx + 1));
-    plat.group.add(createMascot(0.0, plat.topY, 2.45, d.color, "#ffd54f"));
-    plat.group.add(createStreetLamp(-1.25, plat.topY, 2.3));
+    // 2. 依該領域的代表單元 (featuredUnits)，在島上擺放帶有「單元專屬 3D 主題道具」的微縮建築與單元小標籤！
+    (d.featuredUnits || []).slice(0, 3).forEach((fu, fIdx) => {
+      const off = subBldOffsets[fIdx];
+      const roofCol = fIdx % 2 === 0 ? d.color : d.trimColor;
+      const bld = createUnitBuilding(off.dx, plat.topY, off.dz, idx + fIdx, roofCol, "#ffffff", fu.propType);
+      bld.scale.set(0.66, 0.66, 0.66);
+      plat.group.add(bld);
+
+      // 代表單元與屬性小膠囊（預設顯示前 2 個代表單元，按右下 🏷️ 可全開）
+      add3DPin(
+        `<div class="label-pill pill-world-sub" style="border-color:${d.trimColor};">
+          <span>${fu.topicEmoji}</span>
+          <span class="pin-title">${fu.name}</span>
+          <span class="pin-attr-tag">${fu.attrTag}</span>
+        </div>`,
+        new THREE.Vector3(c.x + off.dx, plat.topY + 1.65, c.z + off.dz),
+        "world-sub-pin",
+        () => openUnitModal(fu.uid),
+        fIdx === 0,
+        fu.attrTag
+      );
+    });
+
+    // 3. 該領域專屬植被樹種與吉祥物
+    plat.group.add(createDomainFoliage(d.id, -2.35, plat.topY, -1.45, 0.95, 0));
+    plat.group.add(createDomainFoliage(d.id, 2.35, plat.topY, -1.4, 0.9, 1));
+    plat.group.add(createMascot(0.0, plat.topY, 2.55, d.color, "#ffd54f"));
+    plat.group.add(createStreetLamp(-1.25, plat.topY, 2.4));
 
     // 主跨海連接道路橋樑（內環連中央島，外環連內環島）
     if (c.bridgeFrom === -1) {
@@ -1649,14 +2179,16 @@ function buildWorldArchipelagoScene() {
       worldGroup.add(createRoadBridge(p.x, p.z, p.r, c.x, c.z, c.r, 1.9));
     }
 
-    // 領域島浮動膠囊標籤
+    // 領域島主標題膠囊（附該領域前三大屬性摘要）
+    const topAttrs = (d.attrSummary || []).slice(0, 2).map(a => a.tag).join("・");
     add3DPin(
       `<div class="label-pill" style="border-color:${d.trimColor};">
         <span style="font-size:18px;">${d.icon}</span>
         <span class="pin-title">${d.islandName}</span>
+        <span class="pin-attr-tag">${topAttrs}</span>
         <span class="pin-badge">${d.ownCount}站</span>
       </div>`,
-      new THREE.Vector3(c.x, plat.topY + 2.9, c.z),
+      new THREE.Vector3(c.x, plat.topY + 3.05, c.z),
       "",
       () => enterDomainIsland(d.id),
       true
@@ -1680,25 +2212,27 @@ function buildWorldArchipelagoScene() {
 }
 
 // ==========================================
-// 場景二：🏝️ 單一領域獨立 3D 導覽島（對應三個學習階段）
+// 場景二：🏝️ 單一領域獨立 3D 導覽島（依領域切換專屬聚落名稱、專屬地貌色系、30 單元專屬 3D 道具與屬性標籤）
 // ==========================================
 function buildDomainIslandScene(domainId) {
   clearThreeWorld();
   const d = DOMAIN_MAP[domainId];
   if (!d) return;
 
-  // 1. 中央領域主題廣場 (獨立中央島，與三階段島嶼拉開寬闊海面距離並以跨海道路連接)
-  const centerR = 4.4;
-  const centerHex = createHexPlatform(centerR, 2.25, "#fdfbf7", d.trimColor, "#795548", 0, 0);
+  // 1. 中央領域主題廣場 (獨立中央島，擺放該領域專屬地標與代表屬性微縮道具)
+  const centerR = 4.5;
+  const centerHex = createHexPlatform(centerR, 2.25, d.groundColor, d.trimColor, "#795548", 0, 0);
   worldGroup.add(centerHex.group);
   centerHex.group.add(box(centerR * 1.5, 0.06, 0.8, "#f5ebe0", 0, centerHex.topY, 0));
   centerHex.group.add(box(0.8, 0.06, centerR * 1.5, "#f5ebe0", 0, centerHex.topY, 0));
   worldGroup.add(createDomainMonument(d.landmarkType, d.color, d.trimColor, centerHex.topY));
+  worldGroup.add(createDomainFoliage(d.id, -2.5, centerHex.topY, -1.6, 1.0, 0));
+  worldGroup.add(createDomainFoliage(d.id, 2.5, centerHex.topY, -1.6, 1.0, 1));
   worldGroup.add(createBench(-1.8, centerHex.topY, 1.65, 0.5));
   worldGroup.add(createBench(1.8, centerHex.topY, 1.65, -0.5));
   worldGroup.add(createStreetLamp(-2.2, centerHex.topY, 0.25));
   worldGroup.add(createStreetLamp(2.2, centerHex.topY, 0.25));
-  worldGroup.add(createMascot(0, centerHex.topY, 2.4, d.color, "#fde047"));
+  worldGroup.add(createMascot(0, centerHex.topY, 2.45, d.color, "#fde047"));
 
   add3DPin(
     `<div class="label-pill pill-center">
@@ -1711,41 +2245,45 @@ function buildDomainIslandScene(domainId) {
     true
   );
 
-  // 三個學習階段分島配置（大幅拉開島嶼間距，藉由跨海景觀道路與橋樑連接，畫面清晰不擁擠）
+  const pal1 = (d.stagePalettes && d.stagePalettes["1"]) || { top: "#e8f5e9", trim: "#43a047", roofA: "#ef5350", roofB: "#66bb6a" };
+  const pal2 = (d.stagePalettes && d.stagePalettes["2"]) || { top: "#e3f2fd", trim: "#1e88e5", roofA: "#1e88e5", roofB: "#ffa726" };
+  const pal3 = (d.stagePalettes && d.stagePalettes["3"]) || { top: "#fff3e0", trim: "#fb8c00", roofA: "#ab47bc", roofB: "#fb8c00" };
+
+  // 三個學習階段分島配置（自動套用該領域專屬的階段聚落名稱與主題色系）
   const stageConfigs = [
     {
       stage: "1",
-      title: "🌱 第一階段：啟蒙村",
-      topColor: "#e8f5e9",
-      trimColor: "#43a047",
-      roofA: "#ef5350",
-      roofB: "#66bb6a",
-      hexA: { x: -16.5, z: -7.5, r: 4.5, h: 2.30 },
-      hexB: { x: -30.5, z: -2.0, r: 4.5, h: 2.45 },
+      title: (d.stageTitles && d.stageTitles["1"]) || "🌱 第一階段：啟蒙村",
+      topColor: pal1.top,
+      trimColor: pal1.trim,
+      roofA: pal1.roofA,
+      roofB: pal1.roofB,
+      hexA: { x: -16.5, z: -7.5, r: 4.6, h: 2.30 },
+      hexB: { x: -30.5, z: -2.0, r: 4.6, h: 2.45 },
       hdrPos: new THREE.Vector3(-23.5, 5.8, -6.2),
       hdrClass: "pill-s1-hdr"
     },
     {
       stage: "2",
-      title: "🌿 第二階段：實踐鎮",
-      topColor: "#e3f2fd",
-      trimColor: "#1e88e5",
-      roofA: "#1e88e5",
-      roofB: "#ffa726",
-      hexA: { x: 16.5, z: -7.5, r: 4.5, h: 2.30 },
-      hexB: { x: 30.5, z: -2.0, r: 4.5, h: 2.45 },
+      title: (d.stageTitles && d.stageTitles["2"]) || "🌿 第二階段：實踐鎮",
+      topColor: pal2.top,
+      trimColor: pal2.trim,
+      roofA: pal2.roofA,
+      roofB: pal2.roofB,
+      hexA: { x: 16.5, z: -7.5, r: 4.6, h: 2.30 },
+      hexB: { x: 30.5, z: -2.0, r: 4.6, h: 2.45 },
       hdrPos: new THREE.Vector3(23.5, 5.8, -6.2),
       hdrClass: "pill-s2-hdr"
     },
     {
       stage: "3",
-      title: "🌳 第三階段：進階城",
-      topColor: "#fff3e0",
-      trimColor: "#fb8c00",
-      roofA: "#ab47bc",
-      roofB: "#fb8c00",
-      hexA: { x: -10.5, z: 16.5, r: 4.5, h: 2.10 },
-      hexB: { x: 10.5,  z: 16.5, r: 4.5, h: 2.20 },
+      title: (d.stageTitles && d.stageTitles["3"]) || "🌳 第三階段：進階城",
+      topColor: pal3.top,
+      trimColor: pal3.trim,
+      roofA: pal3.roofA,
+      roofB: pal3.roofB,
+      hexA: { x: -10.5, z: 16.5, r: 4.6, h: 2.10 },
+      hexB: { x: 10.5,  z: 16.5, r: 4.6, h: 2.20 },
       hdrPos: new THREE.Vector3(0, 5.5, 19.5),
       hdrClass: "pill-s3-hdr"
     }
@@ -1753,11 +2291,11 @@ function buildDomainIslandScene(domainId) {
 
   // 每個六角島上的 5 個單元建築位置（隨島嶼放大與道路鋪設，拉開建築彼此間距）
   const localSlots = [
-    { dx: -2.10, dz: -1.75 },
-    { dx: 2.10,  dz: -1.75 },
+    { dx: -2.15, dz: -1.80 },
+    { dx: 2.15,  dz: -1.80 },
     { dx: 0.0,   dz: 0.05 },
-    { dx: -2.10, dz: 1.85 },
-    { dx: 2.10,  dz: 1.85 }
+    { dx: -2.15, dz: 1.90 },
+    { dx: 2.15,  dz: 1.90 }
   ];
 
   stageConfigs.forEach(sc => {
@@ -1795,7 +2333,7 @@ function buildDomainIslandScene(domainId) {
       true
     );
 
-    // 擺放該階段的 10 個單元立體建築（前 5 個上學期在 hexA，後 5 個下學期在 hexB）
+    // 擺放該階段的 10 個單元立體建築（每棟建築皆配備該單元專屬的 3D 主題微縮道具 u.propType 與單元屬性徽章！）
     units.forEach((u, idx) => {
       const isSecondHalf = idx >= 5;
       const hex = isSecondHalf ? sc.hexB : sc.hexA;
@@ -1805,30 +2343,32 @@ function buildDomainIslandScene(domainId) {
       const wz = hex.z + slot.dz;
 
       const roofColor = isSecondHalf ? sc.roofB : sc.roofA;
-      const bld = createUnitBuilding(wx, topY, wz, idx, roofColor);
+      const bld = createUnitBuilding(wx, topY, wz, idx + u.uid, roofColor, "#ffffff", u.propType);
       bld.scale.set(0.74, 0.74, 0.74);
       worldGroup.add(bld);
 
-      // 全島總覽時預設顯示每學期前 2 個代表單元標籤；點進該階段或開啟「全部標籤」時 10 個全開
+      // 全島總覽時預設顯示每學期前 2 個代表單元標籤；點進該階段、點選屬性篩選或開啟「全部標籤」時自動展開
       const isFeatured = (idx % 5 === 0) || (idx % 5 === 1);
       add3DPin(
         `<div class="label-pill">
-          <div class="pin-dot"></div>
+          <span>${u.topicEmoji || "🏠"}</span>
           <span class="pin-title">${u.name}</span>
+          <span class="pin-attr-tag">${u.attrTag || ""}</span>
           <span class="pin-badge">${u.sem}U${u.u}</span>
         </div>`,
-        new THREE.Vector3(wx, topY + 1.95, wz),
+        new THREE.Vector3(wx, topY + 2.0, wz),
         `stage-${sc.stage} unit-pin`,
         () => openUnitModal(u.uid),
-        isFeatured
+        isFeatured,
+        u.attrTag || ""
       );
     });
 
-    // 聚落裝飾（小樹、街燈、小吉祥物）
-    worldGroup.add(createTree(sc.hexA.x - 3.1, pA.topY, sc.hexA.z, 0.9, 0));
-    worldGroup.add(createTree(sc.hexB.x + 3.1, pB.topY, sc.hexB.z - 0.5, 0.95, 1));
-    worldGroup.add(createMascot(sc.hexA.x, pA.topY, sc.hexA.z + 2.8, sc.trimColor, "#ffd54f"));
-    worldGroup.add(createStreetLamp(sc.hexB.x, pB.topY, sc.hexB.z - 2.8));
+    // 聚落裝飾（使用該領域專屬植被樹種、街燈、小吉祥物）
+    worldGroup.add(createDomainFoliage(d.id, sc.hexA.x - 3.2, pA.topY, sc.hexA.z, 0.92, 0));
+    worldGroup.add(createDomainFoliage(d.id, sc.hexB.x + 3.2, pB.topY, sc.hexB.z - 0.5, 0.96, 1));
+    worldGroup.add(createMascot(sc.hexA.x, pA.topY, sc.hexA.z + 2.9, sc.trimColor, "#ffd54f"));
+    worldGroup.add(createStreetLamp(sc.hexB.x, pB.topY, sc.hexB.z - 2.9));
   });
 
   // 海面玩具紅帆船
@@ -1843,7 +2383,7 @@ function buildDomainIslandScene(domainId) {
 }
 
 // ==========================================
-// 導覽切換與 UI 連動
+// 導覽切換與 UI 連動（含領域專屬屬性篩選器）
 // ==========================================
 function renderDomainBar() {
   const bar = document.getElementById("domain-bar");
@@ -1867,25 +2407,65 @@ function renderDomainBar() {
   bar.innerHTML = html;
 }
 
+function renderBannerAttrBar() {
+  const attrBar = document.getElementById("banner-attrs");
+  if (!attrBar) return;
+  if (currentMode === "world") {
+    attrBar.innerHTML = `
+      <button class="attr-chip ${showAll30Pins ? 'active' : ''}" onclick="toggleShowAllPins()">
+        🏷️ ${showAll30Pins ? '已展開各島代表單元與屬性' : '點此展開 10 島代表單元標籤'}
+      </button>
+    `;
+    return;
+  }
+  const d = DOMAIN_MAP[currentMode];
+  if (!d || !d.attrSummary) {
+    attrBar.innerHTML = "";
+    return;
+  }
+  let html = `
+    <button class="attr-chip ${currentAttrFilter === 'all' ? 'active' : ''}" onclick="selectAttrFilter('all')">
+      ✨ 全部屬性 (${(d.stages["1"]||[]).length + (d.stages["2"]||[]).length + (d.stages["3"]||[]).length})
+    </button>
+  `;
+  d.attrSummary.forEach(a => {
+    const active = currentAttrFilter === a.tag ? "active" : "";
+    html += `
+      <button class="attr-chip ${active}" onclick="selectAttrFilter('${a.tag}')">
+        <span>${a.emoji}</span>
+        <span>${a.tag} (${a.count})</span>
+      </button>
+    `;
+  });
+  attrBar.innerHTML = html;
+}
+
+function selectAttrFilter(tag) {
+  currentAttrFilter = tag;
+  renderBannerAttrBar();
+  renderQuickDock();
+}
+
 function enterWorldView(pushHash = true) {
   currentMode = "world";
   currentStageFilter = "all";
+  currentAttrFilter = "all";
   if (pushHash) history.replaceState(null, "", "#world");
 
   document.getElementById("btn-back-world").style.display = "none";
   document.getElementById("stage-switcher").style.display = "none";
   document.getElementById("unit-dock").classList.remove("visible");
-  document.getElementById("btn-all-pins").style.display = "none";
 
   document.getElementById("top-logo").innerText = "🏝️";
   document.getElementById("top-title").innerText = "高雄特教國小部｜3D 領域群島總入口";
   document.getElementById("top-subtitle").innerText = "10 大領域島嶼 × 三個學習階段 × 240 個互動單元";
 
   document.getElementById("banner-title").innerText = "🌊 特教學習大世界（10 大領域群島）";
-  document.getElementById("banner-desc").innerText = "點擊海面上任一座領域島嶼，即可進入該領域的「第一、二、三學習階段」立體教材聚落！";
+  document.getElementById("banner-desc").innerText = "每座島嶼皆有領域專屬地標、植被與代表單元小屋！點擊任一島嶼進入三個學習階段。";
   document.getElementById("banner-note").style.display = "none";
 
   renderDomainBar();
+  renderBannerAttrBar();
   buildWorldArchipelagoScene();
   targetLook.set(0, 0, -2.5);
   spherical.radius = 56;
@@ -1900,19 +2480,19 @@ function enterDomainIsland(domainId, pushHash = true) {
   if (!d) return;
   currentMode = domainId;
   currentStageFilter = "all";
+  currentAttrFilter = "all";
   if (pushHash) history.replaceState(null, "", `#domain=${domainId}`);
 
   document.getElementById("btn-back-world").style.display = "inline-flex";
   document.getElementById("stage-switcher").style.display = "flex";
   document.getElementById("unit-dock").classList.add("visible");
-  document.getElementById("btn-all-pins").style.display = "flex";
 
   document.getElementById("top-logo").innerText = d.icon;
   document.getElementById("top-title").innerText = `${d.islandName}｜三個學習階段導覽`;
   document.getElementById("top-subtitle").innerText = d.themeDesc;
 
   document.getElementById("banner-title").innerText = `${d.icon} ${d.islandName}`;
-  document.getElementById("banner-desc").innerText = d.themeDesc;
+  document.getElementById("banner-desc").innerText = d.themeDesc + "（可點下方屬性切換島上單元標籤）：";
   const noteEl = document.getElementById("banner-note");
   if (d.stage1Note) {
     noteEl.innerText = "💡 " + d.stage1Note;
@@ -1922,6 +2502,7 @@ function enterDomainIsland(domainId, pushHash = true) {
   }
 
   renderDomainBar();
+  renderBannerAttrBar();
   buildDomainIslandScene(domainId);
   selectStage("all");
 
@@ -1969,18 +2550,24 @@ function renderQuickDock() {
   let units = [];
   if (currentStageFilter === "all") {
     units = [...(d.stages["1"] || []), ...(d.stages["2"] || []), ...(d.stages["3"] || [])];
-    dockTitle.innerText = `📍 ${d.islandName}・全部階段單元快速點選：`;
+    dockTitle.innerText = `📍 ${d.islandName}・全部階段單元${currentAttrFilter !== 'all' ? '（屬性：' + currentAttrFilter + '）' : ''}：`;
   } else {
     units = d.stages[currentStageFilter] || [];
-    const stNames = { "1": "🌱 第一階段（啟蒙村）", "2": "🌿 第二階段（實踐鎮）", "3": "🌳 第三階段（進階城）" };
+    const stNames = d.stageTitles || { "1": "🌱 第一階段", "2": "🌿 第二階段", "3": "🌳 第三階段" };
     dockTitle.innerText = `📍 ${stNames[currentStageFilter]} 單元清單：`;
+  }
+
+  if (currentAttrFilter !== "all") {
+    units = units.filter(u => u.attrTag === currentAttrFilter);
   }
   dockCount.innerText = `共 ${units.length} 單元`;
 
   dockList.innerHTML = units.map(u => `
     <button class="dock-unit-btn s${u.stage}" onclick="openUnitModal(${u.uid})">
+      <span>${u.topicEmoji || "🏠"}</span>
       <span style="color:var(--text-muted);font-size:12px;">${u.sem}U${u.u}</span>
       <span>${u.name}</span>
+      <span class="pin-attr-tag">${u.attrTag || ""}</span>
     </button>
   `).join("");
 }
@@ -1988,6 +2575,7 @@ function renderQuickDock() {
 function toggleShowAllPins() {
   showAll30Pins = !showAll30Pins;
   document.getElementById("btn-all-pins").classList.toggle("active", showAll30Pins);
+  renderBannerAttrBar();
 }
 
 // ==========================================
@@ -2014,7 +2602,12 @@ function openUnitModal(uid) {
   stBadge.innerText = `${stLabel}・${u.sem} 第 ${u.u} 單元`;
   stBadge.className = `m-badge m-badge-s${u.stage}`;
 
-  document.getElementById("m-title").innerText = u.name;
+  const attrBadge = document.getElementById("m-attr-badge");
+  if (attrBadge) {
+    attrBadge.innerText = `${u.topicEmoji || "🏷️"} ${u.attrTag || "主題單元"}`;
+  }
+
+  document.getElementById("m-title").innerText = `${u.topicEmoji || ""} ${u.name}`;
 
   document.getElementById("m-link-ppt").href = `${u.url}#teaching`;
   document.getElementById("m-link-video").href = `${u.url}#videos`;
@@ -2318,11 +2911,32 @@ function updateLabelsProjection() {
   const h = stageEl.clientHeight;
 
   pinItems.forEach(item => {
-    // 在領域島內根據階段篩選決定顯示邏輯
+    // 1. 群島大世界內：代表單元與屬性小膠囊切換邏輯
+    if (currentMode === "world" && item.el.classList.contains("world-sub-pin")) {
+      if (!item.always && !showAll30Pins) {
+        item.el.style.display = "none";
+        return;
+      }
+      item.el.style.opacity = "1";
+    }
+
+    // 2. 單一領域島內：根據階段篩選與「單元屬性篩選 (currentAttrFilter)」決定顯示邏輯
     if (currentMode !== "world" && item.el.classList.contains("unit-pin")) {
       const belongStage = item.el.classList.contains("stage-1") ? "1" :
                           item.el.classList.contains("stage-2") ? "2" : "3";
-      if (currentStageFilter === "all") {
+
+      if (currentAttrFilter !== "all") {
+        // 若使用者點選了特定屬性（例如「🦷 潔牙洗漱」或「👕 穿脫儀容」），立即展開所有符合該屬性的單元標籤！
+        if (item.attrTag !== currentAttrFilter) {
+          item.el.style.display = "none";
+          return;
+        }
+        if (currentStageFilter !== "all" && belongStage !== currentStageFilter) {
+          item.el.style.display = "none";
+          return;
+        }
+        item.el.style.opacity = "1";
+      } else if (currentStageFilter === "all") {
         if (!item.always && !showAll30Pins) {
           item.el.style.display = "none";
           return;
