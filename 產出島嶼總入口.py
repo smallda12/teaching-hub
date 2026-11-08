@@ -832,6 +832,18 @@ canvas#canvas-3d {
   display: block;
 }
 
+/* 繪本手作水彩紙紋質感覆蓋層 (Tactile Watercolor Paper Grain Overlay) */
+#stage-3d::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 6;
+  opacity: 0.16;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperGrain)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
 /* 3D 空間投影膠囊標籤層 */
 #labels-layer {
   position: absolute;
@@ -1932,8 +1944,7 @@ function mat(hex, emissive = 0x000000) {
   if (!matPool[key]) {
     matPool[key] = new THREE.MeshLambertMaterial({
       color: new THREE.Color(hex),
-      emissive: new THREE.Color(emissive),
-      flatShading: true
+      emissive: new THREE.Color(emissive)
     });
   }
   return matPool[key];
@@ -1986,6 +1997,216 @@ function createHexPlatform(radius, height, topHex, trimHex, dirtHex, x, z) {
   g.add(top);
 
   return { group: g, topY: height - 0.05 };
+}
+
+// ================= 繪本手作風立體微縮造景元素（純真小雛菊、石板碎屑、研討木書桌、師生人偶） =================
+function createDaisy(scale = 1.0, petalColor = "#ffffff") {
+  const g = new THREE.Group();
+  // 細嫩花莖
+  g.add(cyl(0.015 * scale, 0.015 * scale, 0.28 * scale, "#4ade80", 0, 0, 0, 4));
+  // 純白／柔彩花瓣十字
+  const p1 = box(0.18 * scale, 0.02, 0.05 * scale, petalColor, 0, 0.28 * scale, 0);
+  const p2 = box(0.05 * scale, 0.02, 0.18 * scale, petalColor, 0, 0.28 * scale, 0);
+  const p3 = box(0.14 * scale, 0.02, 0.04 * scale, petalColor, 0, 0.28 * scale, 0);
+  p3.rotation.y = Math.PI / 4;
+  const p4 = box(0.04 * scale, 0.02, 0.14 * scale, petalColor, 0, 0.28 * scale, 0);
+  p4.rotation.y = Math.PI / 4;
+  g.add(p1, p2, p3, p4);
+  // 金黃花蕊
+  g.add(ball(0.042 * scale, "#facc15", 0, 0.3 * scale, 0, 6));
+  return g;
+}
+
+function createDaisyCluster(x, y, z, count = 3, spread = 0.35) {
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+  const colors = ["#ffffff", "#ffffff", "#fef08a", "#fed7aa", "#fce7f3"];
+  for (let i = 0; i < count; i++) {
+    const ang = (i / count) * Math.PI * 2 + (i * 0.37);
+    const r = (0.2 + (i % 3) * 0.3) * spread;
+    const dx = Math.cos(ang) * r;
+    const dz = Math.sin(ang) * r;
+    const d = createDaisy(0.85 + (i % 2) * 0.25, colors[i % colors.length]);
+    d.position.set(dx, 0, dz);
+    d.rotation.y = (i * 1.1) % Math.PI;
+    g.add(d);
+  }
+  return g;
+}
+
+function createPebbleScatter(x, y, z, count = 6, spread = 0.55) {
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+  const pebbleColors = ["#e2e8f0", "#cbd5e1", "#f8fafc", "#f1f5f9", "#e0e7ff", "#fef3c7"];
+  for (let i = 0; i < count; i++) {
+    const ang = (i / count) * Math.PI * 2 + (i * 0.45);
+    const r = (0.15 + ((i * 7) % 10) / 10.0 * 0.85) * spread;
+    const px = Math.cos(ang) * r;
+    const pz = Math.sin(ang) * r;
+    const psize = 0.08 + (i % 3) * 0.04;
+    const segs = 5 + (i % 2);
+    const col = pebbleColors[i % pebbleColors.length];
+    const pebble = cyl(psize, psize * 1.1, 0.025, col, px, 0.01, pz, segs);
+    pebble.rotation.y = i * 0.8;
+    g.add(pebble);
+  }
+  return g;
+}
+
+// 戶外研討木書桌（暖木長桌、彩色典籍疊、發光筆電、溫熱咖啡杯、鵝頸檯燈、小圓椅）
+function createOutdoorStudyCorner(x, y, z, rotY = 0) {
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+  g.rotation.y = rotY;
+
+  // 1. 暖木桌體
+  const top = box(1.25, 0.08, 0.76, "#d97706", 0, 0.72, 0); // 暖琥珀木桌面
+  const apron = box(1.15, 0.06, 0.68, "#b45309", 0, 0.66, 0); // 桌裙
+  g.add(top, apron);
+  [-0.52, 0.52].forEach(lx => {
+    [-0.28, 0.28].forEach(lz => {
+      g.add(cyl(0.04, 0.04, 0.72, "#b45309", lx, 0, lz, 6)); // 桌腳
+    });
+  });
+
+  // 木椅（桌後靠背椅）
+  g.add(box(0.48, 0.06, 0.42, "#d97706", 0, 0.45, -0.52));
+  [-0.2, 0.2].forEach(sx => {
+    [-0.68, -0.36].forEach(sz => {
+      g.add(cyl(0.03, 0.03, 0.45, "#b45309", sx, 0, sz, 6));
+    });
+  });
+  g.add(box(0.48, 0.28, 0.04, "#b45309", 0, 0.62, -0.7));
+
+  // 2. 左側彩色典籍疊（紅、綠、藍、黃四冊書，白紙內頁清晰可見）
+  g.add(box(0.36, 0.07, 0.26, "#dc2626", -0.38, 0.76, 0.06)); // 紅皮大書
+  g.add(box(0.34, 0.05, 0.24, "#f8fafc", -0.38, 0.76, 0.06)); // 內頁
+  const book2 = box(0.34, 0.065, 0.25, "#16a34a", -0.37, 0.83, 0.07); // 翠綠書
+  book2.rotation.y = 0.08;
+  g.add(book2);
+  const book3 = box(0.32, 0.06, 0.24, "#2563eb", -0.39, 0.895, 0.05); // 寶藍書
+  book3.rotation.y = -0.06;
+  g.add(book3);
+  g.add(box(0.3, 0.05, 0.22, "#f59e0b", -0.38, 0.955, 0.06)); // 暖金手冊
+
+  // 3. 中央發光筆電（深灰機身、微傾螢幕、亮藍發光自體發光螢幕）
+  g.add(box(0.44, 0.025, 0.32, "#334155", 0.06, 0.76, 0.08)); // 底座鍵盤
+  g.add(box(0.38, 0.005, 0.18, "#1e293b", 0.06, 0.78, 0.12));
+  g.add(box(0.12, 0.005, 0.08, "#475569", 0.06, 0.78, 0.01)); // 觸控板
+  // 螢幕上蓋（微傾 15 度）
+  const lid = box(0.44, 0.32, 0.02, "#475569", 0.06, 0.91, -0.06);
+  lid.rotation.x = -0.22;
+  const screen = box(0.39, 0.27, 0.015, "#38bdf8", 0.06, 0.92, -0.05, 0x0284c7);
+  screen.rotation.x = -0.22;
+  g.add(lid, screen);
+
+  // 4. 右前溫熱咖啡杯（亮橘馬克杯、熱咖啡深褐表面、杯把）
+  g.add(cyl(0.065, 0.06, 0.12, "#ea580c", 0.38, 0.76, 0.15, 8));
+  g.add(cyl(0.055, 0.055, 0.02, "#451a03", 0.38, 0.86, 0.15, 8));
+  g.add(box(0.02, 0.06, 0.04, "#ea580c", 0.44, 0.81, 0.15));
+
+  // 5. 右後鵝頸金屬檯燈（暖黃燈罩、溫馨燈泡自發光）
+  g.add(cyl(0.08, 0.09, 0.03, "#f59e0b", 0.42, 0.76, -0.2, 8)); // 燈座
+  g.add(cyl(0.02, 0.02, 0.28, "#d97706", 0.42, 0.85, -0.2, 6)); // 燈桿
+  const lampHead = cone(0.12, 0.16, "#fbbf24", 0.32, 0.98, -0.12, 8);
+  lampHead.rotation.z = 0.55;
+  lampHead.rotation.x = -0.35;
+  g.add(lampHead);
+  g.add(ball(0.05, "#fef08a", 0.32, 0.95, -0.12, 6));
+
+  return g;
+}
+
+// 繪本風導師人偶（深藍八面斗篷／披肩、純白立領與手腕、親切膚色頭部、桃紅腮紅、深藍傾斜畫家貝雷帽）
+function createStorybookTeacher(x, y, z, rotY = 0) {
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+  g.rotation.y = rotY;
+
+  // 雙腳鞋履與深色長褲
+  [-0.12, 0.12].forEach(lx => {
+    g.add(cyl(0.09, 0.09, 0.12, "#0f172a", lx, 0, 0, 8));
+    g.add(cyl(0.07, 0.07, 0.3, "#1e293b", lx, 0.1, 0, 6));
+  });
+
+  // 經典深藍八面立體斗篷 (Low-poly flat-shaded poncho)
+  const poncho = cone(0.46, 0.96, "#2563eb", 0, 0.35, 0, 8);
+  g.add(poncho);
+
+  // 純白立領與手腕袖口
+  g.add(cyl(0.18, 0.22, 0.07, "#f8fafc", 0, 1.28, 0, 8));
+  g.add(ball(0.08, "#f8fafc", -0.28, 0.78, 0.14, 6));
+  g.add(ball(0.08, "#f8fafc", 0.28, 0.78, 0.14, 6));
+
+  // 親切膚色頭部
+  g.add(ball(0.25, "#fed7aa", 0, 1.48, 0, 10));
+  // 雙眼
+  g.add(ball(0.036, "#0f172a", -0.085, 1.5, 0.22, 6));
+  g.add(ball(0.036, "#0f172a", 0.085, 1.5, 0.22, 6));
+  // 溫暖桃粉腮紅
+  g.add(ball(0.042, "#fda4af", -0.14, 1.43, 0.19, 6));
+  g.add(ball(0.042, "#fda4af", 0.14, 1.43, 0.19, 6));
+
+  // 帥氣傾斜深藍畫家貝雷帽 (Chic Artist Beret)
+  const beretRim = cyl(0.28, 0.24, 0.08, "#1e293b", 0.03, 1.66, -0.02, 10);
+  beretRim.rotation.z = -0.2;
+  const beretTop = ball(0.3, "#0f172a", 0.04, 1.72, -0.03, 10);
+  beretTop.scale.set(1.15, 0.42, 1.15);
+  beretTop.rotation.z = -0.2;
+  const stalk = cyl(0.02, 0.02, 0.06, "#1e293b", 0.04, 1.86, -0.03, 4);
+  g.add(beretRim, beretTop, stalk);
+
+  return g;
+}
+
+// 繪本風特教學童／小王子人偶（暖褐靴子、翠綠八面斗篷外套、金黃飄逸長圍巾、金色刺蝟短髮、開朗笑顏）
+function createStorybookStudent(x, y, z, rotY = 0) {
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+  g.rotation.y = rotY;
+
+  // 暖褐小皮靴
+  [-0.1, 0.1].forEach(lx => {
+    g.add(cyl(0.08, 0.08, 0.1, "#78350f", lx, 0, 0, 8));
+  });
+
+  // 翠綠八面立體斗篷外套
+  const tunic = cone(0.42, 0.84, "#15803d", 0, 0.28, 0, 8);
+  g.add(tunic);
+  // 皮帶
+  g.add(cyl(0.28, 0.28, 0.06, "#b45309", 0, 0.5, 0, 8));
+
+  // 金黃飄逸小王子圍巾（領圈＋飄逸長圍巾尾翼）
+  g.add(cyl(0.22, 0.22, 0.08, "#facc15", 0, 1.1, 0, 8));
+  const scarfTail1 = box(0.12, 0.36, 0.04, "#eab308", -0.22, 1.0, -0.15);
+  scarfTail1.rotation.z = 0.45;
+  scarfTail1.rotation.x = -0.25;
+  const scarfTail2 = box(0.1, 0.28, 0.04, "#facc15", 0.18, 0.98, -0.18);
+  scarfTail2.rotation.z = -0.35;
+  g.add(scarfTail1, scarfTail2);
+
+  // 圓圓可愛臉蛋
+  g.add(ball(0.22, "#fed7aa", 0, 1.3, 0, 10));
+  // 雙眼與開朗笑容
+  g.add(ball(0.035, "#0f172a", -0.075, 1.32, 0.19, 6));
+  g.add(ball(0.035, "#0f172a", 0.075, 1.32, 0.19, 6));
+  g.add(box(0.06, 0.02, 0.01, "#b91c1c", 0, 1.23, 0.21));
+  // 桃紅腮紅
+  g.add(ball(0.038, "#fda4af", -0.12, 1.27, 0.17, 6));
+  g.add(ball(0.038, "#fda4af", 0.12, 1.27, 0.17, 6));
+
+  // 亮黃小王子刺蝟金髮
+  g.add(ball(0.24, "#fde047", 0, 1.38, -0.02, 10));
+  g.add(cone(0.12, 0.26, "#eab308", 0, 1.58, 0, 5));
+  g.add(cone(0.08, 0.18, "#eab308", -0.12, 1.5, 0, 4));
+  g.add(cone(0.08, 0.18, "#eab308", 0.12, 1.5, 0, 4));
+
+  // 雙手捧著的學習筆記冊
+  const note = box(0.22, 0.15, 0.02, "#ffffff", 0, 0.78, 0.28);
+  note.rotation.x = -0.4;
+  g.add(note);
+
+  return g;
 }
 
 // 🏫 中央希望學園專屬島嶼基座（寬闊圓形 16 邊心靈港灣台地、前方親水碼頭與白鯨停泊水灣）
@@ -2077,10 +2298,28 @@ function createHopeSchoolMonument(yBase) {
   g.add(towerRoof);
   g.add(ball(0.18, "#fbbf24", 0, 5.25, -0.6, 8));
 
-  // 3. 校門口：校訓石碑（玉白底座＋金色牌匾「快樂活潑，自立自強」）
+  // 3. 校門口：校訓石碑（玉白底座＋金色牌匾「快樂活潑，自立自強」銘文）
   const stoneBase = box(1.85, 0.32, 0.72, "#475569", 0, 0.16, 1.85);
   const stoneBody = box(1.65, 0.82, 0.25, "#f8fafc", 0, 0.68, 1.85);
-  const plaque = box(1.5, 0.65, 0.06, "#f59e0b", 0, 0.68, 1.98);
+
+  // 繪製校訓金字銘文牌匾紋理
+  const mottoCanvas = document.createElement("canvas");
+  mottoCanvas.width = 512; mottoCanvas.height = 192;
+  const mctx = mottoCanvas.getContext("2d");
+  mctx.fillStyle = "#f59e0b";
+  mctx.fillRect(0, 0, 512, 192);
+  mctx.strokeStyle = "#92400e";
+  mctx.lineWidth = 10;
+  mctx.strokeRect(5, 5, 502, 182);
+  mctx.fillStyle = "#ffffff";
+  mctx.font = "900 36px 'Noto Sans TC', sans-serif";
+  mctx.textAlign = "center";
+  mctx.textBaseline = "middle";
+  mctx.fillText("快樂活潑・自立自強", 256, 96);
+  const mottoTex = new THREE.CanvasTexture(mottoCanvas);
+  const plaqueMat = new THREE.MeshLambertMaterial({ map: mottoTex });
+  const plaque = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.65, 0.06), plaqueMat);
+  plaque.position.set(0, 0.68, 1.98);
   g.add(stoneBase, stoneBody, plaque);
   // 兩側路燈
   g.add(createStreetLamp(-1.25, 0, 1.85));
@@ -2115,6 +2354,24 @@ function createHopeSchoolMonument(yBase) {
   g.add(createTree(-3.3, 0, -1.9, 1.2, 0));
   g.add(createTree(3.3, 0, -1.9, 1.2, 1));
   g.add(createTree(-3.0, 0, 2.1, 0.95, 2));
+
+  // 7. 繪本風戶外研討木書桌（研討長桌、彩色典籍疊、發光筆電、溫熱咖啡杯、鵝頸檯燈、小圓椅）
+  g.add(createOutdoorStudyCorner(-2.25, 0, 2.05, 0.45));
+
+  // 8. 師生親切共學人偶（導師：深藍斗篷＋畫家貝雷帽；特教學童／小王子：翠綠斗篷＋金黃飄逸圍巾與閃亮金髮）
+  g.add(createStorybookTeacher(-1.65, 0, 1.85, -0.95));
+  g.add(createStorybookStudent(-1.45, 0, 2.55, 2.35));
+
+  // 9. 地坪手作石板碎屑與小雛菊純真花叢（散落於前庭綠意草坪、校訓石碑旁與親水碼頭周邊）
+  g.add(createPebbleScatter(-1.3, 0, 1.45, 8, 0.65));
+  g.add(createPebbleScatter(0.0, 0, 2.35, 7, 0.7));
+  g.add(createPebbleScatter(1.2, 0, 1.85, 6, 0.55));
+  g.add(createDaisyCluster(-2.6, 0, 1.8, 5, 0.5));
+  g.add(createDaisyCluster(-1.9, 0, 2.5, 4, 0.4));
+  g.add(createDaisyCluster(1.4, 0, 2.4, 5, 0.5));
+  g.add(createDaisyCluster(2.8, 0, 1.9, 4, 0.4));
+  g.add(createDaisyCluster(-3.2, 0, 0.8, 4, 0.4));
+  g.add(createDaisyCluster(3.1, 0, 0.8, 4, 0.4));
 
   return g;
 }
@@ -2694,14 +2951,74 @@ function createDomainMonument(type, primaryColor, trimColor, yBase) {
   g.add(box(0.75, 0.45, 0.04, "#ef4444", -1.12, 2.45, -1.0));
 
   if (type === "lighthouse_whale") {
-    // 🏠 特需生活管理島：水池＋小白鯨＋紅白燈塔＋潔白大牙齒
+    // 🏠 特需生活管理島：繪本風紅白暖光燈塔（圓形投射暖光錐＋圓斑光暈）＋水池小白鯨＋大牙齒＋共學石板與小雛菊
     g.add(cyl(1.65, 1.7, 0.15, "#38bdf8", 0, 0.18, 0, 14));
     const whale = ball(0.62, "#0284c7", 0.35, 0.65, 0.2, 10);
     whale.scale.set(1.35, 0.85, 1.0);
     g.add(whale);
-    g.add(cyl(0.55, 0.75, 2.5, "#ffffff", -0.65, 0.2, -0.3, 8));
-    g.add(cyl(0.62, 0.62, 0.45, "#ef4444", -0.65, 1.6, -0.3, 8));
-    g.add(cone(0.68, 0.65, "#ef4444", -0.65, 2.7, -0.3, 8));
+
+    // 階梯石砌底座與拱門木門
+    g.add(cyl(1.35, 1.55, 0.45, "#78350f", -0.85, 0.2, -0.3, 10));
+    g.add(box(0.38, 0.65, 0.08, "#451a03", -0.85, 0.38, 0.55));
+
+    // 雙色紅白塔身（立體多段筒身）
+    g.add(cyl(0.92, 1.2, 1.2, "#fef3c7", -0.85, 0.65, -0.3, 10)); // 下層暖白石磚
+    g.add(cyl(0.86, 0.94, 0.7, "#dc2626", -0.85, 1.45, -0.3, 10)); // 中層活力磚紅
+    g.add(cyl(0.8, 0.86, 0.55, "#fef3c7", -0.85, 2.0, -0.3, 10));  // 上層暖白石磚
+
+    // 觀景平台露台與金屬護欄
+    g.add(cyl(1.15, 1.15, 0.15, "#78350f", -0.85, 2.45, -0.3, 12));
+    g.add(cyl(1.12, 1.12, 0.22, "#1e293b", -0.85, 2.6, -0.3, 12));
+
+    // 發光燈室（金黃溫暖發光內核）
+    g.add(cyl(0.68, 0.68, 0.7, "#fef08a", -0.85, 2.62, -0.3, 8, 0xfef08a));
+
+    // 磚紅八角錐尖頂與黃金風向球
+    g.add(cone(1.08, 0.85, "#dc2626", -0.85, 3.32, -0.3, 8));
+    g.add(ball(0.18, "#f59e0b", -0.85, 4.22, -0.3, 8));
+
+    // 🌟 燈塔暖光投射光錐（半透明加法混色發光光束，朝向地面光斑投射）
+    const beamLength = 4.2;
+    const beamGeom = new THREE.ConeGeometry(1.65, beamLength, 20, 1, true);
+    beamGeom.translate(0, -beamLength / 2, 0);
+    const beamMat = new THREE.MeshBasicMaterial({
+      color: 0xfef08a,
+      transparent: true,
+      opacity: 0.36,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide,
+      depthWrite: false
+    });
+    const beam = new THREE.Mesh(beamGeom, beamMat);
+    beam.position.set(-0.85, 2.92, -0.3);
+    beam.lookAt(1.15, 0.24, 1.25);
+    beam.rotateX(-Math.PI / 2);
+    g.add(beam);
+
+    // 🌟 地面溫暖圓形光斑（暖黃光暈圓形光灘）
+    const puddleGeom = new THREE.CircleGeometry(1.35, 24);
+    const puddleMat = new THREE.MeshBasicMaterial({
+      color: 0xfef08a,
+      transparent: true,
+      opacity: 0.45,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+    const puddle = new THREE.Mesh(puddleGeom, puddleMat);
+    puddle.rotation.x = -Math.PI / 2;
+    puddle.position.set(1.15, 0.24, 1.25);
+    g.add(puddle);
+
+    // 光斑旁休憩閱讀長椅與翻開的書本
+    g.add(createBench(1.15, 0.22, 1.85, 0.2));
+    g.add(box(0.24, 0.04, 0.18, "#ffffff", 1.15, 0.62, 1.85));
+
+    // 散落小雛菊與石板碎屑
+    g.add(createDaisyCluster(0.3, 0.22, 1.6, 4, 0.35));
+    g.add(createDaisyCluster(1.9, 0.22, 1.2, 4, 0.35));
+    g.add(createPebbleScatter(1.15, 0.22, 0.8, 6, 0.45));
+
+    // 單元代表道具：潔白健康牙齒
     g.add(createUnitTopicProp("tooth_clean", 0.95, 0.22, -0.55, 1.2));
   } else if (type === "gym_rainbow") {
     // 🤸 特需動作訓練島：彩虹階梯與感統平衡木館＋大龍球
@@ -2900,6 +3217,9 @@ function buildWorldArchipelagoScene() {
     plat.group.add(createDomainFoliage(d.id, 2.35, plat.topY, -1.4, 0.9, 1));
     plat.group.add(createMascot(0.0, plat.topY, 2.55, d.color, "#ffd54f"));
     plat.group.add(createStreetLamp(-1.25, plat.topY, 2.4));
+    plat.group.add(createDaisyCluster(-2.7, plat.topY, 0.8, 4, 0.45));
+    plat.group.add(createDaisyCluster(2.6, plat.topY, 0.9, 4, 0.45));
+    plat.group.add(createPebbleScatter(0.0, plat.topY, 1.85, 5, 0.45));
 
     // 主跨海連接道路橋樑（內環連希望學園島，外環連內環島）
     if (c.bridgeFrom === -1) {
@@ -2963,6 +3283,9 @@ function buildDomainIslandScene(domainId) {
   worldGroup.add(createStreetLamp(-2.2, centerHex.topY, 0.25));
   worldGroup.add(createStreetLamp(2.2, centerHex.topY, 0.25));
   worldGroup.add(createMascot(0, centerHex.topY, 2.45, d.color, "#fde047"));
+  worldGroup.add(createDaisyCluster(-2.8, centerHex.topY, 1.2, 4, 0.45));
+  worldGroup.add(createDaisyCluster(2.8, centerHex.topY, 1.2, 4, 0.45));
+  worldGroup.add(createPebbleScatter(0, centerHex.topY, 1.4, 6, 0.5));
 
   add3DPin(
     `<div class="label-pill pill-center">
@@ -3771,7 +4094,7 @@ const TOUR_STOPS = [
   {
     id: "hope_school",
     title: "🏫 第一站：希望學園（群島核心）",
-    desc: "歡迎來到希望學園！這裡是大家上課與學習成長的基地營。校訓是「快樂活潑，自立自強」。跟著白鯨領航員，準備出發上課囉！",
+    desc: "歡迎來到希望學園！這裡是大家上課與學習成長的基地營。校訓是「快樂活潑，自立自強」。前庭設有戶外研討木書桌、發光筆電與繪本風師生親切研讀，跟著白鯨領航員準備出發上課囉！",
     lookAt: [0, 1.8, 0],
     spherical: { radius: 24, theta: 0.05, phi: 1.05 },
     domainId: null
@@ -3779,7 +4102,7 @@ const TOUR_STOPS = [
   {
     id: "selfcare",
     title: "🏠 第二站：特需生活管理島（自立生活港灣）",
-    desc: "在潔牙泡泡燈塔與晨光衣帽風車下，學會自己穿鞋襪、刷牙洗臉、打掃環境，把每一天過得神氣又乾淨！",
+    desc: "在紅白暖光燈塔與金黃投射光束下，學會自己穿鞋襪、刷牙洗臉、打掃環境，把每一天過得神氣又乾淨！",
     lookAt: [-17.5, 2.1, -9.5],
     spherical: { radius: 18, theta: -0.65, phi: 1.02 },
     domainId: "selfcare"
