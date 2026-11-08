@@ -30,12 +30,15 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PROTO_DIR = os.path.join(os.path.dirname( os.path.dirname(ROOT)), "島嶼網站原型_生活管理")
 
-# 10 大領域島設定（每座島具備專屬地標、專屬三階段聚落名稱、專屬地貌色系與領域代表屬性）
+# 10 大領域島設定（每座島具備專屬地標、獨立地貌造型、專屬三階段聚落名稱與世界觀精神）
 DOMAIN_CONFIG = [
     {
         "id": "selfcare",
         "name": "特需生活管理",
         "islandName": "特需生活管理島",
+        "islandShape": "crescent_bay",
+        "islandTitle": "自立生活港灣",
+        "islandStory": "自立生活港灣。在潔牙燈塔與晨光衣帽風車下，學會穿鞋襪、自己刷牙洗臉、打掃環境，把每一天過得神氣又乾淨！",
         "icon": "🏠",
         "color": "#1565c0",
         "trimColor": "#42a5f5",
@@ -59,6 +62,9 @@ DOMAIN_CONFIG = [
         "id": "motor",
         "name": "特需功能性動作訓練",
         "islandName": "特需動作訓練島",
+        "islandShape": "stepped_terrace",
+        "islandTitle": "躍動階梯之巔",
+        "islandStory": "躍動階梯之巔。踩上彩虹平衡木、走過階梯跳石，小手抓握有力、雙腳踩得穩健，每一步都充滿自立力量！",
         "icon": "🤸",
         "color": "#4f5bd5",
         "trimColor": "#7986cb",
@@ -81,76 +87,88 @@ DOMAIN_CONFIG = [
     {
         "id": "chinese",
         "name": "語文",
-        "islandName": "語文溝通島",
+        "islandName": "語文繪本島",
+        "islandShape": "open_book",
+        "islandTitle": "故事書卷之森",
+        "islandStory": "故事書卷之森。翻開海面上浮現的巨型繪本書卷，在魔法羽毛筆鐘樓下聽故事、讀句子，勇敢說出心裡話！",
         "icon": "📖",
-        "color": "#8a5a2b",
-        "trimColor": "#ffb74d",
-        "groundColor": "#fff8e1",
-        "themeDesc": "生活語彙、聽說讀寫、繪本故事與人際表達",
+        "color": "#0284c7",
+        "trimColor": "#38bdf8",
+        "groundColor": "#f0f9ff",
+        "themeDesc": "語文識字、繪本閱讀、溝通表達與生活應用",
         "landmarkType": "book_tower",
         "sourceDomains": ["語文"],
         "shareStage1Daily": False,
         "stageTitles": {
-            "1": "🌱 第一階段：語彙啟蒙村（新朋友・故事樹）",
-            "2": "🌿 第二階段：閱讀實踐鎮（心情組曲・台灣風情）",
-            "3": "🌳 第三階段：文學表達城（作家作品・故宮挖寶）"
+            "1": "🌱 第一階段：語文啟蒙村（認識名字・日常指物）",
+            "2": "🌿 第二階段：生活閱讀鎮（童話寓言・生活對話）",
+            "3": "🌳 第三階段：閱讀素養城（客閩多元・社會閱讀）"
         },
         "stagePalettes": {
-            "1": {"top": "#fff8e1", "trim": "#ffb300", "roofA": "#d84315", "roofB": "#fb8c00"},
-            "2": {"top": "#fff3e0", "trim": "#fb8c00", "roofA": "#8d6e63", "roofB": "#f4511e"},
-            "3": {"top": "#fbe9e7", "trim": "#e64a19", "roofA": "#6d4c41", "roofB": "#d81b60"}
+            "1": {"top": "#f0f9ff", "trim": "#38bdf8", "roofA": "#0284c7", "roofB": "#f59e0b"},
+            "2": {"top": "#e0f2fe", "trim": "#0ea5e9", "roofA": "#0369a1", "roofB": "#10b981"},
+            "3": {"top": "#ede9fe", "trim": "#8b5cf6", "roofA": "#6d28d9", "roofB": "#f43f5e"}
         }
     },
     {
         "id": "math",
         "name": "數學",
         "islandName": "生活數學島",
+        "islandShape": "crystal_square",
+        "islandTitle": "幾何時空花園",
+        "islandStory": "幾何時空花園。在幾何時鐘高塔與天秤金幣前，數數量、比大小、看時間、學購物，生活有條理又有秩序！",
         "icon": "📐",
-        "color": "#2b6cb0",
-        "trimColor": "#64b5f6",
-        "groundColor": "#e1f5fe",
-        "themeDesc": "數與量、時間金錢、幾何圖形與邏輯序列",
+        "color": "#ea580c",
+        "trimColor": "#fb923c",
+        "groundColor": "#fff7ed",
+        "themeDesc": "數與量、幾何形狀、生活計量、時鐘與金錢購物",
         "landmarkType": "clock_pyramid",
         "sourceDomains": ["數學"],
         "shareStage1Daily": False,
         "stageTitles": {
-            "1": "🌱 第一階段：數數啟蒙村（1-30數字・形狀分類）",
-            "2": "🌿 第二階段：量測實踐鎮（重量容量・時間計算機）",
-            "3": "🌳 第三階段：幾何邏輯城（平面扇形・立體多面體）"
+            "1": "🌱 第一階段：數感啟蒙村（數數比大小・基本形狀）",
+            "2": "🌿 第二階段：生活計量鎮（錢幣購物・時鐘看時間）",
+            "3": "🌳 第三階段：實用數學城（加減運算・複合測量）"
         },
         "stagePalettes": {
-            "1": {"top": "#e1f5fe", "trim": "#039be5", "roofA": "#0288d1", "roofB": "#fbc02d"},
-            "2": {"top": "#e0f2f1", "trim": "#00897b", "roofA": "#0097a7", "roofB": "#ffb300"},
-            "3": {"top": "#e8eaf6", "trim": "#3f51b5", "roofA": "#303f9f", "roofB": "#f57c00"}
+            "1": {"top": "#fff7ed", "trim": "#fb923c", "roofA": "#ea580c", "roofB": "#0284c7"},
+            "2": {"top": "#fef3c7", "trim": "#f59e0b", "roofA": "#d97706", "roofB": "#8b5cf6"},
+            "3": {"top": "#ffedd5", "trim": "#f97316", "roofA": "#c2410c", "roofB": "#10b981"}
         }
     },
     {
         "id": "pe",
         "name": "健體",
-        "islandName": "健康與體育島",
+        "islandName": "健體活力島",
+        "islandShape": "stadium_oval",
+        "islandTitle": "聖火守護之島",
+        "islandStory": "聖火守護之島。沿著運動場跑道奔跑，聖火高塔指引方向，認識身體、看懂紅綠燈過馬路，健康又有活力！",
         "icon": "🏃",
-        "color": "#c2410c",
-        "trimColor": "#ff8a65",
-        "groundColor": "#fbe9e7",
-        "themeDesc": "體能運動遊戲、健康飲食、安全防護與身心活力",
+        "color": "#d32f2f",
+        "trimColor": "#ef5350",
+        "groundColor": "#ffebee",
+        "themeDesc": "健康體適能、球類運動遊戲、安全防護與衛生保健",
         "landmarkType": "stadium_torch",
-        "sourceDomains": ["健體"],
+        "sourceDomains": ["健體", "健康與體育"],
         "shareStage1Daily": False,
         "stageTitles": {
-            "1": "🌱 第一階段：活力啟蒙村（認識身體・玩球跑跳）",
-            "2": "🌿 第二階段：運動實踐鎮（優良飲食・足下風雲）",
-            "3": "🌳 第三階段：健康競技城（軸心持拍・防疫運動）"
+            "1": "🌱 第一階段：活力啟蒙村（認識身體・基本滾跑）",
+            "2": "🌿 第二階段：運動實踐鎮（拍球接球・體能挑戰）",
+            "3": "🌳 第三階段：健康防護城（急救自護・團隊遊戲）"
         },
         "stagePalettes": {
-            "1": {"top": "#fbe9e7", "trim": "#ff7043", "roofA": "#e53935", "roofB": "#fb8c00"},
-            "2": {"top": "#fff3e0", "trim": "#ffa726", "roofA": "#f4511e", "roofB": "#43a047"},
-            "3": {"top": "#ffebee", "trim": "#e53935", "roofA": "#c62828", "roofB": "#00897b"}
+            "1": {"top": "#ffebee", "trim": "#e57373", "roofA": "#d32f2f", "roofB": "#ffb300"},
+            "2": {"top": "#fbe9e7", "trim": "#ff8a65", "roofA": "#d84315", "roofB": "#1e88e5"},
+            "3": {"top": "#ede7f6", "trim": "#9575cd", "roofA": "#512da8", "roofB": "#43a047"}
         }
     },
     {
         "id": "nature",
         "name": "自然",
         "islandName": "自然探險島",
+        "islandShape": "nature_spiral",
+        "islandTitle": "四季觀星之島",
+        "islandStory": "四季觀星之島。轉動生態大風車、探訪綠意溫室花房，看四季天氣、摸摸花草小動物，大自然是神奇的好朋友！",
         "icon": "🌱",
         "color": "#2e7d32",
         "trimColor": "#81c784",
@@ -174,6 +192,9 @@ DOMAIN_CONFIG = [
         "id": "society",
         "name": "社會",
         "islandName": "社會生活島",
+        "islandShape": "town_blocks",
+        "islandTitle": "社區同心市鎮",
+        "islandStory": "社區同心市鎮。繞過世界地球儀噴泉、搭乘溫馨小公車，認識鄰舍、遵守班規與交通禮貌，大家同心快樂生活！",
         "icon": "🏮",
         "color": "#c0562e",
         "trimColor": "#e57373",
@@ -197,6 +218,9 @@ DOMAIN_CONFIG = [
         "id": "life",
         "name": "綜合",
         "islandName": "綜合活動島",
+        "islandShape": "treasure_isles",
+        "islandTitle": "巧手百寶工坊",
+        "islandStory": "巧手百寶工坊。圍在童軍營火帳篷旁，一起玩桌遊、輪流排隊、動手串珠與垃圾分類，學習當生活小創客！",
         "icon": "🌏",
         "color": "#00838f",
         "trimColor": "#4dd0e1",
@@ -220,6 +244,9 @@ DOMAIN_CONFIG = [
         "id": "arts",
         "name": "藝術與人文",
         "islandName": "藝術創想島",
+        "islandShape": "artist_palette",
+        "islandTitle": "彩虹調色海礁",
+        "islandStory": "彩虹調色海礁。巨型木畫架立在調色盤天池邊，踏上琴鍵階梯步道，用繽紛色彩與旋律唱出快樂心情！",
         "icon": "🎨",
         "color": "#8e24aa",
         "trimColor": "#ba68c8",
@@ -243,6 +270,9 @@ DOMAIN_CONFIG = [
         "id": "daily",
         "name": "生活課程",
         "islandName": "生活課程啟蒙島",
+        "islandShape": "sprout_petal",
+        "islandTitle": "萌芽探險新星",
+        "islandStory": "萌芽探險新星。揹起立體彩色小書包、溜下向日葵滑梯，不怕生、常微笑，國小新生活充滿奇妙與樂趣！",
         "icon": "🎒",
         "color": "#d81b60",
         "trimColor": "#f06292",
@@ -442,6 +472,9 @@ def build_domains_payload(all_units):
             "id": cfg["id"],
             "name": cfg["name"],
             "islandName": cfg["islandName"],
+            "islandShape": cfg.get("islandShape", "hex"),
+            "islandTitle": cfg.get("islandTitle", cfg["islandName"]),
+            "islandStory": cfg.get("islandStory", cfg["themeDesc"]),
             "icon": cfg["icon"],
             "color": cfg["color"],
             "trimColor": cfg["trimColor"],
@@ -1351,6 +1384,278 @@ canvas#canvas-3d {
   .search-input { width: 120px; }
   .search-input:focus { width: 160px; }
 }
+
+/* ── 希望學園與校訓專屬樣式 ── */
+.pill-hope-school {
+  background: linear-gradient(135deg, rgba(225, 29, 72, 0.95), rgba(245, 158, 11, 0.95)) !important;
+  border: 2px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 8px 24px rgba(225, 29, 72, 0.45) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+.pill-hope-school .pin-title {
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.pill-hope-school .pin-badge {
+  background: rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  font-weight: 700 !important;
+}
+
+.icon-pill-btn.hope-btn {
+  background: linear-gradient(135deg, #fff1f2, #fef3c7);
+  border-color: #f59e0b;
+  color: #b45309;
+  font-weight: 700;
+}
+.icon-pill-btn.hope-btn:hover {
+  background: linear-gradient(135deg, #ffe4e6, #fde68a);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.28);
+}
+
+.icon-pill-btn.tour-btn {
+  background: linear-gradient(135deg, #f0fdf4, #e0f2fe);
+  border-color: #0284c7;
+  color: #0369a1;
+  font-weight: 700;
+}
+.icon-pill-btn.tour-btn:hover {
+  background: linear-gradient(135deg, #dcfce7, #bae6fd);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.28);
+}
+
+/* 希望學園專屬彈窗 */
+.hope-card {
+  max-width: 680px !important;
+  background: #ffffff !important;
+  border-radius: 24px !important;
+  border: 2px solid #f59e0b !important;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35) !important;
+  padding: 28px !important;
+}
+.hope-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 2px dashed #f1f5f9;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+.hope-card-icon {
+  font-size: 42px;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fef3c7, #ffe4e6);
+  border: 2px solid #fbbf24;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.hope-card-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: #1e293b;
+  line-height: 1.25;
+}
+.hope-motto-tag {
+  display: inline-block;
+  margin-top: 6px;
+  background: linear-gradient(135deg, #e11d48, #f59e0b);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 13px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(225, 29, 72, 0.3);
+}
+.hope-card-intro {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #334155;
+  background: #fdfbf7;
+  border: 1.5px solid #fde68a;
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+}
+.hope-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.hope-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #475569;
+  background: #f8fafc;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+.hope-item-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.hope-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 18px;
+}
+.hope-btn-tour {
+  flex: 1.2;
+  min-width: 180px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #ffffff;
+  border: none;
+  font-size: 14.5px;
+  font-weight: 800;
+  padding: 12px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+  transition: all 0.2s;
+}
+.hope-btn-tour:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.45);
+}
+.hope-btn-classic {
+  text-decoration: none;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 12px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.hope-btn-classic:hover { background: #e2e8f0; color: #1e293b; }
+.hope-btn-start {
+  background: linear-gradient(135deg, #e11d48, #f59e0b);
+  color: #ffffff;
+  border: none;
+  font-size: 14.5px;
+  font-weight: 800;
+  padding: 12px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+}
+.hope-btn-start:hover { transform: translateY(-2px); }
+
+/* 白鯨巡航浮動故事列 */
+.tour-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%) translateY(120%);
+  width: min(720px, calc(100vw - 32px));
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  border: 2px solid #38bdf8;
+  border-radius: 20px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.28);
+  padding: 16px 22px;
+  z-index: 210;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s;
+  opacity: 0;
+  pointer-events: none;
+}
+.tour-bar.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.tour-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.tour-badge {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid #7dd3fc;
+}
+.tour-title {
+  font-size: 17px;
+  font-weight: 900;
+  color: #0f172a;
+  flex: 1;
+}
+.tour-close {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.tour-desc {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #334155;
+  margin-bottom: 14px;
+  background: #f8fafc;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border-left: 4px solid #0284c7;
+}
+.tour-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.tour-btn-nav {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.tour-btn-nav:hover { background: #e2e8f0; }
+.tour-btn-go {
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  color: #ffffff;
+  border: none;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 8px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+.tour-btn-go:hover { transform: translateY(-1.5px); }
+
 </style>
 </head>
 <body>
@@ -1364,8 +1669,8 @@ canvas#canvas-3d {
     </button>
     <div class="brand-logo" id="top-logo">🏝️</div>
     <div class="brand-titles">
-      <h1 id="top-title">高雄特教國小部｜3D 領域群島總入口</h1>
-      <p id="top-subtitle">10 大領域島嶼 × 三個學習階段 × 240 個互動單元</p>
+      <h1 id="top-title">🏫 希望學園・3D 特教群島總入口</h1>
+      <p id="top-subtitle">校訓：快樂活潑，自立自強 ｜ 10 大領域島嶼 × 240 個互動單元</p>
     </div>
   </div>
 
@@ -1385,6 +1690,8 @@ canvas#canvas-3d {
       <div class="search-dropdown" id="search-results"></div>
     </div>
 
+    <button class="icon-pill-btn hope-btn" onclick="openHopeSchoolModal()" title="查看希望學園校訓與全島導覽"><span style="font-size:16px;">🏫</span><span>希望學園</span></button>
+    <button class="icon-pill-btn tour-btn" id="btn-whale-tour" onclick="startWhaleGuidedTour()" title="跟著白鯨巡航導覽"><span style="font-size:16px;">🐋</span><span>白鯨導覽</span></button>
     <button class="icon-pill-btn" id="btn-tod" onclick="cycleTimeOfDay()" title="切換白天／夕陽／星夜">☀️ 時段</button>
     <button class="icon-pill-btn primary-toggle" id="btn-view-mode" onclick="toggleDisplayMode()">
       <span id="view-mode-icon">📋</span>
@@ -1515,6 +1822,67 @@ canvas#canvas-3d {
   </div>
 </div>
 
+<!-- 白鯨巡航浮動故事列 -->
+<div class="tour-bar" id="tour-bar">
+  <div class="tour-header">
+    <div class="tour-badge" id="tour-step-tag">站點 1 / 11</div>
+    <div class="tour-title" id="tour-title">🏫 第一站：希望學園（群島核心）</div>
+    <button class="tour-close" onclick="stopWhaleTour()" title="關閉巡航導覽">&times;</button>
+  </div>
+  <div class="tour-desc" id="tour-desc">「這裡是大家學習成長的基地營。校訓是『快樂活潑，自立自強』。跟著白鯨領航員，準備出發上課囉！」</div>
+  <div class="tour-footer">
+    <button class="tour-btn-nav" onclick="prevTourStep()">⬅ 上一站</button>
+    <button class="tour-btn-go" id="tour-btn-go" onclick="visitCurrentTourIsland()">🚀 進入該島上課</button>
+    <button class="tour-btn-nav" onclick="nextTourStep()">下一站 ➔</button>
+  </div>
+</div>
+
+<!-- 希望學園校訓與導覽視窗 -->
+<div class="modal-backdrop" id="modal-hope-school" onclick="if(event.target===this)closeHopeSchoolModal()">
+  <div class="hope-card" onclick="event.stopPropagation()">
+    <button class="modal-close-btn" onclick="closeHopeSchoolModal()">&times;</button>
+    <div class="hope-card-header">
+      <div class="hope-card-icon">🏫</div>
+      <div>
+        <h2 class="hope-card-title">希望學園（Hope Academy）</h2>
+        <div class="hope-motto-tag">校訓：快樂活潑，自立自強</div>
+      </div>
+    </div>
+    <div class="hope-card-intro">
+      「大家在希望學園上課，一起學習、一起快樂成長。<br>
+      穿過 10 條跨海木橋，每座主題島都有一套精心設計的生活自立技能。<br>
+      帶著<strong>快樂活潑</strong>的心情出發，帶著<strong>自立自強</strong>的本領回來！」
+    </div>
+    <div class="hope-grid">
+      <div class="hope-item">
+        <span class="hope-item-icon">🔔</span>
+        <div class="hope-item-text"><strong>希望之鐘・主校舍</strong>：每天早晨敲響希望鐘聲，引領孩子開啟自立生活的充實學習。</div>
+      </div>
+      <div class="hope-item">
+        <span class="hope-item-icon">🪨</span>
+        <div class="hope-item-text"><strong>校訓石碑</strong>：刻寫「快樂活潑，自立自強」，是陪伴孩子一生前行、不怕挫折的座右銘。</div>
+      </div>
+      <div class="hope-item">
+        <span class="hope-item-icon">🚩</span>
+        <div class="hope-item-text"><strong>晨光操場與彩虹旗台</strong>：升起藍天白鯨校旗，大家一起做伸展操、充滿朝氣。</div>
+      </div>
+      <div class="hope-item">
+        <span class="hope-item-icon">🐋</span>
+        <div class="hope-item-text"><strong>白鯨啟航碼頭</strong>：10 條跨海木橋通往 10 大主題島，白鯨領航員噴出彩虹水花為孩子加油守護。</div>
+      </div>
+      <div class="hope-item">
+        <span class="hope-item-icon">🌟</span>
+        <div class="hope-item-text"><strong>240 站自立學習寶庫</strong>：涵蓋食衣住行、動作訓練、認知溝通與社會適應三大階段完整教材。</div>
+      </div>
+    </div>
+    <div class="hope-actions">
+      <button class="hope-btn-tour" onclick="startWhaleGuidedTour(0); closeHopeSchoolModal();">🐋 跟著白鯨巡航導覽</button>
+      <a class="hope-btn-classic" href="index_classic.html">🗂️ 舊版學期制總入口</a>
+      <button class="hope-btn-start" onclick="closeHopeSchoolModal()">踏上木橋出發上課 ➔</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // 權威 240 站 × 10 大領域島 × 三學習階段完整資料（由 產出島嶼總入口.py 自動注入）
 const DOMAINS_DATA = __DOMAINS_DATA__;
@@ -1597,27 +1965,387 @@ function ball(r, color, x = 0, y = 0, z = 0, seg = 8) {
 }
 
 // 帶彩色邊框與厚實土層的立體六角地塊（對齊參考圖的精緻鑲邊六角島）
+// 經典立體六角地塊（供領域三階段村落島使用）
 function createHexPlatform(radius, height, topHex, trimHex, dirtHex, x, z) {
   const g = new THREE.Group();
   g.position.set(x, 0, z);
 
-  // 底層岩石與泥土斷面
   const cliff = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.98, radius * 0.82, height, 6), mat(dirtHex));
   cliff.position.y = height / 2 - 0.25;
   cliff.castShadow = true; cliff.receiveShadow = true;
   g.add(cliff);
 
-  // 彩色外框鑲邊 (Trim Rim)
   const rim = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.03, radius * 1.01, 0.34, 6), mat(trimHex));
   rim.position.y = height - 0.32;
   rim.castShadow = true; rim.receiveShadow = true;
   g.add(rim);
 
-  // 頂層草皮／鋪面
   const top = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.96, radius * 0.96, 0.26, 6), mat(topHex));
   top.position.y = height - 0.18;
   top.receiveShadow = true;
   g.add(top);
+
+  return { group: g, topY: height - 0.05 };
+}
+
+// 🏫 中央希望學園專屬島嶼基座（寬闊圓形 16 邊心靈港灣台地、前方親水碼頭與白鯨停泊水灣）
+function buildHopeSchoolCenter(radius, height, x, z) {
+  const g = new THREE.Group();
+  g.position.set(x, 0, z);
+
+  // 主台地岩壁（16邊圓形）
+  const cliff = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.05, radius * 0.92, height, 16), mat("#6d4c41"));
+  cliff.position.y = height / 2 - 0.25;
+  cliff.castShadow = true; cliff.receiveShadow = true;
+  g.add(cliff);
+
+  // 暖金鑲邊護欄
+  const rim = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.08, radius * 1.05, 0.38, 16), mat("#f59e0b"));
+  rim.position.y = height - 0.32;
+  rim.castShadow = true; rim.receiveShadow = true;
+  g.add(rim);
+
+  // 頂層綠意草坪
+  const top = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.02, radius * 1.02, 0.28, 16), mat("#fdfbf7"));
+  top.position.y = height - 0.18;
+  top.receiveShadow = true;
+  g.add(top);
+
+  // 前方延伸親水木棧碼頭（白鯨啟航處）
+  const dock = box(radius * 0.88, 0.22, 1.35, "#8d6e63", 0, height - 0.08, radius * 0.72);
+  g.add(dock);
+  [-radius * 0.36, 0, radius * 0.36].forEach(px => {
+    g.add(cyl(0.12, 0.12, 0.75, "#5d4037", px, height + 0.15, radius * 0.85, 6));
+  });
+
+  // 島內十字石板大道
+  g.add(box(radius * 1.55, 0.06, 0.85, "#f1f5f9", 0, height - 0.04, 0));
+  g.add(box(0.85, 0.06, radius * 1.55, "#f1f5f9", 0, height - 0.04, 0));
+
+  return { group: g, topY: height - 0.05 };
+}
+
+// 🏫 希望學園核心 3D 建築群（主校舍、希望之鐘樓、校訓石碑、晨光旗台、守護白鯨）
+function createHopeSchoolMonument(yBase) {
+  const g = new THREE.Group();
+  g.position.set(0, yBase, 0);
+
+  // 1. 學園主校舍（象牙暖白兩層建築，磚紅雙斜屋頂）
+  const mainBld = box(3.6, 1.95, 2.2, "#fdfbf7", 0, 0.975, -0.6);
+  g.add(mainBld);
+
+  // 左右側翼教室
+  const wingL = box(1.5, 1.55, 1.9, "#fdfbf7", -2.1, 0.775, -0.6);
+  const wingR = box(1.5, 1.55, 1.9, "#fdfbf7", 2.1, 0.775, -0.6);
+  g.add(wingL, wingR);
+
+  // 主屋頂（溫馨磚紅）
+  const roofMain = cone(2.5, 1.15, "#c2410c", 0, 2.55, -0.6, 4);
+  roofMain.rotation.y = Math.PI / 4;
+  roofMain.scale.set(1.2, 0.85, 0.88);
+  g.add(roofMain);
+
+  const roofL = cone(1.25, 0.85, "#b91c1c", -2.1, 1.95, -0.6, 4);
+  roofL.rotation.y = Math.PI / 4;
+  const roofR = cone(1.25, 0.85, "#b91c1c", 2.1, 1.95, -0.6, 4);
+  roofR.rotation.y = Math.PI / 4;
+  g.add(roofL, roofR);
+
+  // 正門入口柱廊
+  g.add(box(1.7, 0.2, 0.9, "#f1f5f9", 0, 0.1, 0.85)); // 門階
+  g.add(cyl(0.12, 0.12, 1.45, "#ffffff", -0.65, 0.8, 0.85, 8)); // 柱L
+  g.add(cyl(0.12, 0.12, 1.45, "#ffffff", 0.65, 0.8, 0.85, 8)); // 柱R
+  g.add(box(1.7, 0.25, 0.9, "#e2e8f0", 0, 1.55, 0.85)); // 柱頂山牆
+
+  // 教室發光窗戶（上下排）
+  [-1.1, -0.4, 0.4, 1.1].forEach(wx => {
+    g.add(box(0.38, 0.52, 0.05, "#38bdf8", wx, 1.35, 0.52));
+    g.add(box(0.38, 0.52, 0.05, "#fde047", wx, 0.6, 0.52));
+  });
+
+  // 2. 中央希望之鐘樓（金黃鐘塔頂端＋希望之鐘）
+  const tower = cyl(0.72, 0.82, 2.3, "#f8fafc", 0, 2.65, -0.6, 8);
+  g.add(tower);
+  // 鐘樓鏤空閣
+  g.add(box(0.48, 0.72, 1.5, "#1e293b", 0, 2.85, -0.6));
+  // 金色希望之鐘
+  const bell = ball(0.32, "#f59e0b", 0, 2.8, -0.6, 8);
+  bell.scale.set(1.0, 1.3, 1.0);
+  g.add(bell);
+  // 尖頂與金色風向球
+  const towerRoof = cone(0.88, 1.35, "#f59e0b", 0, 4.45, -0.6, 8);
+  g.add(towerRoof);
+  g.add(ball(0.18, "#fbbf24", 0, 5.25, -0.6, 8));
+
+  // 3. 校門口：校訓石碑（玉白底座＋金色牌匾「快樂活潑，自立自強」）
+  const stoneBase = box(1.85, 0.32, 0.72, "#475569", 0, 0.16, 1.85);
+  const stoneBody = box(1.65, 0.82, 0.25, "#f8fafc", 0, 0.68, 1.85);
+  const plaque = box(1.5, 0.65, 0.06, "#f59e0b", 0, 0.68, 1.98);
+  g.add(stoneBase, stoneBody, plaque);
+  // 兩側路燈
+  g.add(createStreetLamp(-1.25, 0, 1.85));
+  g.add(createStreetLamp(1.25, 0, 1.85));
+
+  // 4. 晨光操場升旗台
+  g.add(cyl(0.06, 0.06, 3.6, "#94a3b8", -2.8, 0.1, 1.3, 6)); // 旗桿
+  const flag = box(0.95, 0.58, 0.04, "#0284c7", -2.3, 3.25, 1.3); // 旗幟
+  flag.rotation.y = 0.15;
+  g.add(flag);
+
+  // 5. 碼頭守護白鯨（溫柔的白鯨領航員）
+  const whaleG = new THREE.Group();
+  whaleG.position.set(2.45, 0.1, 1.35);
+  whaleG.rotation.y = -0.52;
+  const whaleBody = ball(0.78, "#ffffff", 0, 0.38, 0, 12);
+  whaleBody.scale.set(1.45, 0.85, 0.95);
+  const whaleFinL = box(0.45, 0.08, 0.22, "#e2e8f0", -0.15, 0.32, 0.78);
+  whaleFinL.rotation.y = 0.45;
+  const whaleFinR = box(0.45, 0.08, 0.22, "#e2e8f0", -0.15, 0.32, -0.78);
+  whaleFinR.rotation.y = -0.45;
+  const whaleTail = cone(0.38, 0.72, "#ffffff", -1.05, 0.46, 0, 6);
+  whaleTail.rotation.z = Math.PI / 2.3;
+  whaleG.add(whaleBody, whaleFinL, whaleFinR, whaleTail);
+  // 白鯨彩虹水花光環
+  whaleG.add(ball(0.16, "#38bdf8", 0.48, 1.05, 0, 6));
+  whaleG.add(ball(0.11, "#7dd3fc", 0.56, 1.38, 0.05, 6));
+  whaleG.add(ball(0.07, "#bae6fd", 0.62, 1.62, -0.05, 6));
+  g.add(whaleG);
+
+  // 6. 陪伴校舍的綠樹
+  g.add(createTree(-3.3, 0, -1.9, 1.2, 0));
+  g.add(createTree(3.3, 0, -1.9, 1.2, 1));
+  g.add(createTree(-3.0, 0, 2.1, 0.95, 2));
+
+  return g;
+}
+
+// 🏝️ 10 大領域專屬獨立地貌島嶼建造器（每座島具備獨特輪廓、水灣、階梯與地貌造型）
+function createDomainIslandPlatform(radius, height, topHex, trimHex, dirtHex, x, z, shapeType = "hex") {
+  const g = new THREE.Group();
+  g.position.set(x, 0, z);
+
+  if (shapeType === "crescent_bay") {
+    // 🏠 特需生活管理島：掌心海灣形（弧形高地圍繞碧藍內灣池與小棧橋）
+    const cliff = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.05, radius * 0.88, height, 14), mat(dirtHex));
+    cliff.position.y = height / 2 - 0.25;
+    cliff.castShadow = true; cliff.receiveShadow = true;
+    g.add(cliff);
+
+    const rim = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.08, radius * 1.05, 0.34, 14), mat(trimHex));
+    rim.position.y = height - 0.32;
+    g.add(rim);
+
+    const top = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.02, radius * 1.02, 0.26, 14), mat(topHex));
+    top.position.y = height - 0.18;
+    g.add(top);
+
+    // 前方碧藍掌心水灣（內嵌式水池）
+    const covePool = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.48, radius * 0.48, 0.12, 12), mat("#38bdf8"));
+    covePool.position.set(0, height - 0.08, radius * 0.35);
+    g.add(covePool);
+    // 弧形碼頭棧板
+    const dock = box(radius * 0.65, 0.14, 0.45, "#8d6e63", 0, height - 0.04, radius * 0.62);
+    g.add(dock);
+
+  } else if (shapeType === "stepped_terrace") {
+    // 🤸 特需動作訓練島：雙層階梯台地（高低雙層山丘、攀登石階）
+    const cliff = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.0, radius * 0.82, height, 8), mat(dirtHex));
+    cliff.position.y = height / 2 - 0.25;
+    cliff.castShadow = true; cliff.receiveShadow = true;
+    g.add(cliff);
+
+    const rim = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.04, radius * 1.02, 0.34, 8), mat(trimHex));
+    rim.position.y = height - 0.32;
+    g.add(rim);
+
+    const top = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.98, radius * 0.98, 0.26, 8), mat(topHex));
+    top.position.y = height - 0.18;
+    g.add(top);
+
+    // 第二層躍動高台（右後方突起山丘）
+    const highHill = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.45, radius * 0.52, 0.65, 8), mat(topHex));
+    highHill.position.set(radius * 0.32, height + 0.18, -radius * 0.25);
+    g.add(highHill);
+    // 攀登三級跳石階梯
+    for (let i = 0; i < 3; i++) {
+      const step = box(0.72, 0.16, 0.38, "#d7ccc8", radius * 0.12 + i * 0.12, height + i * 0.15, -radius * 0.15 + i * 0.12);
+      g.add(step);
+    }
+
+  } else if (shapeType === "open_book") {
+    // 📖 語文繪本島：精裝展開繪本書卷（兩翼微揚厚書台地）
+    const cliff = new THREE.Mesh(new THREE.BoxGeometry(radius * 1.85, height, radius * 1.45), mat(dirtHex));
+    cliff.position.y = height / 2 - 0.25;
+    cliff.castShadow = true; cliff.receiveShadow = true;
+    g.add(cliff);
+
+    // 書脊中線石路
+    g.add(box(0.42, height + 0.1, radius * 1.5, "#4a3b32", 0, height / 2 - 0.15, 0));
+
+    // 左書頁台地
+    const pageL = box(radius * 0.88, 0.3, radius * 1.35, topHex, -radius * 0.46, height - 0.12, 0);
+    pageL.rotation.z = 0.08;
+    // 右書頁台地
+    const pageR = box(radius * 0.88, 0.3, radius * 1.35, topHex, radius * 0.46, height - 0.12, 0);
+    pageR.rotation.z = -0.08;
+    g.add(pageL, pageR);
+
+    // 金色書頁滾邊
+    g.add(box(radius * 1.88, 0.12, 0.15, trimHex, 0, height - 0.22, radius * 0.68));
+
+  } else if (shapeType === "crystal_square") {
+    // 📐 數學邏輯島：八角幾何同心階梯
+    const cliff = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.98, radius * 0.82, height, 8), mat(dirtHex));
+    cliff.position.y = height / 2 - 0.25;
+    cliff.castShadow = true; cliff.receiveShadow = true;
+    g.add(cliff);
+
+    const rim = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.05, radius * 1.02, 0.34, 8), mat(trimHex));
+    rim.position.y = height - 0.32;
+    g.add(rim);
+
+    const top = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.96, radius * 0.96, 0.26, 8), mat(topHex));
+    top.position.y = height - 0.18;
+    g.add(top);
+
+    // 幾何同心方形石板拼圖
+    g.add(box(radius * 0.88, 0.05, radius * 0.88, "#fef08a", 0, height - 0.04, 0));
+    g.add(box(radius * 0.48, 0.08, radius * 0.48, "#f59e0b", 0, height - 0.02, 0));
+
+  } else if (shapeType === "stadium_oval") {
+    // 🏃 健體活力島：橢圓形運動場跑道島
+    const cliff = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.02, radius * 0.84, height, 16), mat(dirtHex));
+    cliff.position.y = height / 2 - 0.25;
+    cliff.scale.set(1.22, 1, 0.92);
+    g.add(cliff);
+
+    // 外圈深紅色 PU 跑道環
+    const track = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.15, radius * 1.12, 0.28, 16), mat("#d32f2f"));
+    track.position.y = height - 0.25;
+    track.scale.set(1.22, 1, 0.92);
+    g.add(track);
+
+    // 中央草坪
+    const top = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.85, radius * 0.85, 0.32, 16), mat(topHex));
+    top.position.y = height - 0.16;
+    top.scale.set(1.22, 1, 0.92);
+    g.add(top);
+
+  } else if (shapeType === "nature_spiral") {
+    // 🌱 自然探險島：相切雙圓螺旋貝殼階梯
+    const cliffA = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.85, radius * 0.72, height, 12), mat(dirtHex));
+    cliffA.position.set(-radius * 0.15, height / 2 - 0.25, 0);
+    g.add(cliffA);
+
+    const cliffB = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.55, radius * 0.48, height + 0.38, 10), mat("#5d4037"));
+    cliffB.position.set(radius * 0.52, (height + 0.38) / 2 - 0.25, -radius * 0.2);
+    g.add(cliffB);
+
+    const topA = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.82, radius * 0.82, 0.26, 12), mat(topHex));
+    topA.position.set(-radius * 0.15, height - 0.18, 0);
+    g.add(topA);
+
+    const topB = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.52, radius * 0.52, 0.26, 10), mat("#a5d6a7"));
+    topB.position.set(radius * 0.52, height + 0.24, -radius * 0.2);
+    g.add(topB);
+
+  } else if (shapeType === "town_blocks") {
+    // 🏮 社會生活島：四方街區十字城鎮
+    const cliff = new THREE.Mesh(new THREE.BoxGeometry(radius * 1.65, height, radius * 1.65), mat(dirtHex));
+    cliff.position.y = height / 2 - 0.25;
+    g.add(cliff);
+
+    const top = new THREE.Mesh(new THREE.BoxGeometry(radius * 1.62, 0.26, radius * 1.62), mat(topHex));
+    top.position.y = height - 0.18;
+    g.add(top);
+
+    // 十字深灰柏油馬路與斑馬線
+    g.add(box(radius * 1.64, 0.06, 0.95, "#475569", 0, height - 0.04, 0));
+    g.add(box(0.95, 0.06, radius * 1.64, "#475569", 0, height - 0.04, 0));
+
+  } else if (shapeType === "treasure_isles") {
+    // 🌏 綜合活動島：主島伴隨雙浮游小島礁
+    const cliff = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.92, radius * 0.78, height, 7), mat(dirtHex));
+    cliff.position.y = height / 2 - 0.25;
+    g.add(cliff);
+
+    const top = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.88, radius * 0.88, 0.26, 7), mat(topHex));
+    top.position.y = height - 0.18;
+    g.add(top);
+
+    // 小子島 1（東北小島）
+    const sub1 = new THREE.Mesh(new THREE.CylinderGeometry(1.25, 0.95, height * 0.75, 6), mat(dirtHex));
+    sub1.position.set(radius * 0.95, height * 0.75 / 2 - 0.25, -radius * 0.55);
+    const subTop1 = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 0.2, 6), mat(trimHex));
+    subTop1.position.set(radius * 0.95, height * 0.75 - 0.15, -radius * 0.55);
+    g.add(sub1, subTop1);
+
+    // 連接子島的小木棧道
+    const footBridge = box(1.35, 0.12, 0.42, "#8d6e63", radius * 0.65, height * 0.75 - 0.05, -radius * 0.35);
+    footBridge.rotation.y = -0.52;
+    g.add(footBridge);
+
+  } else if (shapeType === "artist_palette") {
+    // 🎨 藝術創想島：流線型調色盤橢圓附拇指天池
+    const cliff = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.15, radius * 0.95, height, 16), mat(dirtHex));
+    cliff.position.y = height / 2 - 0.25;
+    cliff.scale.set(1.25, 1, 0.95);
+    g.add(cliff);
+
+    const top = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.12, radius * 1.12, 0.26, 16), mat(topHex));
+    top.position.y = height - 0.18;
+    top.scale.set(1.25, 1, 0.95);
+    g.add(top);
+
+    // 調色盤拇指孔（圓形內嵌海蝕池）
+    const thumbHole = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.32, radius * 0.32, 0.22, 12), mat("#38bdf8"));
+    thumbHole.position.set(-radius * 0.65, height - 0.08, 0);
+    g.add(thumbHole);
+
+    // 調色盤邊緣彩色顏料色滴（紅黃綠藍）
+    const paintColors = ["#ef4444", "#eab308", "#22c55e", "#3b82f6", "#a855f7"];
+    paintColors.forEach((pcol, pi) => {
+      const ang = (pi / paintColors.length) * Math.PI * 0.85 - 0.35;
+      const px = Math.cos(ang) * (radius * 0.85);
+      const pz = Math.sin(ang) * (radius * 0.7);
+      const dollop = ball(0.24, pcol, px, height - 0.02, pz, 6);
+      dollop.scale.set(1.2, 0.35, 1.2);
+      g.add(dollop);
+    });
+
+  } else if (shapeType === "sprout_petal") {
+    // 🎒 生活課程啟蒙島：三葉嫩芽花瓣圓潤台地
+    const cliff = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.0, radius * 0.85, height, 16), mat(dirtHex));
+    cliff.position.y = height / 2 - 0.25;
+    g.add(cliff);
+
+    const top = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.98, radius * 0.98, 0.26, 16), mat(topHex));
+    top.position.y = height - 0.18;
+    g.add(top);
+
+    // 三片展開的花瓣小草丘
+    for (let pi = 0; pi < 3; pi++) {
+      const pang = (pi / 3) * Math.PI * 2;
+      const pet = ball(radius * 0.45, "#fbcfe8", Math.cos(pang) * radius * 0.42, height - 0.08, Math.sin(pang) * radius * 0.42, 8);
+      pet.scale.set(1.1, 0.22, 1.1);
+      g.add(pet);
+    }
+
+  } else {
+    // 預設經典六角島
+    const cliff = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.98, radius * 0.82, height, 6), mat(dirtHex));
+    cliff.position.y = height / 2 - 0.25;
+    cliff.castShadow = true; cliff.receiveShadow = true;
+    g.add(cliff);
+
+    const rim = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.03, radius * 1.01, 0.34, 6), mat(trimHex));
+    rim.position.y = height - 0.32;
+    g.add(rim);
+
+    const top = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.96, radius * 0.96, 0.26, 6), mat(topHex));
+    top.position.y = height - 0.18;
+    g.add(top);
+  }
 
   return { group: g, topY: height - 0.05 };
 }
@@ -2086,35 +2814,40 @@ function add3DPin(htmlContent, worldVec, extraClass, onClickFn, isAlwaysVisible 
 function buildWorldArchipelagoScene() {
   clearThreeWorld();
 
-  // 中央總廣場島
-  const centerR = 4.8;
-  const centerHex = createHexPlatform(centerR, 2.35, "#fdfbf7", "#38bdf8", "#8d6e63", 0, 0);
+  // 🏫 中央核心：希望學園島（校訓：快樂活潑，自立自強）
+  const centerR = 5.2;
+  const centerHex = buildHopeSchoolCenter(centerR, 2.35, 0, 0);
   worldGroup.add(centerHex.group);
-  worldGroup.add(createDomainMonument("book_tower", "#0284c7", "#38bdf8", centerHex.topY));
-  worldGroup.add(createTree(-2.8, centerHex.topY, 1.6, 1.1, 0));
-  worldGroup.add(createTree(2.8, centerHex.topY, -1.5, 1.0, 1));
-  worldGroup.add(createMascot(1.8, centerHex.topY, 2.0, "#0284c7", "#fde047"));
 
+  // 建造希望學園 3D 建築群
+  const hopeMonument = createHopeSchoolMonument(centerHex.topY);
+  worldGroup.add(hopeMonument);
+
+  // 希望學園 3D 標籤（點擊聚焦並展開學園導覽）
   add3DPin(
-    `<div class="label-pill pill-center"><div class="pin-dot"></div><span class="pin-title">🏫 特教教材共學總廣場</span><span class="pin-badge" style="background:rgba(255,255,255,0.22);color:#fff;">240 站</span></div>`,
-    new THREE.Vector3(0, centerHex.topY + 3.5, 0),
-    "",
-    () => resetCamera(),
+    `<div class="label-pill pill-center pill-hope-school">
+      <div class="pin-dot"></div>
+      <span class="pin-title">🏫 希望學園（群島核心）</span>
+      <span class="pin-badge">校訓：快樂活潑，自立自強</span>
+    </div>`,
+    new THREE.Vector3(0, centerHex.topY + 4.8, 0),
+    "hope-pin",
+    () => focusHopeSchool(),
     true
   );
 
-  // 10 座領域島嶼大幅拉開空間距離（遍布整個畫面視野，不擠在中央，並以跨海道路橋樑彼此相連）
+  // 10 座領域島嶼大幅拉開空間距離，依各自專屬地貌 (islandShape) 獨立造型建造
   const coords = [
-    { x: -17.5, z: -9.5,  h: 2.15, r: 4.2, bridgeFrom: -1 }, // 0: 特需生活管理島（內環左前）
-    { x: 0.0,   z: -18.5, h: 2.20, r: 4.2, bridgeFrom: -1 }, // 1: 功能性動作島（內環正北）
-    { x: 17.5,  z: -9.5,  h: 2.15, r: 4.2, bridgeFrom: -1 }, // 2: 語文繪本島（內環右前）
-    { x: 16.5,  z: 9.5,   h: 2.10, r: 4.2, bridgeFrom: -1 }, // 3: 數學邏輯島（內環右後）
-    { x: -16.5, z: 9.5,   h: 2.10, r: 4.2, bridgeFrom: -1 }, // 4: 健體活力島（內環左後）
-    { x: -32.5, z: -1.0,  h: 2.00, r: 4.1, bridgeFrom: 0  }, // 5: 自然探索島（外環極左）
-    { x: -14.5, z: -25.5, h: 2.05, r: 4.1, bridgeFrom: 1  }, // 6: 社會文化島（外環左北）
-    { x: 14.5,  z: -25.5, h: 2.05, r: 4.1, bridgeFrom: 1  }, // 7: 綜合實踐島（外環右北）
-    { x: 32.5,  z: -1.0,  h: 2.00, r: 4.1, bridgeFrom: 2  }, // 8: 藝術人文島（外環極右）
-    { x: 0.0,   z: 20.5,  h: 2.05, r: 4.1, bridgeFrom: 4  }  // 9: 生活啟蒙島（外環正南）
+    { x: -17.5, z: -9.5,  h: 2.15, r: 4.2, bridgeFrom: -1 }, // 0: 特需生活管理島（內環左前・自立生活港灣）
+    { x: 0.0,   z: -18.5, h: 2.20, r: 4.2, bridgeFrom: -1 }, // 1: 功能性動作島（內環正北・躍動階梯之巔）
+    { x: 17.5,  z: -9.5,  h: 2.15, r: 4.2, bridgeFrom: -1 }, // 2: 語文繪本島（內環右前・故事書卷之森）
+    { x: 16.5,  z: 9.5,   h: 2.10, r: 4.2, bridgeFrom: -1 }, // 3: 數學邏輯島（內環右後・幾何時空花園）
+    { x: -16.5, z: 9.5,   h: 2.10, r: 4.2, bridgeFrom: -1 }, // 4: 健體活力島（內環左後・聖火守護之島）
+    { x: -32.5, z: -1.0,  h: 2.00, r: 4.1, bridgeFrom: 0  }, // 5: 自然探索島（外環極左・四季觀星之島）
+    { x: -14.5, z: -25.5, h: 2.05, r: 4.1, bridgeFrom: 1  }, // 6: 社會文化島（外環左北・社區同心市鎮）
+    { x: 14.5,  z: -25.5, h: 2.05, r: 4.1, bridgeFrom: 1  }, // 7: 綜合實踐島（外環右北・巧手百寶工坊）
+    { x: 32.5,  z: -1.0,  h: 2.00, r: 4.1, bridgeFrom: 2  }, // 8: 藝術人文島（外環極右・彩虹調色海礁）
+    { x: 0.0,   z: 20.5,  h: 2.05, r: 4.1, bridgeFrom: 4  }  // 9: 生活啟蒙島（外環正南・萌芽探險新星）
   ];
 
   // 額外環狀聯絡道路（讓外環與內環形成四通八達的跨海公路網）
@@ -2130,12 +2863,9 @@ function buildWorldArchipelagoScene() {
 
   DOMAINS_DATA.forEach((d, idx) => {
     const c = coords[idx];
-    const plat = createHexPlatform(c.r, c.h, d.groundColor, d.trimColor, "#795548", c.x, c.z);
+    // 依該領域的專屬造型 (d.islandShape) 打造完全獨立的地貌外觀！
+    const plat = createDomainIslandPlatform(c.r, c.h, d.groundColor, d.trimColor, "#795548", c.x, c.z, d.islandShape || "hex");
     worldGroup.add(plat.group);
-
-    // 島內十字石板道路
-    plat.group.add(box(c.r * 1.45, 0.06, 0.72, "#f5ebe0", 0, plat.topY, 0));
-    plat.group.add(box(0.72, 0.06, c.r * 1.45, "#f5ebe0", 0, plat.topY, 0));
 
     // 1. 該領域專屬中央地標
     const mainBld = createDomainMonument(d.landmarkType, d.color, d.trimColor, plat.topY);
@@ -2171,7 +2901,7 @@ function buildWorldArchipelagoScene() {
     plat.group.add(createMascot(0.0, plat.topY, 2.55, d.color, "#ffd54f"));
     plat.group.add(createStreetLamp(-1.25, plat.topY, 2.4));
 
-    // 主跨海連接道路橋樑（內環連中央島，外環連內環島）
+    // 主跨海連接道路橋樑（內環連希望學園島，外環連內環島）
     if (c.bridgeFrom === -1) {
       worldGroup.add(createRoadBridge(0, 0, centerR, c.x, c.z, c.r, 1.95));
     } else {
@@ -2179,13 +2909,13 @@ function buildWorldArchipelagoScene() {
       worldGroup.add(createRoadBridge(p.x, p.z, p.r, c.x, c.z, c.r, 1.9));
     }
 
-    // 領域島主標題膠囊（附該領域前三大屬性摘要）
+    // 領域島主標題膠囊（附該領域專屬稱號與屬性摘要）
     const topAttrs = (d.attrSummary || []).slice(0, 2).map(a => a.tag).join("・");
     add3DPin(
       `<div class="label-pill" style="border-color:${d.trimColor};">
         <span style="font-size:18px;">${d.icon}</span>
         <span class="pin-title">${d.islandName}</span>
-        <span class="pin-attr-tag">${topAttrs}</span>
+        <span class="pin-attr-tag">${d.islandTitle || topAttrs}</span>
         <span class="pin-badge">${d.ownCount}站</span>
       </div>`,
       new THREE.Vector3(c.x, plat.topY + 3.05, c.z),
@@ -2388,9 +3118,14 @@ function buildDomainIslandScene(domainId) {
 function renderDomainBar() {
   const bar = document.getElementById("domain-bar");
   let html = `
-    <button class="domain-chip ${currentMode === 'world' ? 'active' : ''}" onclick="enterWorldView()">
+    <button class="domain-chip ${currentMode === 'world' ? 'active' : ''}" onclick="focusHopeSchool()" style="border-color:#f59e0b;">
+      <span>🏫</span>
+      <span>希望學園（群島核心）</span>
+      <span class="chip-count" style="background:#f59e0b;color:#fff;">校訓：自立自強</span>
+    </button>
+    <button class="domain-chip" onclick="enterWorldView()">
       <span>🌊</span>
-      <span>10 大領域群島總覽</span>
+      <span>10 大領域全島</span>
       <span class="chip-count">240站</span>
     </button>
   `;
@@ -3001,6 +3736,185 @@ window.addEventListener("DOMContentLoaded", () => {
   setupSearch();
   initThreeEngine();
 });
+
+
+// ================= 希望學園彈窗與白鯨巡航導覽系統 =================
+function openHopeSchoolModal() {
+  const m = document.getElementById("modal-hope-school");
+  if (m) m.classList.add("visible");
+}
+
+function closeHopeSchoolModal(event) {
+  if (event && event.target && !event.target.classList.contains("modal-backdrop") && !event.target.classList.contains("modal-close-btn") && !event.target.classList.contains("hope-btn-start")) {
+    return;
+  }
+  const m = document.getElementById("modal-hope-school");
+  if (m) m.classList.remove("visible");
+}
+
+function focusHopeSchool() {
+  if (currentMode !== "world") {
+    enterWorldView(false);
+  }
+  stopWhaleTour();
+  targetLook.set(0, 1.8, 0);
+  spherical.radius = 24;
+  spherical.theta = 0.05;
+  spherical.phi = 1.05;
+  openHopeSchoolModal();
+}
+
+let tourActive = false;
+let tourStep = 0;
+
+const TOUR_STOPS = [
+  {
+    id: "hope_school",
+    title: "🏫 第一站：希望學園（群島核心）",
+    desc: "歡迎來到希望學園！這裡是大家上課與學習成長的基地營。校訓是「快樂活潑，自立自強」。跟著白鯨領航員，準備出發上課囉！",
+    lookAt: [0, 1.8, 0],
+    spherical: { radius: 24, theta: 0.05, phi: 1.05 },
+    domainId: null
+  },
+  {
+    id: "selfcare",
+    title: "🏠 第二站：特需生活管理島（自立生活港灣）",
+    desc: "在潔牙泡泡燈塔與晨光衣帽風車下，學會自己穿鞋襪、刷牙洗臉、打掃環境，把每一天過得神氣又乾淨！",
+    lookAt: [-17.5, 2.1, -9.5],
+    spherical: { radius: 18, theta: -0.65, phi: 1.02 },
+    domainId: "selfcare"
+  },
+  {
+    id: "motor",
+    title: "🤸 第三站：特需動作訓練島（躍動階梯之巔）",
+    desc: "踩上五彩平衡木、走過階梯跳石，小手抓握有力、雙腳踩得穩健，每一步都充滿自立力量！",
+    lookAt: [0, 2.1, -18.5],
+    spherical: { radius: 18, theta: 0.05, phi: 1.02 },
+    domainId: "motor"
+  },
+  {
+    id: "chinese",
+    title: "📖 第四站：語文繪本島（故事書卷之森）",
+    desc: "翻開海面上浮現的巨型繪本書卷，在魔法羽毛筆鐘樓下聽故事、讀句子，勇敢說出心裡話！",
+    lookAt: [17.5, 2.1, -9.5],
+    spherical: { radius: 18, theta: 0.65, phi: 1.02 },
+    domainId: "chinese"
+  },
+  {
+    id: "math",
+    title: "📐 第五站：生活數學島（幾何時空花園）",
+    desc: "在幾何時鐘高塔與天秤金幣前，數數量、比大小、看時間、學購物，生活有條理又有秩序！",
+    lookAt: [16.5, 2.1, 9.5],
+    spherical: { radius: 18, theta: 1.15, phi: 1.02 },
+    domainId: "math"
+  },
+  {
+    id: "pe",
+    title: "🏃 第六站：健體活力島（聖火守護之島）",
+    desc: "沿著運動場跑道奔跑，聖火高塔指引方向，認識身體、看懂紅綠燈過馬路，健康又有活力！",
+    lookAt: [-16.5, 2.1, 9.5],
+    spherical: { radius: 18, theta: -1.15, phi: 1.02 },
+    domainId: "pe"
+  },
+  {
+    id: "nature",
+    title: "🌱 第七站：自然探險島（四季觀星之島）",
+    desc: "轉動生態大風車、探訪綠意溫室花房，看四季天氣、摸摸花草小動物，大自然是神奇的好朋友！",
+    lookAt: [-32.5, 2.0, -1.0],
+    spherical: { radius: 18, theta: -1.45, phi: 1.02 },
+    domainId: "nature"
+  },
+  {
+    id: "society",
+    title: "🏮 第八站：社會生活島（社區同心市鎮）",
+    desc: "繞過世界地球儀噴泉、搭乘溫馨小公車，認識鄰舍、遵守班規與交通禮貌，大家同心快樂生活！",
+    lookAt: [-14.5, 2.0, -25.5],
+    spherical: { radius: 18, theta: -0.45, phi: 1.02 },
+    domainId: "society"
+  },
+  {
+    id: "life",
+    title: "🌏 第九站：綜合活動島（巧手百寶工坊）",
+    desc: "圍在童軍營火帳篷旁，一起玩桌遊、輪流排隊、動手串珠與垃圾分類，學習當生活小創客！",
+    lookAt: [14.5, 2.0, -25.5],
+    spherical: { radius: 18, theta: 0.45, phi: 1.02 },
+    domainId: "life"
+  },
+  {
+    id: "arts",
+    title: "🎨 第十站：藝術創想島（彩虹調色海礁）",
+    desc: "巨型木畫架立在調色盤天池邊，踏上琴鍵階梯步道，用繽紛色彩與旋律唱出快樂心情！",
+    lookAt: [32.5, 2.0, -1.0],
+    spherical: { radius: 18, theta: 1.45, phi: 1.02 },
+    domainId: "arts"
+  },
+  {
+    id: "daily",
+    title: "🎒 第十一站：生活課程島（萌芽探險新星）",
+    desc: "揹起立體彩色小書包、溜下向日葵滑梯，不怕生、常微笑，國小新生活充滿奇妙與樂趣！",
+    lookAt: [0, 2.0, 20.5],
+    spherical: { radius: 18, theta: 3.14, phi: 1.02 },
+    domainId: "daily"
+  }
+];
+
+function startWhaleGuidedTour(step = 0) {
+  if (currentMode !== "world") {
+    enterWorldView(false);
+  }
+  tourActive = true;
+  tourStep = step;
+  updateTourStep();
+}
+
+function updateTourStep() {
+  const stop = TOUR_STOPS[tourStep];
+  if (!stop) return;
+
+  targetLook.set(stop.lookAt[0], stop.lookAt[1], stop.lookAt[2]);
+  spherical.radius = stop.spherical.radius;
+  spherical.theta = stop.spherical.theta;
+  spherical.phi = stop.spherical.phi;
+
+  const bar = document.getElementById("tour-bar");
+  if (bar) {
+    bar.classList.add("visible");
+    document.getElementById("tour-step-tag").innerText = `站點 ${tourStep + 1} / ${TOUR_STOPS.length}`;
+    document.getElementById("tour-title").innerText = stop.title;
+    document.getElementById("tour-desc").innerText = stop.desc;
+    const btnGo = document.getElementById("tour-btn-go");
+    if (btnGo) {
+      btnGo.style.display = stop.domainId ? "inline-flex" : "none";
+      btnGo.innerText = stop.domainId ? `🚀 進入${stop.title.split("（")[0].replace(/.*站：/, "")}上課` : "";
+    }
+  }
+}
+
+function nextTourStep() {
+  tourStep = (tourStep + 1) % TOUR_STOPS.length;
+  updateTourStep();
+}
+
+function prevTourStep() {
+  tourStep = (tourStep - 1 + TOUR_STOPS.length) % TOUR_STOPS.length;
+  updateTourStep();
+}
+
+function stopWhaleTour() {
+  tourActive = false;
+  const bar = document.getElementById("tour-bar");
+  if (bar) bar.classList.remove("visible");
+  resetCamera();
+}
+
+function visitCurrentTourIsland() {
+  const stop = TOUR_STOPS[tourStep];
+  if (stop && stop.domainId) {
+    stopWhaleTour();
+    enterDomainIsland(stop.domainId);
+  }
+}
+
 </script>
 </body>
 </html>
