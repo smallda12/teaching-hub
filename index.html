@@ -1512,6 +1512,10 @@ function createDaisyCluster(x, y, z, count = 3, spread = 0.35) {
     d.position.set(dx, 0, dz);
     d.rotation.y = (i * 1.1) % Math.PI;
     g.add(d);
+    // 花朵隨風搖曳
+    actorAnimators.push(t => {
+      d.rotation.z = Math.sin(t * 2.0 + i) * 0.08;
+    });
   }
   return g;
 }
@@ -2417,15 +2421,33 @@ function createUnitTopicProp(propType, x = 0, y = 0, z = 0, scale = 1) {
   return g;
 }
 
+// 每一座島上的吉祥物小精靈（全面實裝生動動作：歡快蹦跳、搖頭晃腦、揮舞小手）
 function createMascot(x, y, z, bodyColor, hatColor) {
   const g = new THREE.Group();
   g.position.set(x, y, z);
-  g.add(cyl(0.28, 0.32, 0.52, bodyColor, 0, 0, 0, 7));
-  g.add(ball(0.32, "#ffe0b2", 0, 0.72, 0, 8));
-  g.add(cone(0.26, 0.32, hatColor, 0, 0.96, 0, 6));
-  // 耳朵或小手
-  g.add(ball(0.1, bodyColor, -0.32, 0.35, 0, 5));
-  g.add(ball(0.1, bodyColor, 0.32, 0.35, 0, 5));
+
+  const mascotBody = new THREE.Group();
+  mascotBody.add(cyl(0.28, 0.32, 0.52, bodyColor, 0, 0, 0, 7));
+  mascotBody.add(ball(0.32, "#ffe0b2", 0, 0.72, 0, 8));
+  mascotBody.add(cone(0.26, 0.32, hatColor, 0, 0.96, 0, 6));
+
+  // 動態小手
+  const handL = ball(0.1, bodyColor, -0.32, 0.35, 0, 5);
+  const handR = ball(0.1, bodyColor, 0.32, 0.35, 0, 5);
+  mascotBody.add(handL, handR);
+  g.add(mascotBody);
+
+  const seed = (Math.abs(x) * 5.3 + Math.abs(z) * 3.7) % 6.28;
+  actorAnimators.push(t => {
+    // 快樂蹦跳
+    const hop = Math.abs(Math.sin(t * 3.2 + seed));
+    mascotBody.position.y = hop * 0.16;
+    mascotBody.rotation.z = Math.sin(t * 2.4 + seed) * 0.14;
+    // 小手揮舞
+    handL.position.y = 0.35 + Math.sin(t * 4.5 + seed) * 0.08;
+    handR.position.y = 0.35 - Math.sin(t * 4.5 + seed) * 0.08;
+  });
+
   return g;
 }
 
@@ -2634,14 +2656,22 @@ function createDomainMonument(type, primaryColor, trimColor, yBase) {
     // 單元代表道具：潔白健康牙齒
     g.add(createUnitTopicProp("tooth_clean", 0.95, 0.22, -0.55, 1.2));
   } else if (type === "gym_rainbow") {
-    // 🤸 特需動作訓練島：彩虹階梯與感統平衡木館＋大龍球
+    // 🤸 特需動作訓練島：彩虹階梯＋感統平衡木＋【動態彈跳紫色大龍球】
     g.add(box(1.9, 0.42, 1.2, "#ef5350", 0, 0.2, 0));
     g.add(box(1.45, 0.42, 0.95, "#ffca28", 0, 0.62, 0));
     g.add(box(1.05, 0.42, 0.75, "#42a5f5", 0, 1.04, 0));
-    g.add(ball(0.56, "#ab47bc", 0, 1.88, 0, 10));
     g.add(box(2.2, 0.16, 0.32, "#26a69a", 0, 0.35, 1.15));
+
+    // 🌟 動態彈跳大龍球（彈跳與落地壓擠形變）
+    const gymBall = ball(0.56, "#ab47bc", 0, 1.88, 0, 10);
+    g.add(gymBall);
+    actorAnimators.push(t => {
+      const b = Math.abs(Math.sin(t * 3.6));
+      gymBall.position.y = 1.45 + b * 0.65;
+      gymBall.scale.set(1 + (1 - b) * 0.16, 1 - (1 - b) * 0.16, 1 + (1 - b) * 0.16);
+    });
   } else if (type === "book_tower") {
-    // 📖 語文溝通島：敞開的立體巨型繪本書台＋魔法鵝毛筆尖鐘塔
+    // 📖 語文溝通島：【動態輕柔翻動書頁】＋【頂部金色魔法星辰懸浮旋轉】
     g.add(box(1.95, 0.35, 1.35, "#d97706", 0, 0.2, 0));
     const pageL = box(0.88, 0.16, 1.18, "#fffbeb", -0.45, 0.6, 0);
     pageL.rotation.z = 0.22;
@@ -2650,21 +2680,65 @@ function createDomainMonument(type, primaryColor, trimColor, yBase) {
     g.add(pageL, pageR);
     g.add(cyl(0.4, 0.48, 1.95, primaryColor, 0, 0.5, -0.65, 8));
     g.add(cone(0.55, 0.72, trimColor, 0, 2.45, -0.65, 8));
+
+    // 🌟 懸浮旋轉金色魔法星辰
+    const star = ball(0.24, "#fbbf24", 0, 3.35, -0.65, 6);
+    g.add(star);
+    actorAnimators.push(t => {
+      pageL.rotation.z = 0.22 + 0.08 * Math.sin(t * 2.2);
+      pageR.rotation.z = -0.22 - 0.08 * Math.sin(t * 2.2 + 0.8);
+      star.rotation.y = t * 2.2;
+      star.position.y = 3.35 + Math.sin(t * 2.5) * 0.12;
+    });
   } else if (type === "clock_pyramid") {
-    // 📐 生活數學島：黃金幾何金字塔＋時鐘高塔＋算盤立柱
+    // 📐 生活數學島：黃金金字塔＋【時鐘指針真實旋轉走時】＋【金字塔頂部黃金結晶自轉】
     g.add(cone(1.2, 1.8, "#f59e0b", -0.48, 0.2, 0.22, 4));
     g.add(box(0.98, 2.3, 0.98, primaryColor, 0.58, 0.2, -0.25));
-    g.add(ball(0.36, "#fef08a", 0.58, 1.9, 0.28, 8));
     g.add(cone(0.78, 0.8, trimColor, 0.58, 2.5, -0.25, 4));
+
+    // 🌟 時鐘表面與旋轉分針／時針
+    const clockFace = cyl(0.42, 0.42, 0.04, "#ffffff", 0.58, 1.9, 0.25, 12);
+    clockFace.rotation.x = Math.PI / 2;
+    const handM = box(0.035, 0.26, 0.02, "#1e293b", 0, 0.11, 0);
+    const handH = box(0.045, 0.18, 0.02, "#b91c1c", 0, 0.07, 0);
+    const clockHands = new THREE.Group();
+    clockHands.position.set(0.58, 1.9, 0.28);
+    clockHands.add(handM, handH);
+    g.add(clockFace, clockHands);
+
+    // 🌟 幾何金字塔頂黃金結晶
+    const gem = cone(0.35, 0.65, "#fde047", -0.48, 2.15, 0.22, 6);
+    g.add(gem);
+    actorAnimators.push(t => {
+      handM.rotation.z = -t * 3.8;
+      handH.rotation.z = -t * 0.42;
+      gem.rotation.y = t * 1.8;
+      gem.position.y = 2.15 + Math.sin(t * 2.4) * 0.08;
+    });
   } else if (type === "stadium_torch") {
-    // 🏃 健康與體育島：奧運聖火高塔＋紅白PU跑道競技館＋頒獎台
+    // 🏃 健康與體育島：【動態燃燒躍動奧運聖火】＋紅白跑道館＋【彈跳運動球】
     g.add(cyl(1.75, 1.85, 0.35, "#ef5350", 0, 0.2, 0, 12));
     g.add(cyl(1.3, 1.35, 0.35, "#ffffff", 0, 0.55, 0, 12));
     g.add(cyl(0.35, 0.55, 1.85, "#ffd54f", 0, 0.9, -0.35, 8));
-    g.add(cone(0.52, 0.95, "#ff5722", 0, 2.75, -0.35, 7));
-    g.add(ball(0.35, "#ffca28", 0.65, 1.15, 0.55, 8));
+
+    // 🌟 奧運聖火躍動火苗
+    const flame = cone(0.52, 0.95, "#ff5722", 0, 2.75, -0.35, 7);
+    const flameCore = cone(0.32, 0.65, "#fef08a", 0, 2.72, -0.35, 6);
+    g.add(flame, flameCore);
+
+    // 🌟 彈跳運動球
+    const sportsBall = ball(0.35, "#ffca28", 0.65, 1.15, 0.55, 8);
+    g.add(sportsBall);
+    actorAnimators.push(t => {
+      const f = Math.sin(t * 8.5);
+      flame.scale.set(1 + 0.16 * f, 1 + 0.28 * Math.cos(t * 10), 1 + 0.16 * f);
+      flame.rotation.y = t * 2.2;
+      const b = Math.abs(Math.sin(t * 4.2));
+      sportsBall.position.y = 0.52 + b * 0.48;
+      sportsBall.scale.set(1 + (1 - b) * 0.12, 1 - (1 - b) * 0.12, 1 + (1 - b) * 0.12);
+    });
   } else if (type === "windmill_greenhouse") {
-    // 🌱 自然探險島：轉動生態大風車＋翠綠玻璃溫室＋U型大磁鐵
+    // 🌱 自然探險島：生態大風車＋溫室＋【動態微風拍翅嫩葉】
     g.add(box(1.55, 1.05, 1.25, "#a5d6a7", 0.45, 0.2, 0.15));
     g.add(cyl(0.62, 0.62, 1.25, "#81c784", 0.45, 1.25, 0.15, 8));
     g.add(cyl(0.45, 0.62, 2.2, "#ffffff", -0.65, 0.2, -0.35, 8));
@@ -2675,19 +2749,60 @@ function createDomainMonument(type, primaryColor, trimColor, yBase) {
     blades.add(box(0.16, 1.9, 0.05, "#43a047", 0, 0, 0));
     g.add(blades);
     spinningMeshes.push(blades);
+
+    // 🌟 溫室頂部微風拍翅綠葉
+    const sproutG = new THREE.Group();
+    sproutG.position.set(0.45, 1.88, 0.15);
+    const leafL = box(0.25, 0.04, 0.14, "#4ade80", -0.12, 0, 0);
+    leafL.rotation.z = 0.35;
+    const leafR = box(0.25, 0.04, 0.14, "#4ade80", 0.12, 0, 0);
+    leafR.rotation.z = -0.35;
+    sproutG.add(leafL, leafR);
+    g.add(sproutG);
+    actorAnimators.push(t => {
+      leafL.rotation.z = 0.35 + Math.sin(t * 4.2) * 0.2;
+      leafR.rotation.z = -0.35 - Math.sin(t * 4.2) * 0.2;
+    });
     g.add(createUnitTopicProp("science_lab", 0.85, 0.22, 0.95, 1.15));
   } else if (type === "gate_town") {
-    // 🏮 社會生活島：台灣紅磚古城門樓（燕尾飛簷）＋雙側紅燈籠＋紅綠燈
+    // 🏮 社會生活島：城門樓＋【紅燈籠隨風搖曳】＋【真實切換紅綠燈】
     g.add(box(0.55, 1.45, 0.95, "#c62828", -0.72, 0.2, 0));
     g.add(box(0.55, 1.45, 0.95, "#c62828", 0.72, 0.2, 0));
     g.add(box(2.15, 0.55, 1.15, "#b71c1c", 0, 1.45, 0));
     const roof = cone(1.65, 0.85, "#ffb300", 0, 2.0, 0, 4);
     roof.rotation.y = Math.PI / 4;
     g.add(roof);
-    g.add(ball(0.24, "#ef5350", -0.95, 1.35, 0.6, 8));
-    g.add(ball(0.24, "#ef5350", 0.95, 1.35, 0.6, 8));
+
+    // 🌟 動態左右搖曳大紅燈籠
+    const lanternL = new THREE.Group();
+    lanternL.position.set(-0.95, 1.35, 0.6);
+    lanternL.add(ball(0.24, "#ef5350", 0, -0.12, 0, 8));
+    lanternL.add(cyl(0.04, 0.04, 0.15, "#fbbf24", 0, 0.04, 0, 6));
+
+    const lanternR = new THREE.Group();
+    lanternR.position.set(0.95, 1.35, 0.6);
+    lanternR.add(ball(0.24, "#ef5350", 0, -0.12, 0, 8));
+    lanternR.add(cyl(0.04, 0.04, 0.15, "#fbbf24", 0, 0.04, 0, 6));
+    g.add(lanternL, lanternR);
+
+    // 🌟 動態紅綠燈切換
+    g.add(cyl(0.04, 0.04, 2.3, "#475569", 1.4, 0.2, 0.2, 6));
+    g.add(box(0.22, 0.72, 0.18, "#1e293b", 1.4, 1.9, 0.2));
+    const lightR = ball(0.09, "#ef4444", 1.4, 2.15, 0.3, 6);
+    const lightY = ball(0.09, "#eab308", 1.4, 1.9, 0.3, 6);
+    const lightG = ball(0.09, "#22c55e", 1.4, 1.65, 0.3, 6);
+    g.add(lightR, lightY, lightG);
+
+    actorAnimators.push(t => {
+      lanternL.rotation.z = 0.18 * Math.sin(t * 2.2);
+      lanternR.rotation.z = -0.18 * Math.sin(t * 2.2 + 0.4);
+      const phase = Math.floor((t * 0.7) % 3);
+      lightG.material = mat(phase === 0 ? "#22c55e" : "#14532d", phase === 0 ? 0x22c55e : 0);
+      lightY.material = mat(phase === 1 ? "#facc15" : "#713f12", phase === 1 ? 0xfacc15 : 0);
+      lightR.material = mat(phase === 2 ? "#ef4444" : "#7f1d1d", phase === 2 ? 0xef4444 : 0);
+    });
   } else if (type === "ferris_camp") {
-    // 🌏 綜合活動島：彩色摩天輪＋童軍露營三角帳篷與營火
+    // 🌏 綜合活動島：彩色摩天輪＋【童軍露營躍動營火】
     g.add(box(0.2, 1.9, 0.2, "#475569", -0.35, 0.2, -0.2));
     g.add(box(0.2, 1.9, 0.2, "#475569", 0.35, 0.2, -0.2));
     const wheel = new THREE.Mesh(new THREE.TorusGeometry(1.15, 0.1, 6, 16), mat(primaryColor));
@@ -2695,20 +2810,79 @@ function createDomainMonument(type, primaryColor, trimColor, yBase) {
     g.add(wheel);
     spinningMeshes.push(wheel);
     g.add(cone(0.72, 1.05, "#ffa726", 0.75, 0.2, 0.65, 4));
+
+    // 🌟 跳動營火柴火與火苗
+    const fireG = new THREE.Group();
+    fireG.position.set(-0.65, 0.2, 0.65);
+    fireG.add(box(0.38, 0.05, 0.05, "#78350f", 0, 0.03, 0));
+    const fStick = box(0.38, 0.05, 0.05, "#78350f", 0, 0.03, 0);
+    fStick.rotation.y = Math.PI / 3;
+    fireG.add(fStick);
+    const flame1 = cone(0.18, 0.38, "#ef4444", 0, 0.06, 0, 6);
+    const flame2 = cone(0.12, 0.26, "#f59e0b", 0, 0.08, 0, 6);
+    fireG.add(flame1, flame2);
+    g.add(fireG);
+    actorAnimators.push(t => {
+      const f = Math.sin(t * 9.0);
+      flame1.scale.set(1 + 0.22 * f, 1 + 0.32 * Math.cos(t * 11), 1 + 0.22 * f);
+      flame2.scale.set(1 + 0.16 * Math.cos(t * 12), 1 + 0.24 * f, 1 + 0.16 * Math.cos(t * 12));
+    });
   } else if (type === "palette_pavilion") {
-    // 🎨 藝術創想島：七彩調色盤音樂館＋三支巨型彩色畫筆塔
+    // 🎨 藝術創想島：七彩調色盤＋【懸浮魔法彩筆畫圈沾顏料】＋【彈跳彩滴】
     g.add(cyl(1.65, 1.75, 0.32, "#ce93d8", 0, 0.2, 0, 12));
     g.add(cyl(0.95, 1.05, 1.1, "#ffffff", -0.25, 0.52, -0.15, 10));
     g.add(ball(0.98, "#8e24aa", -0.25, 1.62, -0.15, 10));
+
+    // 🌟 懸浮揮灑金色彩筆
+    const brushG = new THREE.Group();
+    brushG.position.set(0.65, 1.25, 0.2);
+    brushG.add(cyl(0.04, 0.05, 0.65, "#d97706", 0, 0.2, 0, 6));
+    brushG.add(cyl(0.055, 0.055, 0.1, "#94a3b8", 0, -0.15, 0, 6));
+    brushG.add(cone(0.07, 0.18, "#ec4899", 0, -0.28, 0, 6));
+    brushG.rotation.x = -0.4;
+    brushG.rotation.z = 0.35;
+    g.add(brushG);
+
+    // 🌟 跳動彩色水滴精靈
+    const drops = [
+      ball(0.12, "#ef4444", 0.35, 0.38, -0.45, 6),
+      ball(0.12, "#3b82f6", 0.75, 0.38, -0.25, 6),
+      ball(0.12, "#eab308", 0.95, 0.38, 0.15, 6),
+      ball(0.12, "#10b981", 0.65, 0.38, 0.55, 6)
+    ];
+    drops.forEach(d => g.add(d));
+    actorAnimators.push(t => {
+      brushG.position.y = 1.25 + 0.15 * Math.sin(t * 3.0);
+      brushG.rotation.z = 0.35 + 0.2 * Math.cos(t * 3.2);
+      drops.forEach((d, i) => {
+        d.position.y = 0.38 + Math.abs(Math.sin(t * 3.6 + i * 1.3)) * 0.14;
+      });
+    });
     g.add(createUnitTopicProp("art_palette", 0.85, 0.52, 0.45, 1.45));
   } else {
-    // 🎒 生活課程啟蒙島：巨型立體紅黃小書包樂園＋公園溜滑梯
+    // 🎒 生活課程啟蒙島：小書包樂園＋【書包開合動態】＋【溜滑梯滾動彩球】
     g.add(box(1.45, 1.55, 1.05, "#d81b60", -0.25, 0.2, 0));
     g.add(box(1.52, 0.75, 1.12, "#ffca28", -0.25, 1.15, 0.05));
     g.add(box(0.95, 0.55, 0.35, "#f06292", -0.25, 0.35, 0.55));
     const slide = box(0.45, 1.45, 0.18, "#29b6f6", 0.95, 0.2, 0.35);
     slide.rotation.z = -0.55;
     g.add(slide);
+
+    // 🌟 書包開合蓋動態
+    const flapG = new THREE.Group();
+    flapG.position.set(-0.25, 1.55, 0.58);
+    const flap = box(1.46, 0.55, 0.08, "#ffca28", 0, -0.25, 0);
+    flapG.add(flap);
+    g.add(flapG);
+
+    // 🌟 溜滑梯滾動彩球
+    const rollBall = ball(0.15, "#f59e0b", 0.95, 0.95, 0.35, 8);
+    g.add(rollBall);
+    actorAnimators.push(t => {
+      flapG.rotation.x = -0.15 + 0.18 * Math.sin(t * 2.5);
+      const p = (Math.sin(t * 2.2) + 1) * 0.5;
+      rollBall.position.set(0.55 + p * 0.75, 1.15 - p * 0.85, 0.35);
+    });
   }
 
   return g;
@@ -2723,6 +2897,7 @@ function clearThreeWorld() {
   labelsLayer.innerHTML = "";
   pinItems.length = 0;
   spinningMeshes.length = 0;
+  actorAnimators.length = 0;
 }
 
 function add3DPin(htmlContent, worldVec, extraClass, onClickFn, isAlwaysVisible = true, attrTag = "") {
@@ -3468,6 +3643,37 @@ function initThreeEngine() {
   seaMesh.receiveShadow = true;
   scene.add(seaMesh);
 
+  // ☁️ 天空飄浮立體繪本雲朵群
+  const cloudsGroup = new THREE.Group();
+  scene.add(cloudsGroup);
+
+  function createPuffyCloud(scale = 1.0) {
+    const g = new THREE.Group();
+    g.scale.set(scale, scale * 0.65, scale);
+    g.add(ball(1.6, "#ffffff", 0, 0, 0, 8));
+    g.add(ball(1.2, "#ffffff", -1.2, -0.15, 0.2, 7));
+    g.add(ball(1.25, "#ffffff", 1.2, -0.15, -0.2, 7));
+    g.add(ball(0.95, "#ffffff", 0.45, 0.7, 0.1, 7));
+    g.add(ball(0.85, "#ffffff", -0.65, 0.65, -0.1, 6));
+    return g;
+  }
+
+  window.cloudItems = [];
+  const cloudDefs = [
+    { x: -35, y: 16, z: -25, s: 1.2, speed: 0.015 },
+    { x: 15, y: 19, z: -32, s: 1.5, speed: 0.02 },
+    { x: 38, y: 15, z: 8, s: 1.1, speed: 0.018 },
+    { x: -28, y: 18, z: 22, s: 1.3, speed: 0.016 },
+    { x: 5, y: 17, z: 34, s: 1.4, speed: 0.022 },
+    { x: -50, y: 20, z: -5, s: 1.6, speed: 0.014 }
+  ];
+  cloudDefs.forEach(cd => {
+    const c = createPuffyCloud(cd.s);
+    c.position.set(cd.x, cd.y, cd.z);
+    cloudsGroup.add(c);
+    window.cloudItems.push({ obj: c, speed: cd.speed });
+  });
+
   // 滑鼠與觸控事件（左鍵旋轉視角、右鍵或按住 Shift 拖曳平移畫面、滾輪縮放）
   let isPanning = false;
   stageEl.addEventListener("contextmenu", e => e.preventDefault());
@@ -3660,8 +3866,16 @@ function animateLoop() {
   }
   spinningMeshes.forEach(m => { m.rotation.z += 0.015; });
 
-  // 🌟 執行師生人偶動態動作（舉手揮手、飄揚圍巾、呼吸、眨眼、轉頭）
+  // 🌟 執行師生人偶與全島物件動態動作
   actorAnimators.forEach(fn => fn(t));
+
+  // ☁️ 雲朵飄移
+  if (window.cloudItems) {
+    window.cloudItems.forEach(ci => {
+      ci.obj.position.x += ci.speed;
+      if (ci.obj.position.x > 68) ci.obj.position.x = -68;
+    });
+  }
 
   renderer.render(scene, camera);
   updateLabelsProjection();
