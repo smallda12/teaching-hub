@@ -2117,94 +2117,213 @@ function createOutdoorStudyCorner(x, y, z, rotY = 0) {
   return g;
 }
 
-// 繪本風導師人偶（深藍八面斗篷／披肩、純白立領與手腕、親切膚色頭部、桃紅腮紅、深藍傾斜畫家貝雷帽）
+// 全域角色動態更新函式註冊列表
+const actorAnimators = [];
+
+// 繪本風導師人偶（生動動作：舉手揮手教學、呼吸起伏、自然眨眼、轉頭探看、圓框眼鏡）
 function createStorybookTeacher(x, y, z, rotY = 0) {
   const g = new THREE.Group();
   g.position.set(x, y, z);
   g.rotation.y = rotY;
 
-  // 雙腳鞋履與深色長褲
+  // 雙腳鞋履與深色長褲（下半身固定）
   [-0.12, 0.12].forEach(lx => {
     g.add(cyl(0.09, 0.09, 0.12, "#0f172a", lx, 0, 0, 8));
     g.add(cyl(0.07, 0.07, 0.3, "#1e293b", lx, 0.1, 0, 6));
   });
 
+  // 上半身群組（隨呼吸起伏）
+  const upperBody = new THREE.Group();
+  g.add(upperBody);
+
   // 經典深藍八面立體斗篷 (Low-poly flat-shaded poncho)
   const poncho = cone(0.46, 0.96, "#2563eb", 0, 0.35, 0, 8);
-  g.add(poncho);
+  upperBody.add(poncho);
 
-  // 純白立領與手腕袖口
-  g.add(cyl(0.18, 0.22, 0.07, "#f8fafc", 0, 1.28, 0, 8));
-  g.add(ball(0.08, "#f8fafc", -0.28, 0.78, 0.14, 6));
-  g.add(ball(0.08, "#f8fafc", 0.28, 0.78, 0.14, 6));
+  // 純白立領
+  upperBody.add(cyl(0.18, 0.22, 0.07, "#f8fafc", 0, 1.28, 0, 8));
+
+  // 🌟 動態右手手臂（高舉揮手、熱情教學指引！）
+  const armR = new THREE.Group();
+  armR.position.set(0.28, 0.95, 0.06);
+  // 袖子
+  armR.add(cyl(0.06, 0.07, 0.34, "#2563eb", 0, -0.15, 0, 6));
+  // 白袖口與手掌
+  armR.add(cyl(0.065, 0.065, 0.06, "#f8fafc", 0, -0.32, 0, 6));
+  armR.add(ball(0.075, "#fed7aa", 0, -0.38, 0, 6));
+  upperBody.add(armR);
+
+  // 🌟 動態左手手臂（書桌旁自然輔助擺動）
+  const armL = new THREE.Group();
+  armL.position.set(-0.28, 0.95, 0.06);
+  armL.add(cyl(0.06, 0.07, 0.34, "#2563eb", 0, -0.15, 0, 6));
+  armL.add(cyl(0.065, 0.065, 0.06, "#f8fafc", 0, -0.32, 0, 6));
+  armL.add(ball(0.075, "#fed7aa", 0, -0.38, 0, 6));
+  upperBody.add(armL);
+
+  // 🌟 動態頭部群組（可左右轉頭與點頭）
+  const headGroup = new THREE.Group();
+  headGroup.position.set(0, 1.48, 0);
+  upperBody.add(headGroup);
 
   // 親切膚色頭部
-  g.add(ball(0.25, "#fed7aa", 0, 1.48, 0, 10));
-  // 雙眼
-  g.add(ball(0.036, "#0f172a", -0.085, 1.5, 0.22, 6));
-  g.add(ball(0.036, "#0f172a", 0.085, 1.5, 0.22, 6));
-  // 溫暖桃粉腮紅
-  g.add(ball(0.042, "#fda4af", -0.14, 1.43, 0.19, 6));
-  g.add(ball(0.042, "#fda4af", 0.14, 1.43, 0.19, 6));
+  headGroup.add(ball(0.25, "#fed7aa", 0, 0, 0, 10));
 
-  // 帥氣傾斜深藍畫家貝雷帽 (Chic Artist Beret)
-  const beretRim = cyl(0.28, 0.24, 0.08, "#1e293b", 0.03, 1.66, -0.02, 10);
+  // 雙眼群組（支援靈活眨眼）
+  const eyesGroup = new THREE.Group();
+  eyesGroup.position.set(0, 0.02, 0.22);
+  const eyeL = ball(0.038, "#0f172a", -0.085, 0, 0, 6);
+  const eyeR = ball(0.038, "#0f172a", 0.085, 0, 0, 6);
+  eyesGroup.add(eyeL, eyeR);
+  headGroup.add(eyesGroup);
+
+  // 溫暖桃粉腮紅
+  headGroup.add(ball(0.042, "#fda4af", -0.14, -0.05, 0.19, 6));
+  headGroup.add(ball(0.042, "#fda4af", 0.14, -0.05, 0.19, 6));
+
+  // 👓 經典大乃老師黑框圓圓眼鏡（如參考截圖）
+  const glasses = new THREE.Group();
+  glasses.position.set(0, 0.02, 0.23);
+  // 左右圓框
+  const rimMat = mat("#0f172a");
+  const glassGeo = new THREE.TorusGeometry(0.068, 0.012, 4, 14);
+  const gL = new THREE.Mesh(glassGeo, rimMat); gL.position.x = -0.085;
+  const gR = new THREE.Mesh(glassGeo, rimMat); gR.position.x = 0.085;
+  // 鼻樑橫桿
+  const bridge = box(0.06, 0.012, 0.012, "#0f172a", 0, 0, 0);
+  glasses.add(gL, gR, bridge);
+  headGroup.add(glasses);
+
+  // 帥氣傾斜深藍畫家貝雷帽
+  const beretRim = cyl(0.28, 0.24, 0.08, "#1e293b", 0.03, 0.18, -0.02, 10);
   beretRim.rotation.z = -0.2;
-  const beretTop = ball(0.3, "#0f172a", 0.04, 1.72, -0.03, 10);
+  const beretTop = ball(0.3, "#0f172a", 0.04, 0.24, -0.03, 10);
   beretTop.scale.set(1.15, 0.42, 1.15);
   beretTop.rotation.z = -0.2;
-  const stalk = cyl(0.02, 0.02, 0.06, "#1e293b", 0.04, 1.86, -0.03, 4);
-  g.add(beretRim, beretTop, stalk);
+  const stalk = cyl(0.02, 0.02, 0.06, "#1e293b", 0.04, 0.38, -0.03, 4);
+  headGroup.add(beretRim, beretTop, stalk);
+
+  // 註冊導師動態動畫更新器
+  actorAnimators.push(t => {
+    // 1. 呼吸起伏 (Breathe)
+    upperBody.position.y = Math.sin(t * 2.2) * 0.025;
+
+    // 2. 揮手與教學指引動作 (Waving / Teaching Gesture)
+    // 右手臂高舉隨節奏歡快揮動（向學童打招呼與引導教材）
+    armR.rotation.z = 2.2 + 0.32 * Math.sin(t * 4.6);
+    armR.rotation.x = -0.25 + 0.12 * Math.cos(t * 3.2);
+
+    // 左手臂在書桌前自然輔助律動
+    armL.rotation.z = -0.25 + 0.08 * Math.sin(t * 2.0);
+    armL.rotation.x = -0.45 + 0.08 * Math.cos(t * 2.0);
+
+    // 3. 頭部轉動探看（在筆電與特教學童之間親切環視）
+    headGroup.rotation.y = -0.15 + 0.18 * Math.sin(t * 1.2);
+    headGroup.rotation.z = 0.06 * Math.cos(t * 1.6);
+
+    // 4. 自然眨眼 (Blink)
+    const isBlink = (t % 3.8) < 0.14;
+    eyesGroup.scale.y = isBlink ? 0.1 : 1.0;
+  });
 
   return g;
 }
 
-// 繪本風特教學童／小王子人偶（暖褐靴子、翠綠八面斗篷外套、金黃飄逸長圍巾、金色刺蝟短髮、開朗笑顏）
+// 繪本風特教學童／小王子人偶（生動動作：金黃長圍巾波浪飄動、點頭傾聽、開朗眨眼、筆記微動）
 function createStorybookStudent(x, y, z, rotY = 0) {
   const g = new THREE.Group();
   g.position.set(x, y, z);
   g.rotation.y = rotY;
 
-  // 暖褐小皮靴
+  // 暖褐小皮靴（固定地坪）
   [-0.1, 0.1].forEach(lx => {
     g.add(cyl(0.08, 0.08, 0.1, "#78350f", lx, 0, 0, 8));
   });
 
+  // 上半身群組（隨呼吸起伏）
+  const upperBody = new THREE.Group();
+  g.add(upperBody);
+
   // 翠綠八面立體斗篷外套
   const tunic = cone(0.42, 0.84, "#15803d", 0, 0.28, 0, 8);
-  g.add(tunic);
-  // 皮帶
-  g.add(cyl(0.28, 0.28, 0.06, "#b45309", 0, 0.5, 0, 8));
+  upperBody.add(tunic);
+  // 皮帶與金色圓扣
+  upperBody.add(cyl(0.28, 0.28, 0.06, "#b45309", 0, 0.5, 0, 8));
+  upperBody.add(ball(0.04, "#fbbf24", 0, 0.5, 0.28, 6));
 
-  // 金黃飄逸小王子圍巾（領圈＋飄逸長圍巾尾翼）
-  g.add(cyl(0.22, 0.22, 0.08, "#facc15", 0, 1.1, 0, 8));
-  const scarfTail1 = box(0.12, 0.36, 0.04, "#eab308", -0.22, 1.0, -0.15);
+  // 🌟 金黃飄逸小王子長圍巾（領圈＋動態飄揚長尾翼）
+  upperBody.add(cyl(0.22, 0.22, 0.08, "#facc15", 0, 1.1, 0, 8));
+
+  // 動態飄揚長圍巾尾翼 1
+  const scarfTail1 = box(0.12, 0.38, 0.04, "#eab308", -0.22, 1.0, -0.15);
   scarfTail1.rotation.z = 0.45;
   scarfTail1.rotation.x = -0.25;
-  const scarfTail2 = box(0.1, 0.28, 0.04, "#facc15", 0.18, 0.98, -0.18);
+  upperBody.add(scarfTail1);
+
+  // 動態飄揚長圍巾尾翼 2
+  const scarfTail2 = box(0.1, 0.3, 0.04, "#facc15", 0.18, 0.98, -0.18);
   scarfTail2.rotation.z = -0.35;
-  g.add(scarfTail1, scarfTail2);
+  upperBody.add(scarfTail2);
+
+  // 🌟 動態頭部群組
+  const headGroup = new THREE.Group();
+  headGroup.position.set(0, 1.3, 0);
+  upperBody.add(headGroup);
 
   // 圓圓可愛臉蛋
-  g.add(ball(0.22, "#fed7aa", 0, 1.3, 0, 10));
-  // 雙眼與開朗笑容
-  g.add(ball(0.035, "#0f172a", -0.075, 1.32, 0.19, 6));
-  g.add(ball(0.035, "#0f172a", 0.075, 1.32, 0.19, 6));
-  g.add(box(0.06, 0.02, 0.01, "#b91c1c", 0, 1.23, 0.21));
+  headGroup.add(ball(0.22, "#fed7aa", 0, 0, 0, 10));
+
+  // 雙眼群組（自然眨眼）
+  const eyesGroup = new THREE.Group();
+  eyesGroup.position.set(0, 0.02, 0.19);
+  eyesGroup.add(ball(0.035, "#0f172a", -0.075, 0, 0, 6));
+  eyesGroup.add(ball(0.035, "#0f172a", 0.075, 0, 0, 6));
+  headGroup.add(eyesGroup);
+
+  // 開朗微笑
+  headGroup.add(box(0.06, 0.02, 0.01, "#b91c1c", 0, -0.07, 0.21));
   // 桃紅腮紅
-  g.add(ball(0.038, "#fda4af", -0.12, 1.27, 0.17, 6));
-  g.add(ball(0.038, "#fda4af", 0.12, 1.27, 0.17, 6));
+  headGroup.add(ball(0.038, "#fda4af", -0.12, -0.03, 0.17, 6));
+  headGroup.add(ball(0.038, "#fda4af", 0.12, -0.03, 0.17, 6));
 
   // 亮黃小王子刺蝟金髮
-  g.add(ball(0.24, "#fde047", 0, 1.38, -0.02, 10));
-  g.add(cone(0.12, 0.26, "#eab308", 0, 1.58, 0, 5));
-  g.add(cone(0.08, 0.18, "#eab308", -0.12, 1.5, 0, 4));
-  g.add(cone(0.08, 0.18, "#eab308", 0.12, 1.5, 0, 4));
+  headGroup.add(ball(0.24, "#fde047", 0, 0.08, -0.02, 10));
+  headGroup.add(cone(0.12, 0.26, "#eab308", 0, 0.28, 0, 5));
+  headGroup.add(cone(0.08, 0.18, "#eab308", -0.12, 0.2, 0, 4));
+  headGroup.add(cone(0.08, 0.18, "#eab308", 0.12, 0.2, 0, 4));
 
-  // 雙手捧著的學習筆記冊
-  const note = box(0.22, 0.15, 0.02, "#ffffff", 0, 0.78, 0.28);
-  note.rotation.x = -0.4;
-  g.add(note);
+  // 🌟 雙手捧著的學習筆記冊（動態群組）
+  const noteGroup = new THREE.Group();
+  noteGroup.position.set(0, 0.78, 0.28);
+  const note = box(0.22, 0.15, 0.02, "#ffffff", 0, 0, 0);
+  const noteCover = box(0.23, 0.16, 0.01, "#f59e0b", 0, 0, -0.01);
+  noteGroup.add(note, noteCover);
+  noteGroup.rotation.x = -0.4;
+  upperBody.add(noteGroup);
+
+  // 註冊學童／小王子動態動畫更新器
+  actorAnimators.push(t => {
+    // 1. 呼吸與雀躍起伏 (Breathe)
+    upperBody.position.y = Math.sin(t * 2.5 + 0.6) * 0.022;
+
+    // 2. 圍巾隨風如波浪般流暢飄揚 (Scarf Fluttering)
+    scarfTail1.rotation.z = 0.45 + 0.24 * Math.sin(t * 4.2);
+    scarfTail1.rotation.x = -0.25 + 0.16 * Math.cos(t * 3.6);
+    scarfTail2.rotation.z = -0.35 + 0.2 * Math.cos(t * 4.0);
+    scarfTail2.rotation.y = 0.15 * Math.sin(t * 3.2);
+
+    // 3. 好奇點頭傾聽與東張西望 (Head Tilting & Nodding)
+    headGroup.rotation.x = 0.06 + 0.08 * Math.sin(t * 2.2); // 頻繁點頭如聽課領悟
+    headGroup.rotation.y = 0.14 * Math.cos(t * 1.5);
+    headGroup.rotation.z = 0.08 * Math.sin(t * 1.1);
+
+    // 4. 手捧筆記冊微動
+    noteGroup.rotation.x = -0.4 + 0.05 * Math.sin(t * 2.5);
+
+    // 5. 靈動眨眼 (Blink，與老師交錯時間)
+    const isBlink = ((t + 1.6) % 4.2) < 0.14;
+    eyesGroup.scale.y = isBlink ? 0.1 : 1.0;
+  });
 
   return g;
 }
@@ -2353,6 +2472,14 @@ function createHopeSchoolMonument(yBase) {
   whaleG.add(ball(0.11, "#7dd3fc", 0.56, 1.38, 0.05, 6));
   whaleG.add(ball(0.07, "#bae6fd", 0.62, 1.62, -0.05, 6));
   g.add(whaleG);
+
+  // 守護白鯨親水悠游動態
+  actorAnimators.push(t => {
+    whaleG.position.y = 0.1 + 0.04 * Math.sin(t * 2.0);
+    whaleTail.rotation.y = 0.22 * Math.sin(t * 3.5);
+    whaleFinL.rotation.z = 0.12 * Math.sin(t * 2.8);
+    whaleFinR.rotation.z = -0.12 * Math.sin(t * 2.8);
+  });
 
   // 6. 陪伴校舍的綠樹
   g.add(createTree(-3.3, 0, -1.9, 1.2, 0));
@@ -4050,6 +4177,9 @@ function animateLoop() {
     worldGroup.position.y = Math.sin(t) * 0.14;
   }
   spinningMeshes.forEach(m => { m.rotation.z += 0.015; });
+
+  // 🌟 執行師生人偶動態動作（舉手揮手、飄揚圍巾、呼吸、眨眼、轉頭）
+  actorAnimators.forEach(fn => fn(t));
 
   renderer.render(scene, camera);
   updateLabelsProjection();
