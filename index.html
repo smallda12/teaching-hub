@@ -1254,9 +1254,11 @@ canvas#canvas-3d {
 
   <!-- 右下角鏡頭控制 -->
   <div class="cam-controls">
-    <button class="cam-btn" id="btn-all-pins" onclick="toggleShowAllPins()" title="切換顯示全部單元標籤／精選標籤">🏷️</button>
+    <button class="cam-btn" onclick="zoomCamera(-1)" title="拉近視角（放大）" aria-label="拉近視角">➕</button>
+    <button class="cam-btn" onclick="zoomCamera(1)" title="拉遠視角（縮小）" aria-label="拉遠視角">➖</button>
     <button class="cam-btn" onclick="resetCamera()" title="重置視角">⟲</button>
     <button class="cam-btn" id="btn-tour" onclick="toggleTour()" title="自動環島巡航運鏡">🎬</button>
+    <button class="cam-btn" id="btn-all-pins" onclick="toggleShowAllPins()" title="切換顯示全部單元標籤／精選標籤">🏷️</button>
   </div>
 
   <!-- 底部單元快速導覽船塢（進入領域島時顯示該島 30 單元） -->
@@ -3480,15 +3482,15 @@ function selectAttrFilter(tag) {
 }
 
 function setHubCamera() {
-  targetLook.set(0, 0, 10);
-  spherical.radius = 72;
+  targetLook.set(0, 1.8, 8.0);
+  spherical.radius = 80;
   spherical.theta = 0.0;
-  spherical.phi = 1.0;
+  spherical.phi = 0.98;
 }
 
 function setStageCamera() {
-  targetLook.set(0, 0, -2.5);
-  spherical.radius = 56;
+  targetLook.set(0, 1.8, -2.5);
+  spherical.radius = 86;
   spherical.theta = 0.08;
   spherical.phi = 0.96;
 }
@@ -3605,23 +3607,23 @@ function selectStage(stage) {
   });
 
   if (stage === "all") {
-    targetLook.set(0, 0, 2.0);
-    spherical.radius = 50;
+    targetLook.set(0, 1.8, 4.0);
+    spherical.radius = 72;
     spherical.theta = 0.0;
-    spherical.phi = 0.98;
+    spherical.phi = 0.96;
   } else if (stage === "1") {
-    targetLook.set(-23.0, 2.0, -4.8);
-    spherical.radius = 27;
+    targetLook.set(-23.5, 2.0, -4.8);
+    spherical.radius = 29;
     spherical.theta = 0.48;
     spherical.phi = 0.96;
   } else if (stage === "2") {
-    targetLook.set(23.0, 2.0, -4.8);
-    spherical.radius = 27;
+    targetLook.set(23.5, 2.0, -4.8);
+    spherical.radius = 29;
     spherical.theta = -0.48;
     spherical.phi = 0.96;
   } else if (stage === "3") {
     targetLook.set(0, 2.0, 16.5);
-    spherical.radius = 27;
+    spherical.radius = 29;
     spherical.theta = 0.05;
     spherical.phi = 0.96;
   }
@@ -3957,7 +3959,7 @@ function initThreeEngine() {
       targetLook.z -= (-dx * sinT - dy * cosT) * panSpeed;
     } else {
       spherical.theta -= dx * 0.0065;
-      spherical.phi = Math.max(0.32, Math.min(1.38, spherical.phi - dy * 0.0065));
+      spherical.phi = Math.max(0.10, Math.min(1.42, spherical.phi - dy * 0.0065));
     }
   });
   window.addEventListener("pointerup", () => { isDragging = false; isPanning = false; });
@@ -3995,7 +3997,39 @@ function initThreeEngine() {
     if (it.onClick) it.onClick();
   });
   stageEl.addEventListener("wheel", e => {
-    spherical.radius = Math.max(14, Math.min(92, spherical.radius + e.deltaY * 0.032));
+    spherical.radius = Math.max(12, Math.min(140, spherical.radius + e.deltaY * 0.036));
+  }, { passive: true });
+
+  // 觸控雙指縮放 (Pinch-to-zoom)
+  let touchStartDist = 0;
+  let touchStartRadius = 0;
+  stageEl.addEventListener("touchstart", e => {
+    if (e.touches.length === 2) {
+      isDragging = false;
+      touchStartDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      touchStartRadius = spherical.radius;
+    }
+  }, { passive: true });
+  stageEl.addEventListener("touchmove", e => {
+    if (e.touches.length === 2 && touchStartDist > 0) {
+      isDragging = false;
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      if (dist > 10) {
+        const factor = touchStartDist / dist;
+        spherical.radius = Math.max(12, Math.min(140, touchStartRadius * factor));
+      }
+    }
+  }, { passive: true });
+  stageEl.addEventListener("touchend", e => {
+    if (e.touches.length < 2) {
+      touchStartDist = 0;
+    }
   }, { passive: true });
   window.addEventListener("resize", onResize);
 
@@ -4035,6 +4069,11 @@ function onResize() {
   camera.aspect = stageEl.clientWidth / stageEl.clientHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(stageEl.clientWidth, stageEl.clientHeight);
+}
+
+function zoomCamera(dir) {
+  const step = 8;
+  spherical.radius = Math.max(12, Math.min(140, spherical.radius + dir * step));
 }
 
 function resetCamera() {
@@ -4222,7 +4261,7 @@ function focusHopeSchool() {
   }
   stopWhaleTour();
   targetLook.set(0, 1.8, 0);
-  spherical.radius = 24;
+  spherical.radius = 26;
   spherical.theta = 0.05;
   spherical.phi = 1.05;
   openHopeSchoolModal();
@@ -4237,7 +4276,7 @@ const TOUR_STOPS = [
     title: "🏫 第一站：希望學園",
     desc: "歡迎來到希望學園！這裡是大家上課與學習成長的基地營，校訓是「快樂活潑，自立自強」。從這裡出發，三座學習階段島嶼等著我們去探險！",
     lookAt: [0, 1.8, 0],
-    spherical: { radius: 24, theta: 0.05, phi: 1.05 },
+    spherical: { radius: 26, theta: 0.05, phi: 1.05 },
     stage: null
   },
   {
@@ -4245,7 +4284,7 @@ const TOUR_STOPS = [
     title: "🌱 第二站：第一學習階段島",
     desc: "從認識自己、照顧自己開始，在各領域小島上打好基礎，一步一步學會生活中的大小事！",
     lookAt: [-24, 2.1, -7],
-    spherical: { radius: 22, theta: -0.6, phi: 1.0 },
+    spherical: { radius: 24, theta: -0.6, phi: 1.0 },
     stage: "1"
   },
   {
@@ -4253,7 +4292,7 @@ const TOUR_STOPS = [
     title: "🌿 第三站：第二學習階段島",
     desc: "把學會的本領用在生活裡，和同學合作、動手實踐，讓自己越來越能幹！",
     lookAt: [24, 2.1, -7],
-    spherical: { radius: 22, theta: 0.6, phi: 1.0 },
+    spherical: { radius: 24, theta: 0.6, phi: 1.0 },
     stage: "2"
   },
   {
@@ -4261,7 +4300,7 @@ const TOUR_STOPS = [
     title: "🌳 第四站：第三學習階段島",
     desc: "走進社區與更大的世界，練習獨立生活、照顧自己，也學會關心身邊的人！",
     lookAt: [0, 2.1, 25],
-    spherical: { radius: 22, theta: 0.05, phi: 1.0 },
+    spherical: { radius: 24, theta: 0.05, phi: 1.0 },
     stage: "3"
   }
 ];
