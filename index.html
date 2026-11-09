@@ -57,11 +57,20 @@ header.topbar {
   display: flex;
   align-items: center;
   gap: 10px;
-  min-width: 0;
+  min-width: 210px;
+  flex: 1 1 0;
 }
+.brand-titles { flex: 1 1 0; min-width: 0; overflow: hidden; }
+/* 視窗不夠寬時，右側工具只留圖示（滑鼠停上去有提示文字），讓左側「返回」鈕永遠看得到 */
+@media (max-width: 1700px) {
+  .top-right-tools .icon-pill-btn span:not(:first-child) { display: none; }
+  .top-right-tools .search-input { width: 130px; }
+}
+.brand-titles p { overflow: hidden; text-overflow: ellipsis; }
 
 .back-world-btn {
   display: none;
+  flex-shrink: 0;
   align-items: center;
   gap: 6px;
   background: #0284c7;
@@ -81,6 +90,7 @@ header.topbar {
 
 .brand-logo {
   font-size: 30px;
+  flex-shrink: 0;
   line-height: 1;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12));
 }
@@ -102,6 +112,7 @@ header.topbar {
 /* 階段切換膠囊（進入領域島時顯示） */
 .stage-switcher {
   display: none;
+  flex-shrink: 0;
   align-items: center;
   gap: 5px;
   background: #f1f5f9;
@@ -535,6 +546,30 @@ canvas#canvas-3d {
   border-color: #0284c7;
   transform: scale(1.08);
 }
+
+/* 標籤顯示切換（預設隱藏，畫面保持乾淨；游標停在島上或點一下才出現） */
+.label-toggle-btn {
+  position: absolute;
+  right: 76px;
+  bottom: 115px;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #cbd5e1;
+  box-shadow: var(--shadow-soft);
+  font-size: 15px;
+  font-weight: 800;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.label-toggle-btn:hover { border-color: #0284c7; }
+.label-toggle-btn.on { background: #0284c7; color: #fff; border-color: #0284c7; }
+.label-pin.pin-focus { z-index: 95 !important; }
 
 /* 左上角島嶼資訊橫幅 */
 .island-info-banner {
@@ -1157,9 +1192,9 @@ canvas#canvas-3d {
 <!-- 第一列：頂部全域導覽列 -->
 <header class="topbar">
   <div class="brand-group">
-    <button class="back-world-btn" id="btn-back-world" onclick="enterWorldView()">
-      <span>🌊</span>
-      <span>返回領域群島</span>
+    <button class="back-world-btn" id="btn-back-world" onclick="goBack()">
+      <span>↩️</span>
+      <span id="btn-back-text">返回希望學園</span>
     </button>
     <div class="brand-logo" id="top-logo">🏝️</div>
     <div class="brand-titles">
@@ -1186,7 +1221,7 @@ canvas#canvas-3d {
 
     <button class="icon-pill-btn hope-btn" onclick="openHopeSchoolModal()" title="查看希望學園校訓與全島導覽"><span style="font-size:16px;">🏫</span><span>希望學園</span></button>
     <button class="icon-pill-btn tour-btn" id="btn-whale-tour" onclick="startWhaleGuidedTour()" title="跟著白鯨巡航導覽"><span style="font-size:16px;">🐋</span><span>白鯨導覽</span></button>
-    <button class="icon-pill-btn" id="btn-tod" onclick="cycleTimeOfDay()" title="切換白天／夕陽／星夜">☀️ 時段</button>
+    <button class="icon-pill-btn" id="btn-tod" onclick="cycleTimeOfDay()" title="切換白天／夕陽／星夜"><span>☀️</span><span>時段</span></button>
     <button class="icon-pill-btn primary-toggle" id="btn-view-mode" onclick="toggleDisplayMode()">
       <span id="view-mode-icon">📋</span>
       <span id="view-mode-text">領域清單模式</span>
@@ -1213,6 +1248,9 @@ canvas#canvas-3d {
     <div class="banner-note" id="banner-note"></div>
     <div class="banner-attr-bar" id="banner-attrs"></div>
   </div>
+
+  <!-- 右下角：島嶼標籤顯示切換 -->
+  <button class="label-toggle-btn" id="btn-labels" onclick="toggleLabels()" title="切換是否一直顯示島嶼標籤（隱藏時，游標停在島上或點一下就會出現）">🏷️ 標籤：已隱藏</button>
 
   <!-- 右下角鏡頭控制 -->
   <div class="cam-controls">
@@ -1403,6 +1441,16 @@ let currentMode = "world"; // "world" or domainId
 let currentStageFilter = "all"; // "all", "1", "2", "3"
 let displayView = "3d"; // "3d" or "list"
 let showAll30Pins = false;
+let worldStage = null;      // null＝希望學園主島（只連三座學習階段島）；"1"/"2"/"3"＝該學習階段的領域小島群
+let lastWorldStage = null;  // 從哪個學習階段進入領域島（返回時回到那裡）
+let labelsOn = false;       // 標籤預設隱藏
+try { labelsOn = localStorage.getItem("hubLabelsOn") === "1"; } catch (e) {}
+let hoverPin = null, tapPin = null, hoverClearTimer = null;
+const STAGE_META = {
+  "1": { icon: "🌱", name: "第一學習階段", top: "#e8f5e9", trim: "#43a047", hdr: "pill-s1-hdr" },
+  "2": { icon: "🌿", name: "第二學習階段", top: "#e3f2fd", trim: "#1e88e5", hdr: "pill-s2-hdr" },
+  "3": { icon: "🌳", name: "第三學習階段", top: "#fff3e0", trim: "#fb8c00", hdr: "pill-s3-hdr" }
+};
 let activeModalUnitList = [];
 let activeModalIndex = 0;
 
@@ -2896,49 +2944,169 @@ function clearThreeWorld() {
   scene.add(worldGroup);
   labelsLayer.innerHTML = "";
   pinItems.length = 0;
+  hoverPin = null;
+  tapPin = null;
   spinningMeshes.length = 0;
   actorAnimators.length = 0;
 }
 
-function add3DPin(htmlContent, worldVec, extraClass, onClickFn, isAlwaysVisible = true, attrTag = "") {
+function add3DPin(htmlContent, worldVec, extraClass, onClickFn, isAlwaysVisible = true, attrTag = "", pickR = 2.2) {
   const el = document.createElement("div");
   el.className = "label-pin " + (extraClass || "");
   if (attrTag) el.dataset.attr = attrTag;
   el.innerHTML = htmlContent;
+  const item = { el, pos: worldVec, always: isAlwaysVisible, attrTag, pickR, onClick: onClickFn };
   el.onclick = (e) => {
     e.stopPropagation();
     if (!dragMoved && onClickFn) onClickFn();
   };
+  // 游標移到標籤上時保持顯示，方便點進去
+  el.addEventListener("mouseenter", () => {
+    if (hoverClearTimer) { clearTimeout(hoverClearTimer); hoverClearTimer = null; }
+    hoverPin = item;
+  });
+  el.addEventListener("mouseleave", () => scheduleHoverClear());
   labelsLayer.appendChild(el);
-  pinItems.push({ el, pos: worldVec, always: isAlwaysVisible, attrTag });
+  pinItems.push(item);
+}
+
+function scheduleHoverClear() {
+  if (hoverClearTimer) return;
+  hoverClearTimer = setTimeout(() => { hoverPin = null; hoverClearTimer = null; }, 700);
+}
+
+function stageUnitCount(st) {
+  const seen = new Set();
+  DOMAINS_DATA.forEach(d => (d.stages[st] || []).forEach(u => seen.add(u.uid)));
+  return seen.size;
+}
+
+function stageDomains(st) {
+  return DOMAINS_DATA.filter(d => (d.stages[st] || []).length > 0);
 }
 
 // ==========================================
-// 場景一：🌊 10 大領域群島大世界 (World Archipelago)
+// 場景零：🏫 希望學園主島（只連接三座學習階段島嶼，畫面保持清爽）
 // ==========================================
-function buildWorldArchipelagoScene() {
+const HUB_STAGE_POS = {
+  "1": { x: -24.0, z: -7.0 },
+  "2": { x: 24.0,  z: -7.0 },
+  "3": { x: 0.0,   z: 25.0 }
+};
+
+function buildHopeHubScene() {
   clearThreeWorld();
 
-  // 🏫 中央核心：希望學園島（校訓：快樂活潑，自立自強）
   const centerR = 5.2;
   const centerHex = buildHopeSchoolCenter(centerR, 2.35, 0, 0);
   worldGroup.add(centerHex.group);
+  worldGroup.add(createHopeSchoolMonument(centerHex.topY));
 
-  // 建造希望學園 3D 建築群
-  const hopeMonument = createHopeSchoolMonument(centerHex.topY);
-  worldGroup.add(hopeMonument);
-
-  // 希望學園 3D 標籤（點擊聚焦並展開學園導覽）
   add3DPin(
     `<div class="label-pill pill-center pill-hope-school">
       <div class="pin-dot"></div>
-      <span class="pin-title">🏫 希望學園（群島核心）</span>
+      <span class="pin-title">🏫 希望學園</span>
       <span class="pin-badge">校訓：快樂活潑，自立自強</span>
     </div>`,
     new THREE.Vector3(0, centerHex.topY + 4.8, 0),
     "hope-pin",
     () => focusHopeSchool(),
-    true
+    true,
+    "",
+    5.6
+  );
+
+  const spots = [
+    { dx: -2.4, dz: -1.3 },
+    { dx: 2.4,  dz: -1.3 },
+    { dx: 0.0,  dz: 1.9 }
+  ];
+
+  ["1", "2", "3"].forEach(st => {
+    const sm = STAGE_META[st];
+    const p = HUB_STAGE_POS[st];
+    const r = 5.6;
+    const doms = stageDomains(st);
+    const plat = createHexPlatform(r, 2.25, sm.top, sm.trim, "#795548", p.x, p.z);
+    worldGroup.add(plat.group);
+    plat.group.add(box(r * 1.5, 0.06, 0.75, "#f5ebe0", 0, plat.topY, 0));
+    plat.group.add(box(0.75, 0.06, r * 1.5, "#f5ebe0", 0, plat.topY, 0));
+
+    // 島上放該階段三個領域的縮小地標，讓學生一眼看出「這座島裡有很多領域」
+    doms.slice(0, 3).forEach((d, k) => {
+      const m = createDomainMonument(d.landmarkType, d.color, d.trimColor, plat.topY);
+      m.scale.set(0.46, 0.46, 0.46);
+      m.position.x += spots[k].dx;
+      m.position.z += spots[k].dz;
+      plat.group.add(m);
+    });
+    if (doms[0]) {
+      plat.group.add(createDomainFoliage(doms[0].id, -3.6, plat.topY, 1.6, 0.9, 0));
+      plat.group.add(createDomainFoliage(doms[0].id, 3.6, plat.topY, 1.6, 0.9, 1));
+    }
+    plat.group.add(createMascot(-1.6, plat.topY, 3.4, sm.trim, "#ffd54f"));
+    plat.group.add(createStreetLamp(1.7, plat.topY, 3.3));
+    plat.group.add(createDaisyCluster(-3.4, plat.topY, -2.6, 4, 0.45));
+    plat.group.add(createDaisyCluster(3.4, plat.topY, -2.6, 4, 0.45));
+
+    worldGroup.add(createRoadBridge(0, 0, centerR, p.x, p.z, r, 1.95));
+
+    add3DPin(
+      `<div class="label-pill pill-stage-header ${sm.hdr}">
+        <span class="pin-title">${sm.icon} ${sm.name}</span>
+        <span class="pin-badge">${doms.length} 領域・${stageUnitCount(st)} 站</span>
+      </div>`,
+      new THREE.Vector3(p.x, plat.topY + 3.6, p.z),
+      "stage-island-pin",
+      () => enterStageArchipelago(st),
+      true,
+      "",
+      6.2
+    );
+  });
+
+  [[-30, 16], [30, 15], [-12, -16], [13, -17]].forEach(([bx, bz], i) => {
+    const boat = new THREE.Group();
+    boat.position.set(bx, 0.1, bz);
+    boat.rotation.y = -0.5 + i * 0.8;
+    boat.add(box(1.4, 0.35, 0.8, "#e53935", 0, 0, 0));
+    boat.add(cone(0.52, 1.2, "#ffffff", 0, 0.35, 0, 3));
+    worldGroup.add(boat);
+  });
+}
+
+// ==========================================
+// 場景一：🌊 10 大領域群島大世界 (World Archipelago)
+// ==========================================
+function buildStageArchipelagoScene(stage) {
+  clearThreeWorld();
+  const sm = STAGE_META[stage];
+  const stageDoms = stageDomains(stage);
+
+  // 中央：該學習階段的出發廣場（點它回希望學園）
+  const centerR = 5.2;
+  const centerHex = createHexPlatform(centerR, 2.35, sm.top, sm.trim, "#795548", 0, 0);
+  worldGroup.add(centerHex.group);
+  centerHex.group.add(box(centerR * 1.5, 0.06, 0.8, "#f5ebe0", 0, centerHex.topY, 0));
+  centerHex.group.add(box(0.8, 0.06, centerR * 1.5, "#f5ebe0", 0, centerHex.topY, 0));
+  centerHex.group.add(createMascot(0, centerHex.topY, 0.6, sm.trim, "#ffd54f"));
+  centerHex.group.add(createStreetLamp(-2.2, centerHex.topY, 0.3));
+  centerHex.group.add(createStreetLamp(2.2, centerHex.topY, 0.3));
+  centerHex.group.add(createDaisyCluster(-2.8, centerHex.topY, 1.6, 4, 0.45));
+  centerHex.group.add(createDaisyCluster(2.8, centerHex.topY, 1.6, 4, 0.45));
+  centerHex.group.add(createPebbleScatter(0, centerHex.topY, -1.8, 6, 0.5));
+
+  add3DPin(
+    `<div class="label-pill pill-stage-header ${sm.hdr}">
+      <span class="pin-title">${sm.icon} ${sm.name}廣場</span>
+      <span class="pin-badge">${stageDoms.length} 領域・${stageUnitCount(stage)} 站</span>
+    </div>`,
+    new THREE.Vector3(0, centerHex.topY + 3.4, 0),
+    "stage-island-pin",
+    () => enterWorldView(),
+    true,
+    "",
+    5.2
   );
 
   // 10 座領域島嶼大幅拉開空間距離，依各自專屬地貌 (islandShape) 獨立造型建造
@@ -2966,8 +3134,9 @@ function buildWorldArchipelagoScene() {
     { dx: 0.0,   dz: -1.95 }
   ];
 
-  DOMAINS_DATA.forEach((d, idx) => {
+  stageDoms.forEach((d, idx) => {
     const c = coords[idx];
+    const stUnits = d.stages[stage] || [];
     // 依該領域的專屬造型 (d.islandShape) 打造完全獨立的地貌外觀！
     const plat = createDomainIslandPlatform(c.r, c.h, d.groundColor, d.trimColor, "#795548", c.x, c.z, d.islandShape || "hex");
     worldGroup.add(plat.group);
@@ -2978,7 +3147,7 @@ function buildWorldArchipelagoScene() {
     plat.group.add(mainBld);
 
     // 2. 依該領域的代表單元 (featuredUnits)，在島上擺放帶有「單元專屬 3D 主題道具」的微縮建築與單元小標籤！
-    (d.featuredUnits || []).slice(0, 3).forEach((fu, fIdx) => {
+    stUnits.slice(0, 3).forEach((fu, fIdx) => {
       const off = subBldOffsets[fIdx];
       const roofCol = fIdx % 2 === 0 ? d.color : d.trimColor;
       const bld = createUnitBuilding(off.dx, plat.topY, off.dz, idx + fIdx, roofCol, "#ffffff", fu.propType);
@@ -2996,7 +3165,8 @@ function buildWorldArchipelagoScene() {
         "world-sub-pin",
         () => openUnitModal(fu.uid),
         fIdx === 0,
-        fu.attrTag
+        fu.attrTag,
+        1.4
       );
     });
 
@@ -3024,16 +3194,18 @@ function buildWorldArchipelagoScene() {
         <span style="font-size:18px;">${d.icon}</span>
         <span class="pin-title">${d.islandName}</span>
         <span class="pin-attr-tag">${d.islandTitle || topAttrs}</span>
-        <span class="pin-badge">${d.ownCount}站</span>
+        <span class="pin-badge">${stUnits.length}站</span>
       </div>`,
       new THREE.Vector3(c.x, plat.topY + 3.05, c.z),
       "",
-      () => enterDomainIsland(d.id),
-      true
+      () => enterDomainIsland(d.id, true, stage),
+      true,
+      "",
+      4.4
     );
   });
 
-  extraLinks.forEach(([iA, iB]) => {
+  extraLinks.filter(([iA, iB]) => iA < stageDoms.length && iB < stageDoms.length).forEach(([iA, iB]) => {
     const a = coords[iA], b = coords[iB];
     worldGroup.add(createRoadBridge(a.x, a.z, a.r, b.x, b.z, b.r, 1.88));
   });
@@ -3083,7 +3255,9 @@ function buildDomainIslandScene(domainId) {
     new THREE.Vector3(0, centerHex.topY + 3.3, 0),
     "",
     () => selectStage("all"),
-    true
+    true,
+    "",
+    4.2
   );
 
   const pal1 = (d.stagePalettes && d.stagePalettes["1"]) || { top: "#e8f5e9", trim: "#43a047", roofA: "#ef5350", roofB: "#66bb6a" };
@@ -3171,7 +3345,9 @@ function buildDomainIslandScene(domainId) {
       sc.hdrPos,
       `stage-hdr-${sc.stage}`,
       () => selectStage(sc.stage),
-      true
+      true,
+      "",
+      2.4
     );
 
     // 擺放該階段的 10 個單元立體建築（每棟建築皆配備該單元專屬的 3D 主題微縮道具 u.propType 與單元屬性徽章！）
@@ -3201,7 +3377,8 @@ function buildDomainIslandScene(domainId) {
         `stage-${sc.stage} unit-pin`,
         () => openUnitModal(u.uid),
         isFeatured,
-        u.attrTag || ""
+        u.attrTag || "",
+        1.6
       );
     });
 
@@ -3229,17 +3406,23 @@ function buildDomainIslandScene(domainId) {
 function renderDomainBar() {
   const bar = document.getElementById("domain-bar");
   let html = `
-    <button class="domain-chip ${currentMode === 'world' ? 'active' : ''}" onclick="focusHopeSchool()" style="border-color:#f59e0b;">
+    <button class="domain-chip ${currentMode === 'world' && !worldStage ? 'active' : ''}" onclick="enterWorldView()" style="border-color:#f59e0b;">
       <span>🏫</span>
-      <span>希望學園（群島核心）</span>
+      <span>希望學園</span>
       <span class="chip-count" style="background:#f59e0b;color:#fff;">校訓：自立自強</span>
     </button>
-    <button class="domain-chip" onclick="enterWorldView()">
-      <span>🌊</span>
-      <span>10 大領域全島</span>
-      <span class="chip-count">240站</span>
-    </button>
   `;
+  ["1", "2", "3"].forEach(st => {
+    const sm = STAGE_META[st];
+    const active = currentMode === "world" && worldStage === st ? "active" : "";
+    html += `
+      <button class="domain-chip ${active}" onclick="enterStageArchipelago('${st}')" style="border-color:${sm.trim};">
+        <span>${sm.icon}</span>
+        <span>${sm.name}</span>
+        <span class="chip-count">${stageUnitCount(st)}站</span>
+      </button>
+    `;
+  });
   DOMAINS_DATA.forEach(d => {
     const active = currentMode === d.id ? "active" : "";
     html += `
@@ -3257,9 +3440,13 @@ function renderBannerAttrBar() {
   const attrBar = document.getElementById("banner-attrs");
   if (!attrBar) return;
   if (currentMode === "world") {
+    if (!worldStage) {
+      attrBar.innerHTML = "";
+      return;
+    }
     attrBar.innerHTML = `
       <button class="attr-chip ${showAll30Pins ? 'active' : ''}" onclick="toggleShowAllPins()">
-        🏷️ ${showAll30Pins ? '已展開各島代表單元與屬性' : '點此展開 10 島代表單元標籤'}
+        🏷️ ${showAll30Pins ? '已展開各島代表單元標籤' : '點此展開各島代表單元標籤'}
       </button>
     `;
     return;
@@ -3292,8 +3479,24 @@ function selectAttrFilter(tag) {
   renderQuickDock();
 }
 
+function setHubCamera() {
+  targetLook.set(0, 0, 10);
+  spherical.radius = 72;
+  spherical.theta = 0.0;
+  spherical.phi = 1.0;
+}
+
+function setStageCamera() {
+  targetLook.set(0, 0, -2.5);
+  spherical.radius = 56;
+  spherical.theta = 0.08;
+  spherical.phi = 0.96;
+}
+
 function enterWorldView(pushHash = true) {
   currentMode = "world";
+  worldStage = null;
+  lastWorldStage = null;
   currentStageFilter = "all";
   currentAttrFilter = "all";
   if (pushHash) history.replaceState(null, "", "#world");
@@ -3302,34 +3505,74 @@ function enterWorldView(pushHash = true) {
   document.getElementById("stage-switcher").style.display = "none";
   document.getElementById("unit-dock").classList.remove("visible");
 
-  document.getElementById("top-logo").innerText = "🏝️";
-  document.getElementById("top-title").innerText = "高雄特教國小部｜3D 領域群島總入口";
-  document.getElementById("top-subtitle").innerText = "10 大領域島嶼 × 三個學習階段 × 240 個互動單元";
+  document.getElementById("top-logo").innerText = "🏫";
+  document.getElementById("top-title").innerText = "高雄特教國小部｜希望學園總入口";
+  document.getElementById("top-subtitle").innerText = "希望學園 × 三個學習階段 × 10 大領域 × 240 個互動單元";
 
-  document.getElementById("banner-title").innerText = "🌊 特教學習大世界（10 大領域群島）";
-  document.getElementById("banner-desc").innerText = "每座島嶼皆有領域專屬地標、植被與代表單元小屋！點擊任一島嶼進入三個學習階段。";
+  document.getElementById("banner-title").innerText = "🏫 希望學園（快樂活潑，自立自強）";
+  document.getElementById("banner-desc").innerText = "從希望學園出發，點一下任一座學習階段島嶼，就會出現那個階段的各領域小島。游標停在島上會出現名稱。";
   document.getElementById("banner-note").style.display = "none";
 
   renderDomainBar();
   renderBannerAttrBar();
-  buildWorldArchipelagoScene();
-  targetLook.set(0, 0, -2.5);
-  spherical.radius = 56;
-  spherical.theta = 0.08;
-  spherical.phi = 0.96;
+  buildHopeHubScene();
+  setHubCamera();
 
   if (displayView === "list") renderListView();
 }
 
-function enterDomainIsland(domainId, pushHash = true) {
+function enterStageArchipelago(stage, pushHash = true) {
+  const sm = STAGE_META[stage];
+  if (!sm) return;
+  stopWhaleTourSilently();
+  currentMode = "world";
+  worldStage = stage;
+  lastWorldStage = stage;
+  currentStageFilter = "all";
+  currentAttrFilter = "all";
+  if (pushHash) history.replaceState(null, "", `#stage=${stage}`);
+
+  document.getElementById("btn-back-world").style.display = "inline-flex";
+  document.getElementById("btn-back-text").innerText = "返回希望學園";
+  document.getElementById("stage-switcher").style.display = "none";
+  document.getElementById("unit-dock").classList.remove("visible");
+
+  const doms = stageDomains(stage);
+  document.getElementById("top-logo").innerText = sm.icon;
+  document.getElementById("top-title").innerText = `${sm.name}｜領域小島`;
+  document.getElementById("top-subtitle").innerText = `${doms.length} 個領域小島・${stageUnitCount(stage)} 個互動單元`;
+
+  document.getElementById("banner-title").innerText = `${sm.icon} ${sm.name}`;
+  document.getElementById("banner-desc").innerText = "點一下任一座領域小島，就能進入這個階段的單元。游標停在島上會出現名稱；點中間的廣場可回希望學園。";
+  document.getElementById("banner-note").style.display = "none";
+
+  renderDomainBar();
+  renderBannerAttrBar();
+  buildStageArchipelagoScene(stage);
+  setStageCamera();
+
+  if (displayView === "list") renderListView();
+}
+
+function goBack() {
+  if (currentMode !== "world" && lastWorldStage) {
+    enterStageArchipelago(lastWorldStage);
+  } else {
+    enterWorldView();
+  }
+}
+
+function enterDomainIsland(domainId, pushHash = true, fromStage = null) {
   const d = DOMAIN_MAP[domainId];
   if (!d) return;
+  if (fromStage) lastWorldStage = fromStage;
   currentMode = domainId;
   currentStageFilter = "all";
   currentAttrFilter = "all";
   if (pushHash) history.replaceState(null, "", `#domain=${domainId}`);
 
   document.getElementById("btn-back-world").style.display = "inline-flex";
+  document.getElementById("btn-back-text").innerText = lastWorldStage ? `返回${STAGE_META[lastWorldStage].name}` : "返回希望學園";
   document.getElementById("stage-switcher").style.display = "flex";
   document.getElementById("unit-dock").classList.add("visible");
 
@@ -3350,7 +3593,7 @@ function enterDomainIsland(domainId, pushHash = true) {
   renderDomainBar();
   renderBannerAttrBar();
   buildDomainIslandScene(domainId);
-  selectStage("all");
+  selectStage(fromStage || "all");
 
   if (displayView === "list") renderListView();
 }
@@ -3420,8 +3663,22 @@ function renderQuickDock() {
 
 function toggleShowAllPins() {
   showAll30Pins = !showAll30Pins;
+  if (showAll30Pins && !labelsOn) toggleLabels();
   document.getElementById("btn-all-pins").classList.toggle("active", showAll30Pins);
   renderBannerAttrBar();
+}
+
+function toggleLabels() {
+  labelsOn = !labelsOn;
+  try { localStorage.setItem("hubLabelsOn", labelsOn ? "1" : "0"); } catch (e) {}
+  renderLabelToggle();
+}
+
+function renderLabelToggle() {
+  const b = document.getElementById("btn-labels");
+  if (!b) return;
+  b.classList.toggle("on", labelsOn);
+  b.innerText = labelsOn ? "🏷️ 標籤：顯示中" : "🏷️ 標籤：已隱藏";
 }
 
 // ==========================================
@@ -3599,6 +3856,7 @@ function initThreeEngine() {
   const stageEl = document.getElementById("stage-3d");
   const canvas = document.getElementById("canvas-3d");
   labelsLayer = document.getElementById("labels-layer");
+  renderLabelToggle();
 
   scene = new THREE.Scene();
   scene.background = new THREE.Color("#e6f2f5");
@@ -3703,6 +3961,39 @@ function initThreeEngine() {
     }
   });
   window.addEventListener("pointerup", () => { isDragging = false; isPanning = false; });
+
+  // 游標停在島上 → 只顯示那一座島（或那一棟單元小屋）的標籤
+  let lastPickT = 0;
+  stageEl.addEventListener("pointermove", e => {
+    if (isDragging || e.pointerType === "touch") return;
+    if (e.target !== renderer.domElement) return;
+    const now = performance.now();
+    if (now - lastPickT < 60) return;
+    lastPickT = now;
+    const it = pickPinAt(e.clientX, e.clientY);
+    renderer.domElement.style.cursor = it ? "pointer" : "";
+    if (it) {
+      if (hoverClearTimer) { clearTimeout(hoverClearTimer); hoverClearTimer = null; }
+      hoverPin = it;
+    } else if (hoverPin) {
+      scheduleHoverClear();
+    }
+  });
+  stageEl.addEventListener("pointerleave", () => scheduleHoverClear());
+
+  // 點按島嶼：滑鼠直接進入；觸控第一下先顯示標籤，再點一下才進入
+  renderer.domElement.addEventListener("click", e => {
+    if (dragMoved) return;
+    const it = pickPinAt(e.clientX, e.clientY);
+    if (!it) { tapPin = null; return; }
+    const isTouch = e.pointerType === "touch";
+    if (isTouch && tapPin !== it) {
+      tapPin = it;
+      return;
+    }
+    tapPin = null;
+    if (it.onClick) it.onClick();
+  });
   stageEl.addEventListener("wheel", e => {
     spherical.radius = Math.max(14, Math.min(92, spherical.radius + e.deltaY * 0.032));
   }, { passive: true });
@@ -3717,6 +4008,13 @@ function initThreeEngine() {
 
 function applyRouteFromHash() {
   const h = location.hash.replace(/^#/, "");
+  if (h.startsWith("stage=")) {
+    const st = h.split("=")[1];
+    if (STAGE_META[st]) {
+      enterStageArchipelago(st, false);
+      return;
+    }
+  }
   if (h.startsWith("domain=")) {
     const domId = h.split("=")[1];
     if (DOMAIN_MAP[domId]) {
@@ -3741,10 +4039,8 @@ function onResize() {
 
 function resetCamera() {
   if (currentMode === "world") {
-    targetLook.set(0, 0, -2.5);
-    spherical.radius = 56;
-    spherical.theta = 0.08;
-    spherical.phi = 0.96;
+    if (worldStage) setStageCamera();
+    else setHubCamera();
   } else {
     selectStage("all");
   }
@@ -3759,21 +4055,21 @@ function cycleTimeOfDay() {
   todState = (todState + 1) % 3;
   const btn = document.getElementById("btn-tod");
   if (todState === 0) {
-    btn.innerText = "☀️ 時段";
+    btn.innerHTML = "<span>☀️</span><span>時段</span>";
     scene.background.set("#e6f2f5");
     seaMesh.material.color.set("#bae6fd");
     hemiLight.color.setHex(0xffffff);
     sunLight.color.setHex(0xfffbeb);
     sunLight.intensity = 0.92;
   } else if (todState === 1) {
-    btn.innerText = "🌅 夕陽";
+    btn.innerHTML = "<span>🌅</span><span>夕陽</span>";
     scene.background.set("#ffedd5");
     seaMesh.material.color.set("#fdba74");
     hemiLight.color.setHex(0xfed7aa);
     sunLight.color.setHex(0xf97316);
     sunLight.intensity = 1.05;
   } else {
-    btn.innerText = "🌙 星夜";
+    btn.innerHTML = "<span>🌙</span><span>星夜</span>";
     scene.background.set("#0f172a");
     seaMesh.material.color.set("#1e293b");
     hemiLight.color.setHex(0x334155);
@@ -3782,51 +4078,66 @@ function cycleTimeOfDay() {
   }
 }
 
+// 階段與屬性篩選：不符合的標籤連游標停留都不顯示
+function pinPassesFilter(item) {
+  if (currentMode !== "world" && item.el.classList.contains("unit-pin")) {
+    const belong = item.el.classList.contains("stage-1") ? "1" :
+                   item.el.classList.contains("stage-2") ? "2" : "3";
+    if (currentAttrFilter !== "all" && item.attrTag !== currentAttrFilter) return false;
+    if (currentStageFilter !== "all" && belong !== currentStageFilter) return false;
+  }
+  return true;
+}
+
+// 標籤預設隱藏；只有「標籤：顯示中」或老師主動點選屬性時才一直顯示
+function pinShownByMode(item) {
+  if (currentMode !== "world" && item.el.classList.contains("unit-pin") && currentAttrFilter !== "all") return true;
+  if (!labelsOn) return false;
+  const isUnitPin = item.el.classList.contains("unit-pin") || item.el.classList.contains("world-sub-pin");
+  if (isUnitPin) {
+    if (currentMode !== "world" && currentStageFilter !== "all") return true;
+    return item.always || showAll30Pins;
+  }
+  return true;
+}
+
+// 游標／點按位置 → 最近的島嶼或單元標籤
+const pickRaycaster = new THREE.Raycaster();
+const pickNdc = new THREE.Vector2();
+function pickPinAt(clientX, clientY) {
+  if (!worldGroup || !camera || !renderer) return null;
+  const rect = renderer.domElement.getBoundingClientRect();
+  pickNdc.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+  pickNdc.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+  pickRaycaster.setFromCamera(pickNdc, camera);
+  const hits = pickRaycaster.intersectObject(worldGroup, true);
+  if (!hits.length) return null;
+  const p = hits[0].point;
+  let best = null, bestScore = 1;
+  pinItems.forEach(item => {
+    if (!pinPassesFilter(item)) return;
+    // 學習階段的領域小島群：游標停在島上要出現「島名」，不是島上某一棟單元小屋（單元標籤開啟顯示時才可點）
+    if (currentMode === "world" && item.el.classList.contains("world-sub-pin") && !(labelsOn && (item.always || showAll30Pins))) return;
+    const dist = Math.hypot(item.pos.x - p.x, item.pos.z - p.z);
+    const score = dist / (item.pickR || 2.2);
+    if (score < bestScore) { bestScore = score; best = item; }
+  });
+  return best;
+}
+
 function updateLabelsProjection() {
   const stageEl = document.getElementById("stage-3d");
   const w = stageEl.clientWidth;
   const h = stageEl.clientHeight;
 
   pinItems.forEach(item => {
-    // 1. 群島大世界內：代表單元與屬性小膠囊切換邏輯
-    if (currentMode === "world" && item.el.classList.contains("world-sub-pin")) {
-      if (!item.always && !showAll30Pins) {
-        item.el.style.display = "none";
-        return;
-      }
-      item.el.style.opacity = "1";
+    const isFocus = (item === hoverPin || item === tapPin);
+    item.el.classList.toggle("pin-focus", isFocus);
+    if (!pinPassesFilter(item) || (!isFocus && !pinShownByMode(item))) {
+      item.el.style.display = "none";
+      return;
     }
-
-    // 2. 單一領域島內：根據階段篩選與「單元屬性篩選 (currentAttrFilter)」決定顯示邏輯
-    if (currentMode !== "world" && item.el.classList.contains("unit-pin")) {
-      const belongStage = item.el.classList.contains("stage-1") ? "1" :
-                          item.el.classList.contains("stage-2") ? "2" : "3";
-
-      if (currentAttrFilter !== "all") {
-        // 若使用者點選了特定屬性（例如「🦷 潔牙洗漱」或「👕 穿脫儀容」），立即展開所有符合該屬性的單元標籤！
-        if (item.attrTag !== currentAttrFilter) {
-          item.el.style.display = "none";
-          return;
-        }
-        if (currentStageFilter !== "all" && belongStage !== currentStageFilter) {
-          item.el.style.display = "none";
-          return;
-        }
-        item.el.style.opacity = "1";
-      } else if (currentStageFilter === "all") {
-        if (!item.always && !showAll30Pins) {
-          item.el.style.display = "none";
-          return;
-        }
-        item.el.style.opacity = "1";
-      } else {
-        if (belongStage !== currentStageFilter) {
-          item.el.style.display = "none";
-          return;
-        }
-        item.el.style.opacity = "1";
-      }
-    }
+    item.el.style.opacity = "1";
 
     const v = item.pos.clone();
     if (worldGroup) v.y += worldGroup.position.y;
@@ -3906,7 +4217,7 @@ function closeHopeSchoolModal(event) {
 }
 
 function focusHopeSchool() {
-  if (currentMode !== "world") {
+  if (currentMode !== "world" || worldStage) {
     enterWorldView(false);
   }
   stopWhaleTour();
@@ -3923,96 +4234,40 @@ let tourStep = 0;
 const TOUR_STOPS = [
   {
     id: "hope_school",
-    title: "🏫 第一站：希望學園（群島核心）",
-    desc: "歡迎來到希望學園！這裡是大家上課與學習成長的基地營。校訓是「快樂活潑，自立自強」。前庭設有戶外研討木書桌、發光筆電與繪本風師生親切研讀，跟著白鯨領航員準備出發上課囉！",
+    title: "🏫 第一站：希望學園",
+    desc: "歡迎來到希望學園！這裡是大家上課與學習成長的基地營，校訓是「快樂活潑，自立自強」。從這裡出發，三座學習階段島嶼等著我們去探險！",
     lookAt: [0, 1.8, 0],
     spherical: { radius: 24, theta: 0.05, phi: 1.05 },
-    domainId: null
+    stage: null
   },
   {
-    id: "selfcare",
-    title: "🏠 第二站：特需生活管理島（自立生活港灣）",
-    desc: "在紅白暖光燈塔與金黃投射光束下，學會自己穿鞋襪、刷牙洗臉、打掃環境，把每一天過得神氣又乾淨！",
-    lookAt: [-17.5, 2.1, -9.5],
-    spherical: { radius: 18, theta: -0.65, phi: 1.02 },
-    domainId: "selfcare"
+    id: "stage1",
+    title: "🌱 第二站：第一學習階段島",
+    desc: "從認識自己、照顧自己開始，在各領域小島上打好基礎，一步一步學會生活中的大小事！",
+    lookAt: [-24, 2.1, -7],
+    spherical: { radius: 22, theta: -0.6, phi: 1.0 },
+    stage: "1"
   },
   {
-    id: "motor",
-    title: "🤸 第三站：特需動作訓練島（躍動階梯之巔）",
-    desc: "踩上五彩平衡木、走過階梯跳石，小手抓握有力、雙腳踩得穩健，每一步都充滿自立力量！",
-    lookAt: [0, 2.1, -18.5],
-    spherical: { radius: 18, theta: 0.05, phi: 1.02 },
-    domainId: "motor"
+    id: "stage2",
+    title: "🌿 第三站：第二學習階段島",
+    desc: "把學會的本領用在生活裡，和同學合作、動手實踐，讓自己越來越能幹！",
+    lookAt: [24, 2.1, -7],
+    spherical: { radius: 22, theta: 0.6, phi: 1.0 },
+    stage: "2"
   },
   {
-    id: "chinese",
-    title: "📖 第四站：語文繪本島（故事書卷之森）",
-    desc: "翻開海面上浮現的巨型繪本書卷，在魔法羽毛筆鐘樓下聽故事、讀句子，勇敢說出心裡話！",
-    lookAt: [17.5, 2.1, -9.5],
-    spherical: { radius: 18, theta: 0.65, phi: 1.02 },
-    domainId: "chinese"
-  },
-  {
-    id: "math",
-    title: "📐 第五站：生活數學島（幾何時空花園）",
-    desc: "在幾何時鐘高塔與天秤金幣前，數數量、比大小、看時間、學購物，生活有條理又有秩序！",
-    lookAt: [16.5, 2.1, 9.5],
-    spherical: { radius: 18, theta: 1.15, phi: 1.02 },
-    domainId: "math"
-  },
-  {
-    id: "pe",
-    title: "🏃 第六站：健體活力島（聖火守護之島）",
-    desc: "沿著運動場跑道奔跑，聖火高塔指引方向，認識身體、看懂紅綠燈過馬路，健康又有活力！",
-    lookAt: [-16.5, 2.1, 9.5],
-    spherical: { radius: 18, theta: -1.15, phi: 1.02 },
-    domainId: "pe"
-  },
-  {
-    id: "nature",
-    title: "🌱 第七站：自然探險島（四季觀星之島）",
-    desc: "轉動生態大風車、探訪綠意溫室花房，看四季天氣、摸摸花草小動物，大自然是神奇的好朋友！",
-    lookAt: [-32.5, 2.0, -1.0],
-    spherical: { radius: 18, theta: -1.45, phi: 1.02 },
-    domainId: "nature"
-  },
-  {
-    id: "society",
-    title: "🏮 第八站：社會生活島（社區同心市鎮）",
-    desc: "繞過世界地球儀噴泉、搭乘溫馨小公車，認識鄰舍、遵守班規與交通禮貌，大家同心快樂生活！",
-    lookAt: [-14.5, 2.0, -25.5],
-    spherical: { radius: 18, theta: -0.45, phi: 1.02 },
-    domainId: "society"
-  },
-  {
-    id: "life",
-    title: "🌏 第九站：綜合活動島（巧手百寶工坊）",
-    desc: "圍在童軍營火帳篷旁，一起玩桌遊、輪流排隊、動手串珠與垃圾分類，學習當生活小創客！",
-    lookAt: [14.5, 2.0, -25.5],
-    spherical: { radius: 18, theta: 0.45, phi: 1.02 },
-    domainId: "life"
-  },
-  {
-    id: "arts",
-    title: "🎨 第十站：藝術創想島（彩虹調色海礁）",
-    desc: "巨型木畫架立在調色盤天池邊，踏上琴鍵階梯步道，用繽紛色彩與旋律唱出快樂心情！",
-    lookAt: [32.5, 2.0, -1.0],
-    spherical: { radius: 18, theta: 1.45, phi: 1.02 },
-    domainId: "arts"
-  },
-  {
-    id: "daily",
-    title: "🎒 第十一站：生活課程島（萌芽探險新星）",
-    desc: "揹起立體彩色小書包、溜下向日葵滑梯，不怕生、常微笑，國小新生活充滿奇妙與樂趣！",
-    lookAt: [0, 2.0, 20.5],
-    spherical: { radius: 18, theta: 3.14, phi: 1.02 },
-    domainId: "daily"
+    id: "stage3",
+    title: "🌳 第四站：第三學習階段島",
+    desc: "走進社區與更大的世界，練習獨立生活、照顧自己，也學會關心身邊的人！",
+    lookAt: [0, 2.1, 25],
+    spherical: { radius: 22, theta: 0.05, phi: 1.0 },
+    stage: "3"
   }
 ];
 
 function startWhaleGuidedTour(step = 0) {
-  if (currentMode !== "world") {
+  if (currentMode !== "world" || worldStage) {
     enterWorldView(false);
   }
   tourActive = true;
@@ -4037,8 +4292,8 @@ function updateTourStep() {
     document.getElementById("tour-desc").innerText = stop.desc;
     const btnGo = document.getElementById("tour-btn-go");
     if (btnGo) {
-      btnGo.style.display = stop.domainId ? "inline-flex" : "none";
-      btnGo.innerText = stop.domainId ? `🚀 進入${stop.title.split("（")[0].replace(/.*站：/, "")}上課` : "";
+      btnGo.style.display = stop.stage ? "inline-flex" : "none";
+      btnGo.innerText = stop.stage ? `🚀 前往${STAGE_META[stop.stage].name}` : "";
     }
   }
 }
@@ -4053,6 +4308,12 @@ function prevTourStep() {
   updateTourStep();
 }
 
+function stopWhaleTourSilently() {
+  tourActive = false;
+  const bar = document.getElementById("tour-bar");
+  if (bar) bar.classList.remove("visible");
+}
+
 function stopWhaleTour() {
   tourActive = false;
   const bar = document.getElementById("tour-bar");
@@ -4062,9 +4323,9 @@ function stopWhaleTour() {
 
 function visitCurrentTourIsland() {
   const stop = TOUR_STOPS[tourStep];
-  if (stop && stop.domainId) {
+  if (stop && stop.stage) {
     stopWhaleTour();
-    enterDomainIsland(stop.domainId);
+    enterStageArchipelago(stop.stage);
   }
 }
 
