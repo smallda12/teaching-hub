@@ -1254,6 +1254,7 @@ canvas#canvas-3d {
 
   <!-- 右下角鏡頭控制 -->
   <div class="cam-controls">
+    <button class="cam-btn" id="btn-drag-mode" onclick="toggleDragMode()" title="切換拖曳模式：目前為 🔄 視角旋轉（點擊切換為 ✋ 拖曳平移，可將任何島拉到中間觀看）">🔄</button>
     <button class="cam-btn" onclick="zoomCamera(-1)" title="拉近視角（放大）" aria-label="拉近視角">➕</button>
     <button class="cam-btn" onclick="zoomCamera(1)" title="拉遠視角（縮小）" aria-label="拉遠視角">➖</button>
     <button class="cam-btn" onclick="resetCamera()" title="重置視角">⟲</button>
@@ -2988,6 +2989,193 @@ function stageDomains(st) {
 }
 
 // ==========================================
+// ==========================================
+// 🎒 🌱 第一學習階段島（生活自我啟蒙與感官自理）獨特代表道具
+// ==========================================
+function buildStage1Props(g, topY) {
+  // 1. 🎒 巨型自理黃色小書包＋大鉛筆（常規習慣、收拾書包、入學啟蒙）
+  const bagG = new THREE.Group();
+  bagG.position.set(-1.8, topY, -1.2);
+  bagG.add(box(1.25, 1.35, 0.72, "#fbc02d", 0, 0, 0));
+  bagG.add(box(0.95, 0.68, 0.26, "#f57f17", 0, 0.16, 0.42));
+  bagG.add(box(1.1, 0.36, 0.74, "#f9a825", 0, 1.05, 0));
+  bagG.add(box(0.24, 0.14, 0.08, "#ffffff", 0, 0.78, 0.54));
+  bagG.add(box(0.18, 1.15, 0.08, "#0284c7", -0.38, 0.2, -0.38));
+  bagG.add(box(0.18, 1.15, 0.08, "#0284c7", 0.38, 0.2, -0.38));
+  // 斜倚大鉛筆
+  const penG = new THREE.Group();
+  penG.position.set(0.95, 0.35, 0.1);
+  penG.rotation.z = -0.35;
+  penG.add(cyl(0.14, 0.14, 1.7, "#e53935", 0, 0, 0, 6));
+  penG.add(cone(0.14, 0.36, "#ffecb3", 0, 0.85, 0, 6));
+  penG.add(cone(0.06, 0.14, "#263238", 0, 1.1, 0, 6));
+  penG.add(cyl(0.14, 0.14, 0.24, "#f48fb1", 0, -0.95, 0, 6));
+  bagG.add(penG);
+  g.add(bagG);
+
+  // 2. 🟣 感統彩色大龍球＋平衡踩踏石組（動作訓練、肢體協調、觸覺本體覺）
+  const ballG = new THREE.Group();
+  ballG.position.set(1.9, topY, -1.4);
+  const sensorBall = ball(0.95, "#ab47bc", 0, 0.95, 0, 10);
+  ballG.add(sensorBall);
+  ballG.add(cyl(0.96, 0.96, 0.08, "#ce93d8", 0, 0.95, 0, 12));
+  ballG.add(cyl(0.38, 0.44, 0.14, "#42a5f5", -0.85, 0, 0.75, 8));
+  ballG.add(cyl(0.35, 0.42, 0.16, "#66bb6a", 0.85, 0, 0.75, 8));
+  ballG.add(cyl(0.32, 0.38, 0.18, "#ffa726", 0.0, 0, 1.3, 8));
+  g.add(ballG);
+  actorAnimators.push(t => {
+    sensorBall.position.y = 0.95 + Math.sin(t * 3.5) * 0.12;
+  });
+
+  // 3. 🧼 潔淨洗手刷牙洗手台（生活自理、個人衛生、洗手刷牙衣著）
+  const washG = new THREE.Group();
+  washG.position.set(-1.9, topY, 1.7);
+  washG.add(box(1.05, 0.82, 0.72, "#ffffff", 0, 0, 0));
+  washG.add(box(0.92, 0.14, 0.62, "#e0f2fe", 0, 0.82, 0));
+  washG.add(cyl(0.04, 0.04, 0.34, "#94a3b8", 0, 0.92, -0.18));
+  washG.add(ball(0.07, "#94a3b8", 0, 1.1, -0.18));
+  washG.add(cyl(0.09, 0.08, 0.22, "#38bdf8", 0.3, 0.92, 0.12, 8));
+  washG.add(box(0.06, 0.48, 0.32, "#f472b6", -0.54, 0.36, 0));
+  g.add(washG);
+
+  // 4. 🌱 幼苗向日葵花圃（細心培育、自然新芽綻放）
+  const plantG = new THREE.Group();
+  plantG.position.set(2.0, topY, 1.6);
+  plantG.add(box(1.3, 0.26, 0.8, "#8d6e63", 0, 0, 0));
+  plantG.add(box(1.2, 0.12, 0.7, "#5d4037", 0, 0.22, 0));
+  plantG.add(createDaisyCluster(0, 0.26, 0, 5, 0.42));
+  plantG.add(box(0.32, 0.26, 0.22, "#38bdf8", 0.48, 0.22, 0.2));
+  g.add(plantG);
+
+  // 吉祥物與路燈
+  g.add(createMascot(0, topY, 2.7, "#43a047", "#ffd54f"));
+  g.add(createStreetLamp(1.5, topY, 2.6));
+  g.add(createStreetLamp(-1.5, topY, 2.6));
+}
+
+// ==========================================
+// 🎲 🌿 第二學習階段島（動手實踐與合作溝通）獨特代表道具
+// ==========================================
+function buildStage2Props(g, topY) {
+  // 1. 🎲 同儕共玩桌遊方盤＋大骰子＋紅白跳棋（〈桌遊-輪流參與〉、〈溝通訓練-輪流表達〉）
+  const gameG = new THREE.Group();
+  gameG.position.set(-1.8, topY, -1.2);
+  gameG.add(box(1.6, 0.15, 1.6, "#d7ccc8", 0, 0.52, 0));
+  [[-0.65,-0.65],[0.65,-0.65],[-0.65,0.65],[0.65,0.65]].forEach(([lx, lz]) => {
+    gameG.add(cyl(0.06, 0.06, 0.52, "#8d6e63", lx, 0, lz));
+  });
+  gameG.add(box(0.65, 0.04, 0.65, "#ef5350", -0.35, 0.62, -0.35));
+  gameG.add(box(0.65, 0.04, 0.65, "#42a5f5", 0.35, 0.62, -0.35));
+  gameG.add(box(0.65, 0.04, 0.65, "#66bb6a", -0.35, 0.62, 0.35));
+  gameG.add(box(0.65, 0.04, 0.65, "#ffa726", 0.35, 0.62, 0.35));
+  gameG.add(box(0.55, 0.55, 0.55, "#ffffff", 0.22, 0.66, 0.18));
+  gameG.add(cyl(0.12, 0.12, 0.02, "#e53935", 0.22, 1.22, 0.18));
+  gameG.add(cone(0.14, 0.36, "#1e88e5", -0.38, 0.65, -0.28, 8));
+  gameG.add(ball(0.09, "#1e88e5", -0.38, 1.05, -0.28));
+  gameG.add(cone(0.14, 0.36, "#e53935", 0.4, 0.65, -0.35, 8));
+  gameG.add(ball(0.09, "#e53935", 0.4, 1.05, -0.35));
+  g.add(gameG);
+
+  // 2. 🪚 巧手應用工坊長桌＋彩色串珠架（〈巧手應用王〉、〈串珠子-按順序排列〉）
+  const craftG = new THREE.Group();
+  craftG.position.set(1.9, topY, -1.3);
+  craftG.add(box(1.7, 0.16, 0.95, "#8d6e63", 0, 0.65, 0));
+  [[-0.7,-0.38],[0.7,-0.38],[-0.7,0.38],[0.7,0.38]].forEach(([lx, lz]) => {
+    craftG.add(cyl(0.07, 0.07, 0.65, "#5d4037", lx, 0, lz));
+  });
+  craftG.add(cyl(0.03, 0.03, 0.38, "#37474f", -0.45, 0.81, 0));
+  craftG.add(cyl(0.03, 0.03, 0.38, "#37474f", 0.45, 0.81, 0));
+  craftG.add(cyl(0.02, 0.02, 0.9, "#d4af37", 0, 1.0, 0, 6));
+  ["#e53935", "#fdd835", "#1e88e5", "#43a047", "#fb8c00"].forEach((col, idx) => {
+    craftG.add(ball(0.1, col, -0.32 + idx * 0.16, 1.0, 0));
+  });
+  craftG.add(box(0.42, 0.25, 0.26, "#e65100", -0.48, 0.78, -0.18));
+  g.add(craftG);
+
+  // 3. 🥕 實踐種植小菜園＋工具推車（自然觀察與動手實踐）
+  const farmG = new THREE.Group();
+  farmG.position.set(-1.9, topY, 1.7);
+  farmG.add(box(1.4, 0.18, 0.5, "#4e342e", 0, 0, -0.28));
+  farmG.add(box(1.4, 0.18, 0.5, "#4e342e", 0, 0, 0.28));
+  [-0.4, 0, 0.4].forEach(fx => {
+    farmG.add(cone(0.12, 0.35, "#2e7d32", fx, 0.18, -0.28, 6));
+    farmG.add(cone(0.12, 0.35, "#2e7d32", fx, 0.18, 0.28, 6));
+  });
+  farmG.add(box(0.5, 0.22, 0.32, "#fdd835", 0.75, 0.12, 0));
+  farmG.add(cyl(0.1, 0.1, 0.06, "#212121", 0.95, 0.08, 0, 8));
+  g.add(farmG);
+
+  // 4. 🚏 社區生活小站牌（認識周遭、排隊乘車、社區融合）
+  const stopG = new THREE.Group();
+  stopG.position.set(2.0, topY, 1.7);
+  stopG.add(cyl(0.04, 0.04, 1.45, "#37474f", 0, 0, 0));
+  stopG.add(cyl(0.24, 0.24, 0.04, "#0284c7", 0, 1.35, 0, 16));
+  stopG.add(createBench(0, 0, -0.65, 0));
+  g.add(stopG);
+
+  // 吉祥物與路燈
+  g.add(createMascot(0, topY, 2.7, "#1e88e5", "#ffd54f"));
+  g.add(createStreetLamp(1.5, topY, 2.6));
+  g.add(createStreetLamp(-1.5, topY, 2.6));
+}
+
+// ==========================================
+// 🏪 🌳 第三學習階段島（自立生活進階與社區融合）獨特代表道具
+// ==========================================
+function buildStage3Props(g, topY) {
+  // 1. 🏪 自立生活便利小超商＋自動販賣機（金錢購物、超商選物、自立生活管理）
+  const storeG = new THREE.Group();
+  storeG.position.set(-1.9, topY, -1.3);
+  storeG.add(box(1.7, 1.3, 1.2, "#f8fafc", 0, 0, 0));
+  storeG.add(box(1.8, 0.18, 0.45, "#10b981", 0, 1.22, 0.62));
+  storeG.add(box(1.8, 0.06, 0.46, "#ef4444", 0, 1.16, 0.62));
+  storeG.add(box(1.2, 0.72, 0.06, "#bae6fd", 0, 0.32, 0.62));
+  const vendG = new THREE.Group();
+  vendG.position.set(1.2, 0, 0);
+  vendG.add(box(0.55, 1.15, 0.48, "#ef4444", 0, 0, 0));
+  vendG.add(box(0.42, 0.48, 0.06, "#e0f2fe", 0, 0.52, 0.24));
+  vendG.add(box(0.36, 0.16, 0.06, "#1e293b", 0, 0.14, 0.24));
+  storeG.add(vendG);
+  g.add(storeG);
+
+  // 2. 🕰️ 社區雙面鐘樓時刻指針高塔（看懂時間、守時規劃、大眾運輸時刻）
+  const clockG = new THREE.Group();
+  clockG.position.set(1.9, topY, -1.3);
+  clockG.add(box(0.68, 2.1, 0.68, "#64748b", 0, 0, 0));
+  clockG.add(cone(0.55, 0.75, "#b45309", 0, 2.1, 0, 4));
+  clockG.add(cyl(0.28, 0.28, 0.72, "#ffffff", 0, 1.65, 0, 16));
+  clockG.add(box(0.04, 0.16, 0.74, "#1e293b", 0, 1.72, 0));
+  clockG.add(box(0.14, 0.04, 0.74, "#e11d48", 0.06, 1.65, 0));
+  g.add(clockG);
+
+  // 3. 💻 資訊科技發光筆電＋世界地球儀（資訊應用、打字搜尋、開拓視野）
+  const infoG = new THREE.Group();
+  infoG.position.set(-1.8, topY, 1.7);
+  infoG.add(cyl(0.85, 0.8, 0.55, "#8d6e63", 0, 0, 0, 12));
+  infoG.add(box(0.46, 0.04, 0.34, "#334155", -0.15, 0.56, 0));
+  infoG.add(box(0.46, 0.3, 0.04, "#0284c7", -0.15, 0.72, -0.15));
+  const globe = ball(0.18, "#0284c7", 0.32, 0.78, 0.08);
+  infoG.add(globe);
+  infoG.add(cyl(0.02, 0.02, 0.22, "#d4af37", 0.32, 0.62, 0.08));
+  g.add(infoG);
+  actorAnimators.push(t => { globe.rotation.y = t * 0.8; });
+
+  // 4. 🌳 茂密自強大綠樹＋閱讀長椅（邁向獨立、成長守護）
+  const treeG = new THREE.Group();
+  treeG.position.set(2.1, topY, 1.7);
+  treeG.add(cyl(0.24, 0.34, 1.7, "#5d4037", 0, 0, 0));
+  treeG.add(ball(0.88, "#2e7d32", 0, 1.85, 0));
+  treeG.add(ball(0.72, "#388e3c", -0.35, 1.65, 0.25));
+  treeG.add(ball(0.7, "#1b5e20", 0.35, 1.65, -0.2));
+  treeG.add(createBench(-0.75, 0, 1.2, 0.35));
+  g.add(treeG);
+
+  // 吉祥物與路燈
+  g.add(createMascot(0, topY, 2.7, "#fb8c00", "#ffd54f"));
+  g.add(createStreetLamp(1.5, topY, 2.6));
+  g.add(createStreetLamp(-1.5, topY, 2.6));
+}
+
 // 場景零：🏫 希望學園主島（只連接三座學習階段島嶼，畫面保持清爽）
 // ==========================================
 const HUB_STAGE_POS = {
@@ -3027,40 +3215,32 @@ function buildHopeHubScene() {
   ["1", "2", "3"].forEach(st => {
     const sm = STAGE_META[st];
     const p = HUB_STAGE_POS[st];
-    const r = 5.6;
+    const r = 5.8;
     const doms = stageDomains(st);
     const plat = createHexPlatform(r, 2.25, sm.top, sm.trim, "#795548", p.x, p.z);
     worldGroup.add(plat.group);
     plat.group.add(box(r * 1.5, 0.06, 0.75, "#f5ebe0", 0, plat.topY, 0));
     plat.group.add(box(0.75, 0.06, r * 1.5, "#f5ebe0", 0, plat.topY, 0));
 
-    // 島上放該階段三個領域的縮小地標，讓學生一眼看出「這座島裡有很多領域」
-    doms.slice(0, 3).forEach((d, k) => {
-      const m = createDomainMonument(d.landmarkType, d.color, d.trimColor, plat.topY);
-      m.scale.set(0.46, 0.46, 0.46);
-      m.position.x += spots[k].dx;
-      m.position.z += spots[k].dz;
-      plat.group.add(m);
-    });
-    if (doms[0]) {
-      plat.group.add(createDomainFoliage(doms[0].id, -3.6, plat.topY, 1.6, 0.9, 0));
-      plat.group.add(createDomainFoliage(doms[0].id, 3.6, plat.topY, 1.6, 0.9, 1));
+    // 各學習階段專屬代表特徵道具組（象徵各階段能力與單元核心意象）
+    if (st === "1") {
+      buildStage1Props(plat.group, plat.topY);
+    } else if (st === "2") {
+      buildStage2Props(plat.group, plat.topY);
+    } else if (st === "3") {
+      buildStage3Props(plat.group, plat.topY);
     }
-    plat.group.add(createMascot(-1.6, plat.topY, 3.4, sm.trim, "#ffd54f"));
-    plat.group.add(createStreetLamp(1.7, plat.topY, 3.3));
-    plat.group.add(createDaisyCluster(-3.4, plat.topY, -2.6, 4, 0.45));
-    plat.group.add(createDaisyCluster(3.4, plat.topY, -2.6, 4, 0.45));
 
     worldGroup.add(createRoadBridge(0, 0, centerR, p.x, p.z, r, 1.95));
 
     add3DPin(
-      `<div class="label-pill pill-stage-header ${sm.hdr}">
+      `<div class="label-pill pill-stage-header ${sm.hdr}" onclick="focusOrEnterStage('${st}')" title="點擊置中該島至畫面中間觀看；雙擊進入該階段">
         <span class="pin-title">${sm.icon} ${sm.name}</span>
         <span class="pin-badge">${doms.length} 領域・${stageUnitCount(st)} 站</span>
       </div>`,
-      new THREE.Vector3(p.x, plat.topY + 3.6, p.z),
+      new THREE.Vector3(p.x, plat.topY + 3.8, p.z),
       "stage-island-pin",
-      () => enterStageArchipelago(st),
+      () => focusOrEnterStage(st),
       true,
       "",
       6.2
@@ -3443,12 +3623,36 @@ function renderBannerAttrBar() {
   if (!attrBar) return;
   if (currentMode === "world") {
     if (!worldStage) {
-      attrBar.innerHTML = "";
+      // 🏫 希望學園大世界：提供一鍵將各島拉至畫面中間置中觀看之快速導航
+      let html = `
+        <span style="font-size:12px;font-weight:700;color:#64748b;margin-right:4px;">🎯 選擇置中觀看島嶼：</span>
+        <button class="attr-chip ${hubFocusedIsland === 'hope' ? 'active' : ''}" onclick="focusHubIsland('hope')">
+          <span>🏫</span><span>希望學園全景</span>
+        </button>
+        <button class="attr-chip ${hubFocusedIsland === '1' ? 'active' : ''}" onclick="focusHubIsland('1')">
+          <span>🌱</span><span>第一階段：生活啟蒙島</span>
+        </button>
+        <button class="attr-chip ${hubFocusedIsland === '2' ? 'active' : ''}" onclick="focusHubIsland('2')">
+          <span>🌿</span><span>第二階段：生活實踐島</span>
+        </button>
+        <button class="attr-chip ${hubFocusedIsland === '3' ? 'active' : ''}" onclick="focusHubIsland('3')">
+          <span>🌳</span><span>第三階段：自立進階島</span>
+        </button>
+      `;
+      attrBar.innerHTML = html;
       return;
     }
+    const sm = STAGE_META[worldStage];
     attrBar.innerHTML = `
+      <span style="font-size:12px;font-weight:700;color:#64748b;margin-right:4px;">📍 ${sm.icon} ${sm.name}小島群：</span>
+      <button class="attr-chip active" onclick="setStageCamera()">
+        <span>🌟</span><span>群島全景置中</span>
+      </button>
+      <button class="attr-chip" onclick="toggleDragMode()">
+        <span>✋</span><span>切換拖曳平移</span>
+      </button>
       <button class="attr-chip ${showAll30Pins ? 'active' : ''}" onclick="toggleShowAllPins()">
-        🏷️ ${showAll30Pins ? '已展開各島代表單元標籤' : '點此展開各島代表單元標籤'}
+        🏷️ ${showAll30Pins ? '已展開各島代表單元' : '展開各島代表單元'}
       </button>
     `;
     return;
@@ -3482,6 +3686,7 @@ function selectAttrFilter(tag) {
 }
 
 function setHubCamera() {
+  hubFocusedIsland = "hope";
   targetLook.set(0, 1.8, 8.0);
   spherical.radius = 80;
   spherical.theta = 0.0;
@@ -3934,16 +4139,19 @@ function initThreeEngine() {
     window.cloudItems.push({ obj: c, speed: cd.speed });
   });
 
-  // 滑鼠與觸控事件（左鍵旋轉視角、右鍵或按住 Shift 拖曳平移畫面、滾輪縮放）
+  // 滑鼠與觸控事件（支援 ✋ 拖曳平移模式與 🔄 旋轉視角模式，右鍵/中鍵/Shift 隨時平移）
   let isPanning = false;
   stageEl.addEventListener("contextmenu", e => e.preventDefault());
   stageEl.addEventListener("pointerdown", e => {
     isDragging = true;
-    isPanning = (e.button === 2 || e.shiftKey);
+    isPanning = (dragMode === "pan" && e.button === 0) || (e.button === 2 || e.button === 1 || e.shiftKey);
     dragMoved = false;
     autoTour = false;
     document.getElementById("btn-tour").classList.remove("active");
     prevPointer = { x: e.clientX, y: e.clientY };
+    if (isPanning) {
+      stageEl.style.cursor = "grabbing";
+    }
   });
   window.addEventListener("pointermove", e => {
     if (!isDragging) return;
@@ -3951,18 +4159,20 @@ function initThreeEngine() {
     const dy = e.clientY - prevPointer.y;
     if (Math.hypot(dx, dy) > 4) dragMoved = true;
     prevPointer = { x: e.clientX, y: e.clientY };
-    if (isPanning || e.shiftKey) {
-      const panSpeed = spherical.radius * 0.0014;
-      const cosT = Math.cos(spherical.theta);
-      const sinT = Math.sin(spherical.theta);
-      targetLook.x -= (dx * cosT - dy * sinT) * panSpeed;
-      targetLook.z -= (-dx * sinT - dy * cosT) * panSpeed;
+    if (isPanning) {
+      panCamera(dx, dy);
     } else {
       spherical.theta -= dx * 0.0065;
       spherical.phi = Math.max(0.10, Math.min(1.42, spherical.phi - dy * 0.0065));
     }
   });
-  window.addEventListener("pointerup", () => { isDragging = false; isPanning = false; });
+  window.addEventListener("pointerup", () => {
+    isDragging = false;
+    isPanning = false;
+    if (stageEl) {
+      stageEl.style.cursor = dragMode === "pan" ? "grab" : "";
+    }
+  });
 
   // 游標停在島上 → 只顯示那一座島（或那一棟單元小屋）的標籤
   let lastPickT = 0;
@@ -4000,22 +4210,29 @@ function initThreeEngine() {
     spherical.radius = Math.max(12, Math.min(140, spherical.radius + e.deltaY * 0.036));
   }, { passive: true });
 
-  // 觸控雙指縮放 (Pinch-to-zoom)
+  // 觸控雙指縮放與雙指平移 (Pinch-to-zoom & Two-finger Pan)
   let touchStartDist = 0;
   let touchStartRadius = 0;
+  let touchStartMid = { x: 0, y: 0 };
   stageEl.addEventListener("touchstart", e => {
     if (e.touches.length === 2) {
       isDragging = false;
+      isPanning = false;
       touchStartDist = Math.hypot(
         e.touches[0].clientX - e.touches[1].clientX,
         e.touches[0].clientY - e.touches[1].clientY
       );
       touchStartRadius = spherical.radius;
+      touchStartMid = {
+        x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+        y: (e.touches[0].clientY + e.touches[1].clientY) / 2
+      };
     }
   }, { passive: true });
   stageEl.addEventListener("touchmove", e => {
     if (e.touches.length === 2 && touchStartDist > 0) {
       isDragging = false;
+      // 1. 雙指縮放
       const dist = Math.hypot(
         e.touches[0].clientX - e.touches[1].clientX,
         e.touches[0].clientY - e.touches[1].clientY
@@ -4024,6 +4241,13 @@ function initThreeEngine() {
         const factor = touchStartDist / dist;
         spherical.radius = Math.max(12, Math.min(140, touchStartRadius * factor));
       }
+      // 2. 雙指平移世界（將任何島拉至中間）
+      const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      const tdx = midX - touchStartMid.x;
+      const tdy = midY - touchStartMid.y;
+      touchStartMid = { x: midX, y: midY };
+      panCamera(tdx, tdy);
     }
   }, { passive: true });
   stageEl.addEventListener("touchend", e => {
@@ -4069,6 +4293,84 @@ function onResize() {
   camera.aspect = stageEl.clientWidth / stageEl.clientHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(stageEl.clientWidth, stageEl.clientHeight);
+}
+
+let dragMode = "rotate"; // "rotate" or "pan"
+let hubFocusedIsland = "hope";
+
+function toggleDragMode() {
+  dragMode = (dragMode === "rotate") ? "pan" : "rotate";
+  const btn = document.getElementById("btn-drag-mode");
+  const stageEl = document.getElementById("stage-3d");
+  if (btn) {
+    btn.classList.toggle("active", dragMode === "pan");
+    btn.innerHTML = dragMode === "pan" ? "✋" : "🔄";
+    btn.title = dragMode === "pan"
+      ? "目前為：✋ 拖曳平移模式（拖曳可將任何島拉到中間，點擊切換為 🔄 旋轉）"
+      : "目前為：🔄 視角旋轉模式（點擊切換為 ✋ 拖曳平移）";
+  }
+  if (stageEl) {
+    stageEl.style.cursor = dragMode === "pan" ? "grab" : "";
+  }
+}
+
+function panCamera(dx, dy) {
+  const panSpeed = spherical.radius * 0.0013;
+  const forward = new THREE.Vector3();
+  camera.getWorldDirection(forward);
+  forward.y = 0;
+  forward.normalize();
+  const right = new THREE.Vector3().crossVectors(forward, new THREE.Vector3(0, 1, 0)).normalize();
+
+  targetLook.addScaledVector(right, -dx * panSpeed);
+  targetLook.addScaledVector(forward, -dy * panSpeed);
+}
+
+function focusHubIsland(st) {
+  hubFocusedIsland = st;
+  renderBannerAttrBar();
+  const noteEl = document.getElementById("banner-note");
+
+  if (st === "hope") {
+    targetLook.set(0, 1.8, 8.0);
+    spherical.radius = 80;
+    spherical.theta = 0.0;
+    spherical.phi = 0.98;
+    document.getElementById("banner-title").innerText = "🏫 希望學園（快樂活潑，自立自強）";
+    document.getElementById("banner-desc").innerText = "從希望學園出發，點選下方島嶼可直接拉至畫面中間完整觀看，或點「進入階段村落」探索。";
+    if (noteEl) noteEl.style.display = "none";
+  } else {
+    const p = HUB_STAGE_POS[st];
+    const sm = STAGE_META[st];
+    if (p) {
+      targetLook.set(p.x, 2.1, p.z);
+      spherical.radius = 32;
+      spherical.phi = 0.96;
+      document.getElementById("banner-title").innerText = `📍 正在中間觀看：${sm.icon} ${sm.name}島`;
+      document.getElementById("banner-desc").innerText = `目前視角已直接置中於該島！您可 360 度旋轉環繞、拉近拉遠觀看該階段象徵能力的特色地標物品。`;
+      if (noteEl) {
+        noteEl.innerHTML = `
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <button class="t-card-btn" style="background:#0284c7;color:#fff;padding:6px 14px;border-radius:18px;font-size:13px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 6px rgba(2,132,199,0.3);" onclick="enterStageArchipelago('${st}')">
+              <span>🚀</span><span>進入${sm.name}村落</span>
+            </button>
+            <button class="t-card-btn" style="background:#f1f5f9;color:#334155;padding:6px 12px;border-radius:18px;font-size:13px;border:1px solid #cbd5e1;" onclick="focusHubIsland('hope')">
+              <span>⟲</span><span>返回希望學園全景</span>
+            </button>
+          </div>
+        `;
+        noteEl.style.display = "block";
+      }
+    }
+  }
+}
+
+function focusOrEnterStage(st) {
+  if (hubFocusedIsland === st) {
+    enterStageArchipelago(st);
+  } else {
+    focusHubIsland(st);
+  }
 }
 
 function zoomCamera(dir) {
@@ -4261,7 +4563,7 @@ function focusHopeSchool() {
   }
   stopWhaleTour();
   targetLook.set(0, 1.8, 0);
-  spherical.radius = 26;
+  spherical.radius = 24;
   spherical.theta = 0.05;
   spherical.phi = 1.05;
   openHopeSchoolModal();
@@ -4276,7 +4578,7 @@ const TOUR_STOPS = [
     title: "🏫 第一站：希望學園",
     desc: "歡迎來到希望學園！這裡是大家上課與學習成長的基地營，校訓是「快樂活潑，自立自強」。從這裡出發，三座學習階段島嶼等著我們去探險！",
     lookAt: [0, 1.8, 0],
-    spherical: { radius: 26, theta: 0.05, phi: 1.05 },
+    spherical: { radius: 24, theta: 0.05, phi: 1.05 },
     stage: null
   },
   {
@@ -4284,7 +4586,7 @@ const TOUR_STOPS = [
     title: "🌱 第二站：第一學習階段島",
     desc: "從認識自己、照顧自己開始，在各領域小島上打好基礎，一步一步學會生活中的大小事！",
     lookAt: [-24, 2.1, -7],
-    spherical: { radius: 24, theta: -0.6, phi: 1.0 },
+    spherical: { radius: 22, theta: -0.6, phi: 1.0 },
     stage: "1"
   },
   {
@@ -4292,7 +4594,7 @@ const TOUR_STOPS = [
     title: "🌿 第三站：第二學習階段島",
     desc: "把學會的本領用在生活裡，和同學合作、動手實踐，讓自己越來越能幹！",
     lookAt: [24, 2.1, -7],
-    spherical: { radius: 24, theta: 0.6, phi: 1.0 },
+    spherical: { radius: 22, theta: 0.6, phi: 1.0 },
     stage: "2"
   },
   {
@@ -4300,7 +4602,7 @@ const TOUR_STOPS = [
     title: "🌳 第四站：第三學習階段島",
     desc: "走進社區與更大的世界，練習獨立生活、照顧自己，也學會關心身邊的人！",
     lookAt: [0, 2.1, 25],
-    spherical: { radius: 24, theta: 0.05, phi: 1.0 },
+    spherical: { radius: 22, theta: 0.05, phi: 1.0 },
     stage: "3"
   }
 ];
