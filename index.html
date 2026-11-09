@@ -1260,6 +1260,10 @@ canvas#canvas-3d {
     <button class="cam-btn" onclick="resetCamera()" title="重置視角">⟲</button>
     <button class="cam-btn" id="btn-tour" onclick="toggleTour()" title="自動環島巡航運鏡">🎬</button>
     <button class="cam-btn" id="btn-all-pins" onclick="toggleShowAllPins()" title="切換顯示全部單元標籤／精選標籤">🏷️</button>
+    <button class="cam-btn" id="btn-key-hint" onclick="toggleKeyHintToast()" title="⌨️ 操作指引：
+方向鍵（↑ ↓ ← →）或 WASD：上下左右平移畫面
+滑鼠滾輪 或 ➕/➖：拉近／拉遠
+滑鼠左鍵：360度環視旋轉">⌨️</button>
   </div>
 
   <!-- 底部單元快速導覽船塢（進入領域島時顯示該島 30 單元） -->
@@ -4206,7 +4210,11 @@ function initThreeEngine() {
     tapPin = null;
     if (it.onClick) it.onClick();
   });
-  stageEl.addEventListener("wheel", e => {
+  // 滑鼠滾輪縮放（支援畫布與全域視窗，遇彈窗與單元抽屜保留原生滾動）
+  window.addEventListener("wheel", e => {
+    if (e.target.closest && e.target.closest("#treasure-modal, #modal-hope-school, .unit-quick-dock, .modal-content")) {
+      return;
+    }
     spherical.radius = Math.max(12, Math.min(140, spherical.radius + e.deltaY * 0.036));
   }, { passive: true });
 
@@ -4505,6 +4513,33 @@ function animateLoop() {
     spherical.theta += 0.0038;
   }
 
+  // ⌨️ 鍵盤方向鍵（↑ ↓ ← →）與 WASD 上下左右平移畫面
+  if (activeNavKeys.size > 0) {
+    let moveX = 0; // 左右平移 (螢幕視角右/左)
+    let moveZ = 0; // 上下平移 (螢幕視角前/後)
+    if (activeNavKeys.has("ArrowRight") || activeNavKeys.has("KeyD") || activeNavKeys.has("d") || activeNavKeys.has("D")) moveX += 1;
+    if (activeNavKeys.has("ArrowLeft") || activeNavKeys.has("KeyA") || activeNavKeys.has("a") || activeNavKeys.has("A")) moveX -= 1;
+    if (activeNavKeys.has("ArrowUp") || activeNavKeys.has("KeyW") || activeNavKeys.has("w") || activeNavKeys.has("W")) moveZ += 1;
+    if (activeNavKeys.has("ArrowDown") || activeNavKeys.has("KeyS") || activeNavKeys.has("s") || activeNavKeys.has("S")) moveZ -= 1;
+
+    if (moveX !== 0 || moveZ !== 0) {
+      const len = Math.hypot(moveX, moveZ);
+      const nx = moveX / len;
+      const nz = moveZ / len;
+
+      // 平移速度依目前相機拉遠半徑動態縮放，拉遠時快速掃視、拉近時細膩觀賞
+      const speed = spherical.radius * 0.013;
+      const forward = new THREE.Vector3();
+      camera.getWorldDirection(forward);
+      forward.y = 0;
+      forward.normalize();
+      const right = new THREE.Vector3().crossVectors(forward, new THREE.Vector3(0, 1, 0)).normalize();
+
+      targetLook.addScaledVector(right, nx * speed);
+      targetLook.addScaledVector(forward, nz * speed);
+    }
+  }
+
   currentLook.lerp(targetLook, 0.08);
   const cx = spherical.radius * Math.sin(spherical.phi) * Math.sin(spherical.theta);
   const cy = spherical.radius * Math.cos(spherical.phi);
@@ -4533,13 +4568,89 @@ function animateLoop() {
   updateLabelsProjection();
 }
 
+const activeNavKeys = new Set();
+
 window.addEventListener("keydown", e => {
-  if (e.key === "Escape") closeModal();
+  if (e.key === "Escape") {
+    closeModal();
+    return;
+  }
+
+  // 若使用者正在搜尋欄輸入文字，或開啟彈窗時，不攔截方向鍵
+  const tag = document.activeElement ? document.activeElement.tagName : "";
+  if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+  if (document.querySelector(".modal.open, #treasure-modal.open, #modal-hope-school.visible")) return;
+
+  const navCodes = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyW", "KeyS", "KeyA", "KeyD"];
+  if (navCodes.includes(e.code) || ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+    e.preventDefault();
+    if (e.code) activeNavKeys.add(e.code);
+    if (e.key) activeNavKeys.add(e.key);
+    if (autoTour) {
+      autoTour = false;
+      const btn = document.getElementById("btn-tour");
+      if (btn) btn.classList.remove("active");
+    }
+  } else if (e.key === "+" || e.key === "=") {
+    e.preventDefault();
+    zoomCamera(-1);
+  } else if (e.key === "-" || e.key === "_") {
+    e.preventDefault();
+    zoomCamera(1);
+  }
 });
+
+window.addEventListener("keyup", e => {
+  if (e.code) activeNavKeys.delete(e.code);
+  if (e.key) activeNavKeys.delete(e.key);
+});
+
+window.addEventListener("blur", () => {
+  activeNavKeys.clear();
+});
+
+function toggleKeyHintToast() {
+  let toast = document.getElementById("key-hint-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "key-hint-toast";
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.92);
+      color: #ffffff;
+      padding: 10px 22px;
+      border-radius: 24px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.18);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      pointer-events: none;
+    `;
+    toast.innerHTML = `<span>⌨️ <b>鍵盤操作</b>：方向鍵（↑ ↓ ← →）平移畫面</span><span style="color:#94a3b8;">｜</span><span>🖱️ <b>滑鼠</b>：滾輪縮放・左鍵旋轉・右鍵平移</span>`;
+    document.body.appendChild(toast);
+  }
+  toast.style.opacity = "1";
+  toast.style.transform = "translateX(-50%) translateY(0)";
+  clearTimeout(window._keyHintTimer);
+  window._keyHintTimer = setTimeout(() => {
+    toast.style.opacity = "0";
+    toast.style.transform = "translateX(-50%) translateY(10px)";
+  }, 4500);
+}
 
 window.addEventListener("DOMContentLoaded", () => {
   setupSearch();
   initThreeEngine();
+  setTimeout(toggleKeyHintToast, 1600);
 });
 
 
