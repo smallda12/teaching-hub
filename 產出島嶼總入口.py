@@ -2101,10 +2101,13 @@ function moveCamera(now) {
     camera.position.copy(t<0.5?j.startEye:j.endEye);
     controls.target.copy(t<0.5?j.startTarget:j.endTarget);
   } else if (j.flight) {
-    const pos=j.path.getPointAt(k), heading=j.path.getTangentAt(k);
+    const pos=j.path.getPointAt(k);
     flightWhale.position.copy(pos);
-    flightWhale.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0),heading);
-    const chase=pos.clone().addScaledVector(heading,-7); chase.y+=4;
+    // 模型的鼻尖朝局部 +X。升降由航線決定，身體只繞垂直軸轉向。
+    const dx=j.endTarget.x-j.startTarget.x, dz=j.endTarget.z-j.startTarget.z;
+    if (Math.hypot(dx,dz)>0.001) flightWhale.rotation.set(0,Math.atan2(-dz,dx),0);
+    const forward=new THREE.Vector3(1,0,0).applyQuaternion(flightWhale.quaternion);
+    const chase=pos.clone().addScaledVector(forward,-7); chase.y+=4;
     const takeoff=THREE.MathUtils.smoothstep(t,0,0.25), landing=THREE.MathUtils.smoothstep(t,0.70,1);
     camera.position.copy(j.startEye).lerp(chase,takeoff).lerp(j.endEye,landing);
     controls.target.copy(j.startTarget).lerp(pos,takeoff).lerp(j.endTarget,landing);
