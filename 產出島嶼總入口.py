@@ -41,8 +41,8 @@ DOMAIN_CONFIG = [
         "islandStory": "自立生活港灣。在潔牙燈塔與晨光衣帽風車下，學會穿鞋襪、自己刷牙洗臉、打掃環境，把每一天過得神氣又乾淨！",
         "icon": "🏠",
         "color": "#1565c0",
-        "trimColor": "#42a5f5",
-        "groundColor": "#e3f2fd",
+        "trimColor": "#245e9d",
+        "groundColor": "#78b6ea",
         "themeDesc": "衣食住行、穿脫洗漱、清潔打掃與自我保護",
         "landmarkType": "lighthouse_whale",
         "sourceDomains": ["特需生活管理"],
@@ -67,8 +67,8 @@ DOMAIN_CONFIG = [
         "islandStory": "躍動階梯之巔。踩上彩虹平衡木、走過階梯跳石，小手抓握有力、雙腳踩得穩健，每一步都充滿自立力量！",
         "icon": "🤸",
         "color": "#4f5bd5",
-        "trimColor": "#7986cb",
-        "groundColor": "#e8eaf6",
+        "trimColor": "#966214",
+        "groundColor": "#eec75c",
         "themeDesc": "上肢精細操作、下肢平衡移動、姿勢控制與雙手協調",
         "landmarkType": "gym_rainbow",
         "sourceDomains": ["特需功能性動作訓練"],
@@ -93,8 +93,8 @@ DOMAIN_CONFIG = [
         "islandStory": "故事書卷之森。翻開海面上浮現的巨型繪本書卷，在魔法羽毛筆鐘樓下聽故事、讀句子，勇敢說出心裡話！",
         "icon": "📖",
         "color": "#0284c7",
-        "trimColor": "#38bdf8",
-        "groundColor": "#f0f9ff",
+        "trimColor": "#614795",
+        "groundColor": "#ad98de",
         "themeDesc": "語文識字、繪本閱讀、溝通表達與生活應用",
         "landmarkType": "book_tower",
         "sourceDomains": ["語文"],
@@ -119,8 +119,8 @@ DOMAIN_CONFIG = [
         "islandStory": "幾何時空花園。在幾何時鐘高塔與天秤金幣前，數數量、比大小、看時間、學購物，生活有條理又有秩序！",
         "icon": "📐",
         "color": "#ea580c",
-        "trimColor": "#fb923c",
-        "groundColor": "#fff7ed",
+        "trimColor": "#a64a19",
+        "groundColor": "#f2985a",
         "themeDesc": "數與量、幾何形狀、生活計量、時鐘與金錢購物",
         "landmarkType": "clock_pyramid",
         "sourceDomains": ["數學"],
@@ -145,8 +145,8 @@ DOMAIN_CONFIG = [
         "islandStory": "聖火守護之島。沿著運動場跑道奔跑，聖火高塔指引方向，認識身體、看懂紅綠燈過馬路，健康又有活力！",
         "icon": "🏃",
         "color": "#d32f2f",
-        "trimColor": "#ef5350",
-        "groundColor": "#ffebee",
+        "trimColor": "#a22e45",
+        "groundColor": "#ef787c",
         "themeDesc": "健康體適能、球類運動遊戲、安全防護與衛生保健",
         "landmarkType": "stadium_torch",
         "sourceDomains": ["健體", "健康與體育"],
@@ -171,8 +171,8 @@ DOMAIN_CONFIG = [
         "islandStory": "四季觀星之島。轉動生態大風車、探訪綠意溫室花房，看四季天氣、摸摸花草小動物，大自然是神奇的好朋友！",
         "icon": "🌱",
         "color": "#2e7d32",
-        "trimColor": "#81c784",
-        "groundColor": "#e8f5e9",
+        "trimColor": "#297447",
+        "groundColor": "#7fc387",
         "themeDesc": "動植物生態、天氣變化、奇妙磁力與科學探索",
         "landmarkType": "windmill_greenhouse",
         "sourceDomains": ["自然"],
@@ -197,8 +197,8 @@ DOMAIN_CONFIG = [
         "islandStory": "社區同心市鎮。繞過世界地球儀噴泉、搭乘溫馨小公車，認識鄰舍、遵守班規與交通禮貌，大家同心快樂生活！",
         "icon": "🏮",
         "color": "#c0562e",
-        "trimColor": "#e57373",
-        "groundColor": "#ffebee",
+        "trimColor": "#3b526d",
+        "groundColor": "#90a4ba",
         "themeDesc": "家庭學校、社區資源、交通旅遊與多元文化",
         "landmarkType": "gate_town",
         "sourceDomains": ["社會"],
@@ -223,8 +223,8 @@ DOMAIN_CONFIG = [
         "islandStory": "巧手百寶工坊。圍在童軍營火帳篷旁，一起玩桌遊、輪流排隊、動手串珠與垃圾分類，學習當生活小創客！",
         "icon": "🌏",
         "color": "#00838f",
-        "trimColor": "#4dd0e1",
-        "groundColor": "#e0f7fa",
+        "trimColor": "#147b79",
+        "groundColor": "#65cabc",
         "themeDesc": "桌遊輪流、人際互動、生活美感與環境保護",
         "landmarkType": "ferris_camp",
         "sourceDomains": ["綜合"],
@@ -249,8 +249,8 @@ DOMAIN_CONFIG = [
         "islandStory": "彩虹調色海礁。巨型木畫架立在調色盤天池邊，踏上琴鍵階梯步道，用繽紛色彩與旋律唱出快樂心情！",
         "icon": "🎨",
         "color": "#8e24aa",
-        "trimColor": "#ba68c8",
-        "groundColor": "#f3e5f5",
+        "trimColor": "#913777",
+        "groundColor": "#d889bd",
         "themeDesc": "色彩造型、音樂律動、視覺美感與創意手作",
         "landmarkType": "palette_pavilion",
         "sourceDomains": ["藝術", "藝文"],
@@ -275,8 +275,8 @@ DOMAIN_CONFIG = [
         "islandStory": "萌芽探險新星。揹起立體彩色小書包、溜下向日葵滑梯，不怕生、常微笑，國小新生活充滿奇妙與樂趣！",
         "icon": "🎒",
         "color": "#d81b60",
-        "trimColor": "#f06292",
-        "groundColor": "#fce4ec",
+        "trimColor": "#617929",
+        "groundColor": "#b1cb59",
         "themeDesc": "第一學習階段跨領域統整：校園探索、四季自然與生活體驗",
         "landmarkType": "schoolbag_park",
         "sourceDomains": ["生活"],
@@ -523,10 +523,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>高雄特殊教育學校國小部 115 學年度教材｜3D 領域群島與三階段導覽</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🏝️</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="vendor/three-r128.min.js"></script>
 <style>
 :root {
   --bg-sea: #e6f2f5;
@@ -1703,6 +1700,83 @@ canvas#canvas-3d {
 }
 .tour-btn-go:hover { transform: translateY(-1.5px); }
 
+/* 白鯨班的星球航線：深色天幕、米色書頁、金色航標。 */
+:root { --atlas-ink:#463629; --atlas-paper:#fff6df; --atlas-gold:#efc875; --atlas-night:#19253e; }
+body { background:var(--atlas-night); }
+header.topbar { background:#18253e; border-bottom:1px solid #475068; box-shadow:none; }
+.brand-titles h1 {color:#fff4d9; font:700 clamp(17px,1.5vw,24px)/1.3 "PMingLiU",serif;letter-spacing:.07em;}
+.brand-titles p {color:#e4d4b6;}
+nav.domain-bar {background:#202d47;border-bottom:1px solid #4d5364;}
+.domain-chip {background:#30415b;color:#f8efdb;border:1px solid #566077;box-shadow:none;}
+.domain-chip.active {background:#f4d48c;color:#3b2b23;border-color:#f8dc9a;}
+.domain-chip.active .chip-count {background:#675139;color:#fff8e8;}
+.top-right-tools .icon-pill-btn,.label-toggle-btn,.cam-controls,.stage-switcher {background:#fff4d9;color:#473728;border-color:#ccad77;}
+.cam-btn {color:#493827;background:#fff9e7;}
+.island-info-banner,.unit-quick-dock,.treasure-modal,.hope-modal,.tour-bar {
+  color:var(--atlas-ink); background:radial-gradient(ellipse at 10% 0,#fffaf0 0%,#f8ecd3 65%,#ecdbbb 100%);
+  border:1px solid #c5aa7d; border-radius:19px 15px 22px 14px;
+  box-shadow:inset 0 0 0 4px #fffae780,0 12px 32px #10142545;
+}
+.island-info-banner {left:clamp(12px,2.2vw,36px);top:clamp(12px,3vh,34px);max-height:calc(100% - 100px);overflow:auto;pointer-events:auto;}
+.banner-title,.modal-unit-title,.tour-title {font-family:"Noto Serif TC","PMingLiU",serif;color:var(--atlas-ink);}
+.banner-desc {color:#584a39;}
+.atlas-home .island-info-banner {width:clamp(228px,21vw,320px);max-width:unset;padding:clamp(18px,2vw,29px);}
+.atlas-home .banner-title {font-size:clamp(24px,2.7vw,38px);letter-spacing:.07em;line-height:1.4;}
+.atlas-home .banner-desc {font-size:16px;line-height:1.65;margin:6px 0 14px;}
+.atlas-home #banner-attrs {display:grid;gap:3px;margin:0;padding-top:10px;border-top:1px dashed #b69d74;}
+.route-stop {width:100%;display:grid;grid-template-columns:35px 1fr;gap:10px;align-items:center;text-align:left;border:1px solid transparent;background:transparent;color:var(--atlas-ink);padding:7px 5px;min-height:45px;font:inherit;cursor:pointer;border-radius:12px;}
+.route-stop:hover,.route-stop[aria-pressed=true] {background:#ebd5a85c;border-color:#bfa574;}
+.route-mark {width:33px;height:33px;border:1px dashed #b29a70;border-radius:50%;display:grid;place-items:center;background:#fffaec;font-size:18px;}
+.route-stop strong,.route-stop small {display:block;} .route-stop strong {font-size:16px;}
+.route-stop small {font-size:14px;color:#665440;line-height:1.6;}
+.atlas-open {border:1px solid #af7b36;border-radius:10px;background:#f0c773;color:#402d1a;padding:9px 12px;min-height:44px;font-family:inherit;cursor:pointer;}
+#banner-note .atlas-open {font:700 16px/1.3 "Microsoft JhengHei",sans-serif;}
+.atlas-home #banner-note {margin:0 0 12px;background:transparent;padding:0;}
+.cam-controls {border-radius:25px;background:transparent;}
+:focus-visible {outline:3px solid #b95f23;outline-offset:3px;}
+@media(max-width:820px) {
+  header.topbar {height:auto;min-height:96px;display:grid;grid-template-columns:1fr;align-content:center;gap:4px;padding:5px 10px;}
+  .brand-group {min-width:0;}.brand-logo {font-size:20px;}
+  .brand-titles h1 {font-size:16px;white-space:normal;} .brand-titles p {display:none;}
+  .top-right-tools {justify-content:flex-start;gap:4px;min-width:0;}
+  .top-right-tools .icon-pill-btn {padding:4px;min-width:32px;height:32px;justify-content:center;}
+  .top-right-tools .search-box {flex:1;max-width:230px;min-width:68px;}
+  .top-right-tools .search-input,.top-right-tools .search-input:focus {width:100%;min-width:0;}
+  .stage-switcher {order:3;max-width:100%;overflow:auto;margin:0;}.stage-btn {font-size:13px;padding:3px 6px;}
+  body:has(#stage-switcher[style*="flex"]) header.topbar {min-height:122px;}
+  nav.domain-bar {top:96px;height:42px;padding:4px 8px;}
+  #stage-3d,#list-view {top:138px;}
+  body:has(#stage-switcher[style*="flex"]) nav.domain-bar {top:122px;}
+  body:has(#stage-switcher[style*="flex"]) :is(#stage-3d,#list-view) {top:164px;}
+  .domain-chip {font-size:14px;}
+  .atlas-home .island-info-banner {display:block;top:auto;bottom:76px;left:10px;width:calc(100% - 20px);padding:10px 12px;max-height:36%;overflow:auto;}
+  .atlas-home .banner-title {font-size:19px;}
+  .atlas-home .banner-desc {display:none;}
+  .atlas-home #banner-attrs {display:flex;flex-wrap:nowrap;gap:3px;overflow-x:auto;padding:4px 0 0;}
+  .route-stop {display:flex;justify-content:center;min-width:70px;flex:1;padding:3px 1px;min-height:42px;gap:3px;}
+  .route-stop small {display:none;}.route-stop strong {font-size:14px;}
+  .route-mark {width:22px;height:22px;font-size:13px;}
+  .atlas-home .cam-controls {left:8px;right:auto;}
+  .atlas-home #banner-note {margin:4px 0;}
+  .cam-controls {flex-direction:row;right:8px;bottom:6px;gap:2px;max-width:calc(100% - 16px);}
+  .cam-btn {width:clamp(34px,10.8vw,44px);height:40px;} .label-toggle-btn {right:8px;bottom:47px;padding:3px 8px;font-size:13px;}
+  .unit-quick-dock.visible {bottom:85px;max-height:22vh;overflow:auto;}
+  .search-dropdown {position:fixed;left:8px;right:8px;top:88px;width:auto;}
+}
+@media (max-height:540px) and (orientation:landscape) {
+ .atlas-home .island-info-banner {left:8px;top:8px;bottom:auto;width:225px;max-height:calc(100% - 16px);padding:8px;}
+ .atlas-home #banner-attrs {display:grid;grid-template-columns:1fr 1fr;} .route-stop small {display:none;}
+}
+
+.atlas-all {min-height:44px;padding:8px 10px;border:1px solid #bca37a;border-radius:10px;background:#fff8e9;color:#513f2e;font:inherit;cursor:pointer;}
+.route-short {display:none;} @media(max-width:820px){.route-wide{display:none;}.route-short{display:inline;}}
+#canvas-3d,.label-pin { touch-action:none; }
+#stage-3d.orbit-dragging, #stage-3d.orbit-dragging canvas {cursor:grabbing !important;}
+#btn-tour {font:700 14px/1 system-ui;}
+#btn-tour[aria-pressed="true"] {background:#654815;color:white;}
+.route-stop .route-mark {border:2px solid var(--island-ink);background:#fffcf3;}
+.route-stop[aria-pressed="true"] {box-shadow:inset 4px 0 var(--island-ink);}
+:root {--s1-color:#885506;--s2-color:#664193;--s3-color:#a53941;}
 </style>
 </head>
 <body>
@@ -1776,7 +1850,7 @@ canvas#canvas-3d {
     <button class="cam-btn" onclick="zoomCamera(-1)" title="拉近視角（放大）" aria-label="拉近視角">➕</button>
     <button class="cam-btn" onclick="zoomCamera(1)" title="拉遠視角（縮小）" aria-label="拉遠視角">➖</button>
     <button class="cam-btn" onclick="resetCamera()" title="重置視角">⟲</button>
-    <button class="cam-btn" id="btn-tour" onclick="toggleTour()" title="自動環島巡航運鏡">🎬</button>
+    <button class="cam-btn" id="btn-tour" onclick="toggleTour()" title="自動環繞 360 度" aria-label="自動環繞 360 度" aria-pressed="false">360°</button>
     <button class="cam-btn" id="btn-all-pins" onclick="toggleShowAllPins()" title="切換顯示全部單元標籤／精選標籤">🏷️</button>
     <button class="cam-btn" id="btn-key-hint" onclick="toggleKeyHintToast()" title="⌨️ 操作指引：
 方向鍵（↑ ↓ ← →）或 WASD：上下左右平移畫面
@@ -1972,9 +2046,9 @@ let labelsOn = false;       // 標籤預設隱藏
 try { labelsOn = localStorage.getItem("hubLabelsOn") === "1"; } catch (e) {}
 let hoverPin = null, tapPin = null, hoverClearTimer = null;
 const STAGE_META = {
-  "1": { icon: "🌱", name: "第一學習階段", top: "#e8f5e9", trim: "#43a047", hdr: "pill-s1-hdr" },
-  "2": { icon: "🌿", name: "第二學習階段", top: "#e3f2fd", trim: "#1e88e5", hdr: "pill-s2-hdr" },
-  "3": { icon: "🌳", name: "第三學習階段", top: "#fff3e0", trim: "#fb8c00", hdr: "pill-s3-hdr" }
+  "1": { icon: "🌱", name: "第一學習階段", top: "#ffcc52", trim: "#b97915", hdr: "pill-s1-hdr" },
+  "2": { icon: "🌿", name: "第二學習階段", top: "#b397df", trim: "#7043a1", hdr: "pill-s2-hdr" },
+  "3": { icon: "🌳", name: "第三學習階段", top: "#ff9178", trim: "#ba464a", hdr: "pill-s3-hdr" }
 };
 let activeModalUnitList = [];
 let activeModalIndex = 0;
@@ -1983,13 +2057,13 @@ let activeModalIndex = 0;
 // Three.js 3D 黏土微縮沙盤引擎
 // ==========================================
 let scene, camera, renderer, worldGroup, labelsLayer;
-let isDragging = false, dragMoved = false, prevPointer = { x: 0, y: 0 };
+let isDragging = false, dragMoved = false;
 let spherical = { radius: 42, theta: 0.68, phi: 1.02 };
 let targetLook = new THREE.Vector3(0, 0, 0);
 let currentLook = new THREE.Vector3(0, 0, 0);
 let autoTour = false;
 let todState = 0; // 0: day, 1: sunset, 2: night
-let hemiLight, sunLight, backLight, seaMesh;
+let hemiLight, sunLight, backLight, seaMesh, schoolSky, daySky, skyClouds, sunRainbow;
 const pinItems = [];
 const spinningMeshes = [];
 
@@ -2032,25 +2106,219 @@ function ball(r, color, x = 0, y = 0, z = 0, seg = 8) {
 
 // 帶彩色邊框與厚實土層的立體六角地塊（對齊參考圖的精緻鑲邊六角島）
 // 經典立體六角地塊（供領域三階段村落島使用）
+// 以緯線雕出星球的剖面。各圈共用經線，岩層、沙岸與草皮之間沒有接縫。
+let atlasSurface;
+function schoolPaperMaterial() {
+  if (atlasSurface) return atlasSurface;
+  const paper=document.createElement("canvas");
+  paper.width=512;paper.height=256;
+  const ctx=paper.getContext("2d");
+  ctx.fillStyle="#f7ecdc";ctx.fillRect(0,0,512,256);
+  let seed=19;
+  function sample(){seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;}
+  // 薄薄的墨色短筆觸沿著石層生長，遠看仍然能分辨地層的色帶。
+  for(let n=0;n<9500;n++){
+    const x=sample()*512,y=sample()*256;
+    ctx.strokeStyle=sample()<0.38?"rgba(255,255,250,.48)":"rgba(96,65,63,.18)";
+    ctx.lineWidth=0.5+sample();
+    ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+1+sample()*4,y+sample()*1.4);ctx.stroke();
+  }
+  const texture=new THREE.CanvasTexture(paper);
+  texture.wrapS=THREE.RepeatWrapping;
+  atlasSurface=new THREE.MeshLambertMaterial({map:texture,vertexColors:true,side:THREE.DoubleSide});
+  return atlasSurface;
+}
+
+// 在小島邊緣用一個網格畫出草葉，保留中央的建築與教材。
+function meadowFringe(radius,height) {
+  const points=[], colors=[];
+  for(let i=0;i<146;i++) {
+    const a=i*2.399963, ring=0.75+0.17*(0.5+0.5*Math.sin(i*17.21));
+    const x=radius*ring*Math.cos(a),z=radius*ring*Math.sin(a);
+    const shade=new THREE.Color(["#748866","#96a175","#d7b868","#8a9c80"][i%4]);
+    for(let k=0;k<3;k++){
+      const angle=a+k*2.09,dx=Math.cos(angle),dz=Math.sin(angle);
+      const w=radius*0.009, h=radius*(0.018+0.013*(1+Math.sin(i)));
+      points.push(x-w*dz,height,z+w*dx,x+w*dz,height,z-w*dx,x+w*2*dx,height+h,z+w*2*dz);
+      for(let j=0;j<3;j++) colors.push(shade.r,shade.g,shade.b);
+    }
+  }
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute("position",new THREE.Float32BufferAttribute(points,3));
+  geo.setAttribute("color",new THREE.Float32BufferAttribute(colors,3));
+  return new THREE.Mesh(geo,new THREE.MeshBasicMaterial({side:THREE.DoubleSide,vertexColors:true}));
+}
+
+function planetGround(radius, height, grass, stone) {
+  const levels = [[0.02,-1.05],[0.36,-0.98],[0.63,-0.83],[0.82,-0.61],
+    [0.95,-0.34],[1,-0.13],[1.01,-0.065],[0.99,-0.027],[0.91,0],[0.66,0],[0.02,0]];
+  const rock = new THREE.Color(stone), lawn = new THREE.Color(grass);
+  const strata = [rock.clone().multiplyScalar(0.56),rock.clone().multiplyScalar(0.72),
+    rock.clone().multiplyScalar(0.88),rock,rock.clone().lerp(lawn,0.22),
+    rock.clone().lerp(lawn,0.52),lawn.clone().lerp(new THREE.Color("#fff1ca"),0.35),lawn,lawn,lawn];
+  const faces = [], colors = [], uv=[];
+  const segments = 38;
+  function point(ring, column) {
+    const a = column / segments * Math.PI * 2;
+    const [r, depth] = levels[ring];
+    const ripple = 1 + 0.024*Math.sin(5*a+0.6) + 0.015*Math.cos(3*a);
+    const relief = ring < 8 ? 0.018*Math.sin(4*a + ring*0.45) * r : 0;
+    return [Math.cos(a)*radius*r*ripple, height-0.05+radius*(depth+relief), Math.sin(a)*radius*r*ripple];
+  }
+  for (let j=0; j<levels.length-1; j++) {
+    for (let i=0; i<segments; i++) {
+      const a=point(j,i), b=point(j,i+1), c=point(j+1,i), d=point(j+1,i+1);
+      const tint=new THREE.Color(strata[j]).multiplyScalar(0.98+0.035*Math.sin(i*1.3+j*0.5));
+      faces.push(...a,...c,...b,...b,...c,...d);
+      const u=3*i/segments, v=j/(levels.length-1);
+      const u2=3*(i+1)/segments,v2=(j+1)/(levels.length-1);
+      uv.push(u,v,u,v2,u2,v,u2,v,u,v2,u2,v2);
+      for (let n=0;n<6;n++) colors.push(tint.r,tint.g,tint.b);
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position",new THREE.Float32BufferAttribute(faces,3));
+  geo.setAttribute("color",new THREE.Float32BufferAttribute(colors,3));
+  geo.computeVertexNormals();
+  geo.setAttribute("uv",new THREE.Float32BufferAttribute(uv,2));
+  const mesh = new THREE.Mesh(geo,schoolPaperMaterial());
+  mesh.receiveShadow=true;
+  return mesh;
+}
+
+// 下方三組星座分別取形自翻開的課本、鉛筆與白鯨，背景只在初始化繪製一次。
+function paintDaySky() {
+  const canvas = document.createElement("canvas");
+  canvas.width=1536; canvas.height=1024;
+  const ctx=canvas.getContext("2d");
+  const sky=ctx.createLinearGradient(0,0,0,1024);
+  sky.addColorStop(0,"#56baea"); sky.addColorStop(0.55,"#a5e6f1");
+  sky.addColorStop(1,"#fff1c2");
+  ctx.fillStyle=sky;ctx.fillRect(0,0,1536,1024);
+
+  function cloud(x,y,scale) {
+    ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
+    const wash=ctx.createLinearGradient(0,-55,0,15);
+    wash.addColorStop(0,"#fffdf4");wash.addColorStop(1,"#e5f7fa");
+    ctx.fillStyle=wash;ctx.beginPath();ctx.moveTo(-88,8);
+    ctx.bezierCurveTo(-104,-8,-82,-31,-61,-25);
+    ctx.bezierCurveTo(-56,-51,-34,-52,-19,-44);
+    ctx.bezierCurveTo(0,-83,43,-73,53,-37);
+    ctx.bezierCurveTo(80,-45,102,-23,103,-8);
+    ctx.bezierCurveTo(132,-3,119,13,99,14);
+    ctx.bezierCurveTo(63,21,-48,20,-88,8);ctx.fill();ctx.restore();
+  }
+  [[118,184,1.15],[485,285,.55],[1342,354,1.15],[1550,510,.68],[190,620,.65],[935,647,.46],[65,907,1.8],[1422,888,1.7]].forEach(p=>cloud(...p));
+
+  return new THREE.CanvasTexture(canvas);
+}
+
+// 太陽與六道彩帶共用一個世界座標，從側面也能看見彩帶厚度。
+function createSunRainbow() {
+  const group = new THREE.Group();
+  group.name = "太陽與彩虹";
+  group.position.set(6.1, 4.9, -10.2);
+  group.rotation.y = 0.35;
+
+  const gold = new THREE.MeshStandardMaterial({
+    color: 0xffcc52, emissive: 0xffb234, emissiveIntensity: 0.40, roughness: 0.75
+  });
+  const sun = new THREE.Mesh(new THREE.SphereGeometry(0.88, 32, 24), gold);
+  group.add(sun);
+
+  const rayGeometry = new THREE.SphereGeometry(1, 12, 8);
+  const rayMaterial = new THREE.MeshLambertMaterial({color: 0xffca5b, emissive: 0x694013});
+  for (let i = 0; i < 12; i++) {
+    const angle = i * Math.PI / 6;
+    if (i === 2 || i === 3) continue; // 留出彩虹與太陽交會的位置。
+    const direction = new THREE.Vector3(Math.cos(angle), Math.sin(angle), 0.24 * Math.cos(3 * angle)).normalize();
+    const ray = new THREE.Mesh(rayGeometry, rayMaterial);
+    ray.position.copy(direction).multiplyScalar(1.16);
+    ray.scale.set(0.069, 0.20, 0.069);
+    ray.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
+    group.add(ray);
+  }
+
+  const colours = [0xed776d, 0xffa447, 0xffdc57, 0x76c989, 0x6bb5e3, 0xb095db];
+  colours.forEach((colour, index) => {
+    const offset = (2.5 - index) * 0.16;
+    const points = [];
+    for (let step = 0; step <= 32; step++) {
+      const t = step / 32;
+      const a = Math.PI * t;
+      points.push(new THREE.Vector3(
+        2.55 - (2.55 + offset) * Math.cos(a),
+        (2.15 + offset) * Math.sin(a) - 0.38 * t,
+        -0.62 * Math.sin(a) + 0.45 * t
+      ));
+    }
+    const curve = new THREE.CatmullRomCurve3(points);
+    const material = new THREE.MeshStandardMaterial({color: colour, roughness: 0.8});
+    group.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 40, 0.094, 10, false), material));
+    const tip = new THREE.Mesh(new THREE.SphereGeometry(0.094, 10, 8), material);
+    tip.position.copy(points[points.length - 1]);
+    group.add(tip);
+  });
+  return group;
+}
+
+function paintSchoolSky() {
+  const canvas = document.createElement("canvas");
+  canvas.width=1536; canvas.height=1024;
+  const ctx=canvas.getContext("2d");
+  const sky=ctx.createLinearGradient(0,0,canvas.width,canvas.height);
+  sky.addColorStop(0,"#101932"); sky.addColorStop(0.58,"#28395a"); sky.addColorStop(1,"#49374f");
+  ctx.fillStyle=sky; ctx.fillRect(0,0,canvas.width,canvas.height);
+  let seed=9417;
+  const random=()=>{ seed=(Math.imul(1664525,seed)+1013904223)>>>0; return seed/4294967296; };
+  function wash(x,y,r,color) {
+    const fill=ctx.createRadialGradient(x,y,0,x,y,r);
+    fill.addColorStop(0,color); fill.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.fillStyle=fill; ctx.fillRect(x-r,y-r,2*r,2*r);
+  }
+  for(let i=0;i<65;i++) {
+    const x=random()*1600, y=850-x*0.40+(random()-0.5)*250;
+    wash(x,y,60+random()*165,"rgba(187,173,210,0.07)");
+  }
+  for(let i=0;i<620;i++) {
+    const x=random()*1536,y=random()*1024,r=0.4+random()**3*1.8;
+    ctx.globalAlpha=0.3+random()*0.6;
+    ctx.fillStyle=i%4?"#fff1cb":"#cee9f7";
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+    if(r>1.95){ctx.fillRect(x-4*r,y-0.5,8*r,1);ctx.fillRect(x-0.5,y-3*r,1,6*r);}
+  }
+  ctx.globalAlpha=1;
+  function constellation(points) {
+    ctx.beginPath();
+    points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));
+    ctx.strokeStyle="rgba(238,211,163,0.32)";ctx.lineWidth=1.6;ctx.stroke();
+    for(const [x,y] of points) {ctx.fillStyle="#e9d5a2";ctx.beginPath();ctx.arc(x,y,2.4,0,Math.PI*2);ctx.fill();}
+  }
+  constellation([[150,145],[180,151],[201,171],[223,148],[250,141],[248,178],[222,184],[201,199],[176,183],[151,178],[150,145]]);
+  constellation([[1230,225],[1290,155],[1303,167],[1243,237],[1222,246],[1230,225]]);
+  constellation([[1160,835],[1183,817],[1211,814],[1231,823],[1250,824],[1267,811],[1265,829],[1274,837],[1250,837],[1224,854],[1190,855],[1168,849],[1160,835]]);
+  return new THREE.CanvasTexture(canvas);
+}
+
+function starPath(x1,z1,r1,x2,z2,r2,yHeight=1.95) {
+  const dx=x2-x1, dz=z2-z1, length=Math.hypot(dx,dz);
+  const direction=new THREE.Vector3(dx/length,0,dz/length);
+  const first=new THREE.Vector3(x1,yHeight,z1).addScaledVector(direction,r1);
+  const last=new THREE.Vector3(x2,yHeight,z2).addScaledVector(direction,-r2);
+  const middle=first.clone().lerp(last,0.5);
+  middle.y+=Math.min(2,first.distanceTo(last)*0.12);
+  const curve=new THREE.QuadraticBezierCurve3(first,middle,last);
+  const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(curve.getPoints(48)),
+    new THREE.LineDashedMaterial({color:todState===2?0xead39d:0x536b85,dashSize:0.42,gapSize:0.28,transparent:true,opacity:0.8}));
+  line.computeLineDistances();
+  return line;
+}
+
 function createHexPlatform(radius, height, topHex, trimHex, dirtHex, x, z) {
   const g = new THREE.Group();
   g.position.set(x, 0, z);
 
-  const cliff = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.98, radius * 0.82, height, 6), mat(dirtHex));
-  cliff.position.y = height / 2 - 0.25;
-  cliff.castShadow = true; cliff.receiveShadow = true;
-  g.add(cliff);
-
-  const rim = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.03, radius * 1.01, 0.34, 6), mat(trimHex));
-  rim.position.y = height - 0.32;
-  rim.castShadow = true; rim.receiveShadow = true;
-  g.add(rim);
-
-  const top = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.96, radius * 0.96, 0.26, 6), mat(topHex));
-  top.position.y = height - 0.18;
-  top.receiveShadow = true;
-  g.add(top);
-
+  g.add(planetGround(radius,height,topHex,trimHex), meadowFringe(radius,height-0.04));
   return { group: g, topY: height - 0.05 };
 }
 
@@ -2392,23 +2660,7 @@ function buildHopeSchoolCenter(radius, height, x, z) {
   const g = new THREE.Group();
   g.position.set(x, 0, z);
 
-  // 主台地岩壁（16邊圓形）
-  const cliff = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.05, radius * 0.92, height, 16), mat("#6d4c41"));
-  cliff.position.y = height / 2 - 0.25;
-  cliff.castShadow = true; cliff.receiveShadow = true;
-  g.add(cliff);
-
-  // 暖金鑲邊護欄
-  const rim = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.08, radius * 1.05, 0.38, 16), mat("#f59e0b"));
-  rim.position.y = height - 0.32;
-  rim.castShadow = true; rim.receiveShadow = true;
-  g.add(rim);
-
-  // 頂層綠意草坪
-  const top = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.02, radius * 1.02, 0.28, 16), mat("#fdfbf7"));
-  top.position.y = height - 0.18;
-  top.receiveShadow = true;
-  g.add(top);
+  g.add(planetGround(radius,height,"#80bb61","#23794e"), meadowFringe(radius,height-0.04));
 
   // 前方延伸親水木棧碼頭（白鯨啟航處）
   const dock = box(radius * 0.88, 0.22, 1.35, "#8d6e63", 0, height - 0.08, radius * 0.72);
@@ -2515,29 +2767,33 @@ function createHopeSchoolMonument(yBase) {
 
   // 5. 碼頭守護白鯨（溫柔的白鯨領航員）
   const whaleG = new THREE.Group();
-  whaleG.position.set(2.45, 0.1, 1.35);
-  whaleG.rotation.y = -0.52;
-  const whaleBody = ball(0.78, "#ffffff", 0, 0.38, 0, 12);
-  whaleBody.scale.set(1.45, 0.85, 0.95);
-  const whaleFinL = box(0.45, 0.08, 0.22, "#e2e8f0", -0.15, 0.32, 0.78);
-  whaleFinL.rotation.y = 0.45;
-  const whaleFinR = box(0.45, 0.08, 0.22, "#e2e8f0", -0.15, 0.32, -0.78);
-  whaleFinR.rotation.y = -0.45;
-  const whaleTail = cone(0.38, 0.72, "#ffffff", -1.05, 0.46, 0, 6);
-  whaleTail.rotation.z = Math.PI / 2.3;
-  whaleG.add(whaleBody, whaleFinL, whaleFinR, whaleTail);
-  // 白鯨彩虹水花光環
-  whaleG.add(ball(0.16, "#38bdf8", 0.48, 1.05, 0, 6));
-  whaleG.add(ball(0.11, "#7dd3fc", 0.56, 1.38, 0.05, 6));
-  whaleG.add(ball(0.07, "#bae6fd", 0.62, 1.62, -0.05, 6));
-  g.add(whaleG);
-
-  // 守護白鯨親水悠游動態
-  actorAnimators.push(t => {
-    whaleG.position.y = 0.1 + 0.04 * Math.sin(t * 2.0);
-    whaleTail.rotation.y = 0.22 * Math.sin(t * 3.5);
-    whaleFinL.rotation.z = 0.12 * Math.sin(t * 2.8);
-    whaleFinR.rotation.z = -0.12 * Math.sin(t * 2.8);
+  whaleG.position.set(3.15,0.1,2.65);
+  whaleG.rotation.y=-0.35;
+  function whaleOval(parent,x,y,z,sx,sy,sz,tint) {
+    const part=ball(1,tint,x,y,z,18);
+    part.scale.set(sx,sy,sz);
+    parent.add(part);
+    return part;
+  }
+  whaleOval(whaleG,0,0.60,0,1.12,0.55,0.56,"#e2ece8");
+  whaleOval(whaleG,0.63,0.75,0,0.63,0.58,0.51,"#fff8e6");
+  whaleOval(whaleG,1.00,0.60,0,0.40,0.24,0.37,"#fcf1dc");
+  for (const side of [-1,1]) {
+    whaleOval(whaleG,0.87,0.77,side*0.45,0.066,0.073,0.041,"#2d3548");
+    whaleOval(whaleG,0.86,0.79,side*0.48,0.017,0.021,0.012,"#fffaf0");
+    const fin=whaleOval(whaleG,-0.14,0.29,side*0.52,0.41,0.09,0.16,"#bbd4d3");
+    fin.rotation.y=side*0.63;fin.rotation.z=0.20;
+  }
+  const tail=new THREE.Group();tail.position.set(-1,0.56,0);whaleG.add(tail);
+  whaleOval(tail,-0.18,0.08,0,0.53,0.24,0.24,"#d3e5e1");
+  for(const side of [-1,1]){
+    const fin=whaleOval(tail,-0.62,0.18,side*0.22,0.36,0.085,0.20,"#bfd7d5");
+    fin.rotation.y=side*0.58;
+  }
+  whaleG.scale.setScalar(1.12);g.add(whaleG);
+  actorAnimators.push(t=>{
+    whaleG.position.y=0.10+0.12*Math.sin(t*1.25);
+    tail.rotation.z=0.14*Math.sin(t*1.8);
   });
 
   // 6. 陪伴校舍的綠樹
@@ -2794,6 +3050,7 @@ function createDomainIslandPlatform(radius, height, topHex, trimHex, dirtHex, x,
     g.add(top);
   }
 
+  g.add(planetGround(radius*0.89,0.05,topHex,trimHex));
   return { group: g, topY: height - 0.05 };
 }
 
@@ -3044,55 +3301,6 @@ function createBench(x, y, z, rotY = 0) {
 }
 
 // 建立跨海連接道路／景觀大橋（含路面、兩側護欄、橋墩與路燈）
-function createRoadBridge(x1, z1, r1, x2, z2, r2, yHeight = 1.95) {
-  const dx = x2 - x1;
-  const dz = z2 - z1;
-  const fullDist = Math.hypot(dx, dz);
-  const ux = dx / fullDist;
-  const uz = dz / fullDist;
-
-  // 從兩島邊緣內縮一點點開始架橋，確保視覺無縫銜接
-  const startX = x1 + ux * (r1 * 0.86);
-  const startZ = z1 + uz * (r1 * 0.86);
-  const endX = x2 - ux * (r2 * 0.86);
-  const endZ = z2 - uz * (r2 * 0.86);
-
-  const midX = (startX + endX) * 0.5;
-  const midZ = (startZ + endZ) * 0.5;
-  const len = Math.max(1.2, Math.hypot(endX - startX, endZ - startZ));
-  const angle = Math.atan2(dz, dx);
-
-  const g = new THREE.Group();
-  g.position.set(midX, 0, midZ);
-  g.rotation.y = -angle;
-
-  // 主路面與兩側木質護欄邊條
-  g.add(box(len, 0.22, 1.35, "#f5ebe0", 0, yHeight - 0.18, 0));
-  g.add(box(len, 0.34, 0.14, "#8d6e63", 0, yHeight - 0.12, -0.68));
-  g.add(box(len, 0.34, 0.14, "#8d6e63", 0, yHeight - 0.12, 0.68));
-
-  // 路面中線石磚點綴與護欄木樁、橋墩
-  const stepCount = Math.max(2, Math.floor(len / 2.6));
-  for (let i = 1; i < stepCount; i++) {
-    const px = -len / 2 + (len / stepCount) * i;
-    // 兩側木樁
-    g.add(box(0.18, 0.55, 0.18, "#6d4c41", px, yHeight - 0.05, -0.68));
-    g.add(box(0.18, 0.55, 0.18, "#6d4c41", px, yHeight - 0.05, 0.68));
-    // 水中橋墩
-    if (i % 2 === 1) {
-      g.add(cyl(0.22, 0.28, yHeight, "#a1887f", px, 0, -0.45, 6));
-      g.add(cyl(0.22, 0.28, yHeight, "#a1887f", px, 0, 0.45, 6));
-    }
-  }
-
-  // 橋中央路燈
-  if (len > 4.5) {
-    g.add(createStreetLamp(0, yHeight, -0.58));
-  }
-
-  return g;
-}
-
 // 多樣化微縮建築生成器（除建築本體外，可根據該單元的 propType 在庭院前擺放專屬立體主題道具！）
 function createUnitBuilding(x, y, z, styleIdx, roofColor, wallColor = "#ffffff", propType = "") {
   const g = new THREE.Group();
@@ -3464,6 +3672,16 @@ function createDomainMonument(type, primaryColor, trimColor, yBase) {
 function clearThreeWorld() {
   if (worldGroup) {
     scene.remove(worldGroup);
+    const saved=new Set([...Object.values(matPool),atlasSurface]);
+    const transient=new Set();
+    worldGroup.traverse(object=>{
+      if(object.geometry) object.geometry.dispose();
+      if(object.material) {
+        const materials=Array.isArray(object.material)?object.material:[object.material];
+        materials.forEach(material=>{if(!saved.has(material)) transient.add(material);});
+      }
+    });
+    transient.forEach(material=>{if(material.map) material.map.dispose(); material.dispose();});
   }
   worldGroup = new THREE.Group();
   scene.add(worldGroup);
@@ -3753,10 +3971,10 @@ function buildHopeHubScene() {
       buildStage3Props(plat.group, plat.topY);
     }
 
-    worldGroup.add(createRoadBridge(0, 0, centerR, p.x, p.z, r, 1.95));
+    worldGroup.add(starPath(0, 0, centerR, p.x, p.z, r, 1.95));
 
     add3DPin(
-      `<div class="label-pill pill-stage-header ${sm.hdr}" onclick="focusOrEnterStage('${st}')" title="點擊置中該島至畫面中間觀看；雙擊進入該階段">
+      `<div class="label-pill pill-stage-header ${sm.hdr}" title="點一下聚焦，再點一下進入階段">
         <span class="pin-title">${sm.icon} ${sm.name}</span>
         <span class="pin-badge">${doms.length} 領域・${stageUnitCount(st)} 站</span>
       </div>`,
@@ -3770,12 +3988,11 @@ function buildHopeHubScene() {
   });
 
   [[-30, 16], [30, 15], [-12, -16], [13, -17]].forEach(([bx, bz], i) => {
-    const boat = new THREE.Group();
-    boat.position.set(bx, 0.1, bz);
-    boat.rotation.y = -0.5 + i * 0.8;
-    boat.add(box(1.4, 0.35, 0.8, "#e53935", 0, 0, 0));
-    boat.add(cone(0.52, 1.2, "#ffffff", 0, 0.35, 0, 3));
-    worldGroup.add(boat);
+    const prop = createUnitTopicProp(["book_story","hand_grip","traffic_car","nature_plant"][i%4],0,0,0,1.8);
+    const moon = new THREE.Group();
+    moon.position.set(bx,-0.6,bz);
+    moon.add(planetGround(1.22,0.08,"#ded0ab","#928197"),prop);
+    worldGroup.add(moon);
   });
 }
 
@@ -3842,7 +4059,7 @@ function buildStageArchipelagoScene(stage) {
     const c = coords[idx];
     const stUnits = d.stages[stage] || [];
     // 依該領域的專屬造型 (d.islandShape) 打造完全獨立的地貌外觀！
-    const plat = createDomainIslandPlatform(c.r, c.h, d.groundColor, d.trimColor, "#795548", c.x, c.z, d.islandShape || "hex");
+    const plat = createDomainIslandPlatform(c.r, c.h, d.groundColor, d.trimColor, d.trimColor, c.x, c.z, d.islandShape || "hex");
     worldGroup.add(plat.group);
 
     // 1. 該領域專屬中央地標
@@ -3885,10 +4102,10 @@ function buildStageArchipelagoScene(stage) {
 
     // 主跨海連接道路橋樑（內環連希望學園島，外環連內環島）
     if (c.bridgeFrom === -1) {
-      worldGroup.add(createRoadBridge(0, 0, centerR, c.x, c.z, c.r, 1.95));
+      worldGroup.add(starPath(0, 0, centerR, c.x, c.z, c.r, 1.95));
     } else {
       const p = coords[c.bridgeFrom];
-      worldGroup.add(createRoadBridge(p.x, p.z, p.r, c.x, c.z, c.r, 1.9));
+      worldGroup.add(starPath(p.x, p.z, p.r, c.x, c.z, c.r, 1.9));
     }
 
     // 領域島主標題膠囊（附該領域專屬稱號與屬性摘要）
@@ -3911,17 +4128,16 @@ function buildStageArchipelagoScene(stage) {
 
   extraLinks.filter(([iA, iB]) => iA < stageDoms.length && iB < stageDoms.length).forEach(([iA, iB]) => {
     const a = coords[iA], b = coords[iB];
-    worldGroup.add(createRoadBridge(a.x, a.z, a.r, b.x, b.z, b.r, 1.88));
+    worldGroup.add(starPath(a.x, a.z, a.r, b.x, b.z, b.r, 1.88));
   });
 
   // 海面小帆船點綴
   [[-26, 15], [26, 14.5], [-25, -18], [25, -18], [-8, 10], [9, -9]].forEach(([bx, bz], i) => {
-    const boat = new THREE.Group();
-    boat.position.set(bx, 0.1, bz);
-    boat.rotation.y = i * 1.1;
-    boat.add(box(1.4, 0.35, 0.8, "#ef4444", 0, 0, 0));
-    boat.add(cone(0.52, 1.2, "#ffffff", 0, 0.35, 0, 3));
-    worldGroup.add(boat);
+    const prop = createUnitTopicProp(["book_story","hand_grip","traffic_car","nature_plant"][i%4],0,0,0,1.8);
+    const moon = new THREE.Group();
+    moon.position.set(bx,-0.6,bz);
+    moon.add(planetGround(1.22,0.08,"#ded0ab","#928197"),prop);
+    worldGroup.add(moon);
   });
 }
 
@@ -3973,8 +4189,8 @@ function buildDomainIslandScene(domainId) {
     {
       stage: "1",
       title: (d.stageTitles && d.stageTitles["1"]) || "🌱 第一階段：啟蒙村",
-      topColor: pal1.top,
-      trimColor: pal1.trim,
+      topColor: STAGE_META["1"].top,
+      trimColor: STAGE_META["1"].trim,
       roofA: pal1.roofA,
       roofB: pal1.roofB,
       hexA: { x: -16.5, z: -7.5, r: 4.6, h: 2.30 },
@@ -3985,8 +4201,8 @@ function buildDomainIslandScene(domainId) {
     {
       stage: "2",
       title: (d.stageTitles && d.stageTitles["2"]) || "🌿 第二階段：實踐鎮",
-      topColor: pal2.top,
-      trimColor: pal2.trim,
+      topColor: STAGE_META["2"].top,
+      trimColor: STAGE_META["2"].trim,
       roofA: pal2.roofA,
       roofB: pal2.roofB,
       hexA: { x: 16.5, z: -7.5, r: 4.6, h: 2.30 },
@@ -3997,8 +4213,8 @@ function buildDomainIslandScene(domainId) {
     {
       stage: "3",
       title: (d.stageTitles && d.stageTitles["3"]) || "🌳 第三階段：進階城",
-      topColor: pal3.top,
-      trimColor: pal3.trim,
+      topColor: STAGE_META["3"].top,
+      trimColor: STAGE_META["3"].trim,
       roofA: pal3.roofA,
       roofB: pal3.roofB,
       hexA: { x: -10.5, z: 16.5, r: 4.6, h: 2.10 },
@@ -4030,15 +4246,15 @@ function buildDomainIslandScene(domainId) {
     pB.group.add(box(0.72, 0.06, sc.hexB.r * 1.55, "#f5ebe0", 0, pB.topY, 0));
 
     // 1. 連接中央廣場島 (0,0) 至該階段上學期島 (hexA) 的跨海景觀道路
-    worldGroup.add(createRoadBridge(0, 0, centerR, sc.hexA.x, sc.hexA.z, sc.hexA.r, 1.98));
+    worldGroup.add(starPath(0, 0, centerR, sc.hexA.x, sc.hexA.z, sc.hexA.r, 1.98));
 
     // 若為第三階段，也從中央廣場島連接一條對稱跨海道路至 hexB
     if (sc.stage === "3") {
-      worldGroup.add(createRoadBridge(0, 0, centerR, sc.hexB.x, sc.hexB.z, sc.hexB.r, 1.98));
+      worldGroup.add(starPath(0, 0, centerR, sc.hexB.x, sc.hexB.z, sc.hexB.r, 1.98));
     }
 
     // 2. 連接上學期島 (hexA) 與下學期島 (hexB) 的跨海景觀道路
-    worldGroup.add(createRoadBridge(sc.hexA.x, sc.hexA.z, sc.hexA.r, sc.hexB.x, sc.hexB.z, sc.hexB.r, 2.05));
+    worldGroup.add(starPath(sc.hexA.x, sc.hexA.z, sc.hexA.r, sc.hexB.x, sc.hexB.z, sc.hexB.r, 2.05));
 
     // 階段聚落主標題膠囊
     add3DPin(
@@ -4095,12 +4311,11 @@ function buildDomainIslandScene(domainId) {
 
   // 海面玩具紅帆船
   [[-22, 10], [22, 10], [0, -15]].forEach(([bx, bz], i) => {
-    const boat = new THREE.Group();
-    boat.position.set(bx, 0.1, bz);
-    boat.rotation.y = -0.4 + i * 0.9;
-    boat.add(box(1.4, 0.35, 0.8, "#e53935", 0, 0, 0));
-    boat.add(cone(0.52, 1.2, "#ffffff", 0, 0.35, 0, 3));
-    worldGroup.add(boat);
+    const prop = createUnitTopicProp(["book_story","hand_grip","traffic_car","nature_plant"][i%4],0,0,0,1.8);
+    const moon = new THREE.Group();
+    moon.position.set(bx,-0.6,bz);
+    moon.add(planetGround(1.22,0.08,"#ded0ab","#928197"),prop);
+    worldGroup.add(moon);
   });
 }
 
@@ -4138,32 +4353,35 @@ function renderDomainBar() {
     `;
   });
   bar.innerHTML = html;
+  if(renderer && camera) onResize();
+}
+
+const ATLAS_STOPS = [
+  ["hope","🐋","學園","希望學園","校舍、白鯨與共讀書桌"],
+  ["1","🎒","一階","第一學習階段","書包、洗手台與感統球"],
+  ["2","🎲","二階","第二學習階段","桌遊、串珠與公車站"],
+  ["3","🏪","三階","第三學習階段","超商、時鐘與筆電"]
+];
+function renderSchoolRoute() {
+  const selected=ATLAS_STOPS.find(stop=>stop[0]===hubFocusedIsland) || ATLAS_STOPS[0];
+  const [id,,,title,objects]=selected;
+  document.getElementById("banner-title").textContent=title;
+  document.getElementById("banner-desc").textContent=id==="hope" ? "跟著白鯨，選一座學習島出發。" : objects;
+  const area=document.getElementById("banner-attrs");
+  area.innerHTML=ATLAS_STOPS.map(([key,icon,short,name,props])=>
+    `<button class="route-stop" style="--island-ink:${key==='hope'?'#23794e':STAGE_META[key].trim}" type="button" aria-label="觀看${name}" aria-pressed="${key===id}" onclick="focusHubIsland('${key}')"><span class="route-mark" aria-hidden="true">${icon}</span><span><strong><span class="route-wide">${name}</span><span class="route-short">${short}</span></strong><small>${props}</small></span></button>`).join("");
+  const note=document.getElementById("banner-note");
+  note.style.display="block";
+  note.innerHTML=id==="hope" ? '<button class="atlas-open" onclick="startWhaleGuidedTour()">島嶼逛一逛</button> <button class="atlas-all" onclick="resetCamera()">群島全景</button>' :
+    `<button class="atlas-open" onclick="enterStageArchipelago('${id}')">進入${title}</button>`;
 }
 
 function renderBannerAttrBar() {
+  document.body.classList.toggle("atlas-home",currentMode==="world" && !worldStage);
   const attrBar = document.getElementById("banner-attrs");
   if (!attrBar) return;
   if (currentMode === "world") {
-    if (!worldStage) {
-      // 🏫 希望學園大世界：提供一鍵將各島拉至畫面中間置中觀看之快速導航
-      let html = `
-        <span style="font-size:12px;font-weight:700;color:#64748b;margin-right:4px;">🎯 選擇置中觀看島嶼：</span>
-        <button class="attr-chip ${hubFocusedIsland === 'hope' ? 'active' : ''}" onclick="focusHubIsland('hope')">
-          <span>🏫</span><span>希望學園全景</span>
-        </button>
-        <button class="attr-chip ${hubFocusedIsland === '1' ? 'active' : ''}" onclick="focusHubIsland('1')">
-          <span>🌱</span><span>第一階段：生活啟蒙島</span>
-        </button>
-        <button class="attr-chip ${hubFocusedIsland === '2' ? 'active' : ''}" onclick="focusHubIsland('2')">
-          <span>🌿</span><span>第二階段：生活實踐島</span>
-        </button>
-        <button class="attr-chip ${hubFocusedIsland === '3' ? 'active' : ''}" onclick="focusHubIsland('3')">
-          <span>🌳</span><span>第三階段：自立進階島</span>
-        </button>
-      `;
-      attrBar.innerHTML = html;
-      return;
-    }
+    if (!worldStage) { renderSchoolRoute(); return; }
     const sm = STAGE_META[worldStage];
     attrBar.innerHTML = `
       <span style="font-size:12px;font-weight:700;color:#64748b;margin-right:4px;">📍 ${sm.icon} ${sm.name}小島群：</span>
@@ -4210,7 +4428,7 @@ function selectAttrFilter(tag) {
 function setHubCamera() {
   hubFocusedIsland = "hope";
   targetLook.set(0, 1.8, 8.0);
-  spherical.radius = 80;
+  spherical.radius = Math.min(140, Math.max(80, 85 / camera.aspect));
   spherical.theta = 0.0;
   spherical.phi = 0.98;
 }
@@ -4245,7 +4463,7 @@ function enterWorldView(pushHash = true) {
   renderDomainBar();
   renderBannerAttrBar();
   buildHopeHubScene();
-  setHubCamera();
+  focusHubIsland('hope');
 
   if (displayView === "list") renderListView();
 }
@@ -4588,7 +4806,9 @@ function initThreeEngine() {
   renderLabelToggle();
 
   scene = new THREE.Scene();
-  scene.background = new THREE.Color("#e6f2f5");
+  schoolSky=paintSchoolSky();
+  daySky = paintDaySky();
+  scene.background=daySky;
 
   camera = new THREE.PerspectiveCamera(38, stageEl.clientWidth / stageEl.clientHeight, 0.5, 300);
 
@@ -4632,7 +4852,10 @@ function initThreeEngine() {
 
   // ☁️ 天空飄浮立體繪本雲朵群
   const cloudsGroup = new THREE.Group();
+  skyClouds=cloudsGroup;
   scene.add(cloudsGroup);
+  sunRainbow = createSunRainbow();
+  scene.add(sunRainbow);
 
   function createPuffyCloud(scale = 1.0) {
     const g = new THREE.Group();
@@ -4662,38 +4885,71 @@ function initThreeEngine() {
   });
 
   // 滑鼠與觸控事件（支援 ✋ 拖曳平移模式與 🔄 旋轉視角模式，右鍵/中鍵/Shift 隨時平移）
-  let isPanning = false;
+  // 一指或滑鼠繞注視點旋轉，雙指以兩指中心平移並依距離縮放。
+  const pointers = new Map();
+  let origin;
+  let panDrag = false;
+  function pairGeometry() {
+    const [a,b] = pointers.values();
+    return {x:(a.x+b.x)/2, y:(a.y+b.y)/2, distance:Math.hypot(a.x-b.x,a.y-b.y)};
+  }
+  function endPointer(e) {
+    if (!pointers.delete(e.pointerId)) return;
+    isDragging = pointers.size > 0;
+    if (isDragging) origin = pointers.values().next().value;
+    else stageEl.classList.remove("orbit-dragging");
+    if (e.type === "pointercancel") dragMoved = true;
+  }
   stageEl.addEventListener("contextmenu", e => e.preventDefault());
   stageEl.addEventListener("pointerdown", e => {
-    isDragging = true;
-    isPanning = (dragMode === "pan" && e.button === 0) || (e.button === 2 || e.button === 1 || e.shiftKey);
-    dragMoved = false;
-    autoTour = false;
-    document.getElementById("btn-tour").classList.remove("active");
-    prevPointer = { x: e.clientX, y: e.clientY };
-    if (isPanning) {
-      stageEl.style.cursor = "grabbing";
-    }
-  });
-  window.addEventListener("pointermove", e => {
-    if (!isDragging) return;
-    const dx = e.clientX - prevPointer.x;
-    const dy = e.clientY - prevPointer.y;
-    if (Math.hypot(dx, dy) > 4) dragMoved = true;
-    prevPointer = { x: e.clientX, y: e.clientY };
-    if (isPanning) {
-      panCamera(dx, dy);
+    if (!e.target.closest("#canvas-3d, .label-pin") || pointers.size >= 2) return;
+    const point = {x:e.clientX,y:e.clientY};
+    if (pointers.size === 0) {
+      origin = point;
+      dragMoved = false;
+      panDrag = dragMode === "pan" || e.button === 2 || e.button === 1 || e.shiftKey;
     } else {
-      spherical.theta -= dx * 0.0065;
-      spherical.phi = Math.max(0.10, Math.min(1.42, spherical.phi - dy * 0.0065));
+      dragMoved = true;
+    }
+    pointers.set(e.pointerId,point);
+    e.target.setPointerCapture(e.pointerId);
+    setAutoOrbit(false);
+    isDragging = true;
+    stageEl.classList.add("orbit-dragging");
+  });
+  stageEl.addEventListener("pointermove", e => {
+    const previous = pointers.get(e.pointerId);
+    if (!previous) return;
+    const next = {x:e.clientX,y:e.clientY};
+    const before = pointers.size === 2 ? pairGeometry() : null;
+    pointers.set(e.pointerId,next);
+    if (before) {
+      const after = pairGeometry();
+      if (before.distance > 4 && after.distance > 4) {
+        spherical.radius = Math.max(12,Math.min(140,spherical.radius*before.distance/after.distance));
+      }
+      panCamera(after.x-before.x,after.y-before.y);
+      return;
+    }
+    if (!dragMoved && Math.hypot(next.x-origin.x,next.y-origin.y)<4) return;
+    const start = dragMoved ? previous : origin;
+    dragMoved = true;
+    const dx = next.x-start.x, dy = next.y-start.y;
+    if (panDrag) panCamera(dx,dy);
+    else {
+      spherical.theta -= dx * Math.PI * 2 / stageEl.clientWidth;
+      spherical.phi = Math.max(0.035,Math.min(Math.PI-0.035,
+        spherical.phi - dy * Math.PI / stageEl.clientHeight));
     }
   });
-  window.addEventListener("pointerup", () => {
+  for (const eventName of ["pointerup","pointercancel","lostpointercapture"]) {
+    stageEl.addEventListener(eventName,endPointer);
+  }
+  window.addEventListener("blur", () => {
+    pointers.clear();
     isDragging = false;
-    isPanning = false;
-    if (stageEl) {
-      stageEl.style.cursor = dragMode === "pan" ? "grab" : "";
-    }
+    dragMoved = true;
+    stageEl.classList.remove("orbit-dragging");
   });
 
   // 游標停在島上 → 只顯示那一座島（或那一棟單元小屋）的標籤
@@ -4736,57 +4992,14 @@ function initThreeEngine() {
     spherical.radius = Math.max(12, Math.min(140, spherical.radius + e.deltaY * 0.036));
   }, { passive: true });
 
-  // 觸控雙指縮放與雙指平移 (Pinch-to-zoom & Two-finger Pan)
-  let touchStartDist = 0;
-  let touchStartRadius = 0;
-  let touchStartMid = { x: 0, y: 0 };
-  stageEl.addEventListener("touchstart", e => {
-    if (e.touches.length === 2) {
-      isDragging = false;
-      isPanning = false;
-      touchStartDist = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-      touchStartRadius = spherical.radius;
-      touchStartMid = {
-        x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
-        y: (e.touches[0].clientY + e.touches[1].clientY) / 2
-      };
-    }
-  }, { passive: true });
-  stageEl.addEventListener("touchmove", e => {
-    if (e.touches.length === 2 && touchStartDist > 0) {
-      isDragging = false;
-      // 1. 雙指縮放
-      const dist = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-      if (dist > 10) {
-        const factor = touchStartDist / dist;
-        spherical.radius = Math.max(12, Math.min(140, touchStartRadius * factor));
-      }
-      // 2. 雙指平移世界（將任何島拉至中間）
-      const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-      const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-      const tdx = midX - touchStartMid.x;
-      const tdy = midY - touchStartMid.y;
-      touchStartMid = { x: midX, y: midY };
-      panCamera(tdx, tdy);
-    }
-  }, { passive: true });
-  stageEl.addEventListener("touchend", e => {
-    if (e.touches.length < 2) {
-      touchStartDist = 0;
-    }
-  }, { passive: true });
   window.addEventListener("resize", onResize);
 
   // 根據初始 Hash 或預設領域載入
+  applyTimeOfDay();
   applyRouteFromHash();
   window.addEventListener("hashchange", applyRouteFromHash);
 
+  onResize();
   animateLoop();
 }
 
@@ -4817,6 +5030,11 @@ function onResize() {
   const stageEl = document.getElementById("stage-3d");
   if (!stageEl || stageEl.clientWidth === 0) return;
   camera.aspect = stageEl.clientWidth / stageEl.clientHeight;
+  const skyAspect=schoolSky.image.width/schoolSky.image.height;
+  for (const sky of [schoolSky,daySky]) {
+    sky.repeat.set(Math.min(1,camera.aspect/skyAspect),Math.min(1,skyAspect/camera.aspect));
+    sky.offset.set((1-sky.repeat.x)/2,(1-sky.repeat.y)/2);
+  }
   camera.updateProjectionMatrix();
   renderer.setSize(stageEl.clientWidth, stageEl.clientHeight);
 }
@@ -4853,42 +5071,16 @@ function panCamera(dx, dy) {
 }
 
 function focusHubIsland(st) {
-  hubFocusedIsland = st;
-  renderBannerAttrBar();
-  const noteEl = document.getElementById("banner-note");
-
-  if (st === "hope") {
-    targetLook.set(0, 1.8, 8.0);
-    spherical.radius = 80;
-    spherical.theta = 0.0;
-    spherical.phi = 0.98;
-    document.getElementById("banner-title").innerText = "🏫 希望學園（快樂活潑，自立自強）";
-    document.getElementById("banner-desc").innerText = "從希望學園出發，點選下方島嶼可直接拉至畫面中間完整觀看，或點「進入階段村落」探索。";
-    if (noteEl) noteEl.style.display = "none";
-  } else {
-    const p = HUB_STAGE_POS[st];
-    const sm = STAGE_META[st];
-    if (p) {
-      targetLook.set(p.x, 2.1, p.z);
-      spherical.radius = 32;
-      spherical.phi = 0.96;
-      document.getElementById("banner-title").innerText = `📍 正在中間觀看：${sm.icon} ${sm.name}島`;
-      document.getElementById("banner-desc").innerText = `目前視角已直接置中於該島！您可 360 度旋轉環繞、拉近拉遠觀看該階段象徵能力的特色地標物品。`;
-      if (noteEl) {
-        noteEl.innerHTML = `
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-            <button class="t-card-btn" style="background:#0284c7;color:#fff;padding:6px 14px;border-radius:18px;font-size:13px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 6px rgba(2,132,199,0.3);" onclick="enterStageArchipelago('${st}')">
-              <span>🚀</span><span>進入${sm.name}村落</span>
-            </button>
-            <button class="t-card-btn" style="background:#f1f5f9;color:#334155;padding:6px 12px;border-radius:18px;font-size:13px;border:1px solid #cbd5e1;" onclick="focusHubIsland('hope')">
-              <span>⟲</span><span>返回希望學園全景</span>
-            </button>
-          </div>
-        `;
-        noteEl.style.display = "block";
-      }
-    }
-  }
+  stopWhaleTourSilently();
+  const restoreFocus=document.activeElement?.classList.contains("route-stop");
+  hubFocusedIsland=st;
+  const spot=HUB_STAGE_POS[st] || {x:0,z:0};
+  targetLook.set(spot.x,1,spot.z);
+  spherical.radius=window.innerWidth<=820?31:25;
+  spherical.phi=1.20;
+  spherical.theta=st==="2"?0.32:-0.32;
+  renderSchoolRoute();
+  if(restoreFocus) document.querySelector('.route-stop[aria-pressed="true"]')?.focus({preventScroll:true});
 }
 
 function focusOrEnterStage(st) {
@@ -4907,41 +5099,57 @@ function zoomCamera(dir) {
 function resetCamera() {
   if (currentMode === "world") {
     if (worldStage) setStageCamera();
-    else setHubCamera();
+    else {setHubCamera();renderSchoolRoute();}
   } else {
     selectStage("all");
   }
 }
 
+function setAutoOrbit(enabled) {
+  autoTour = enabled;
+  const btn = document.getElementById("btn-tour");
+  btn.classList.toggle("active",enabled);
+  btn.setAttribute("aria-pressed",String(enabled));
+  btn.title = enabled ? "暫停自動環繞" : "自動環繞 360 度";
+  btn.setAttribute("aria-label",btn.title);
+}
 function toggleTour() {
-  autoTour = !autoTour;
-  document.getElementById("btn-tour").classList.toggle("active", autoTour);
+  setAutoOrbit(!autoTour);
 }
 
 function cycleTimeOfDay() {
   todState = (todState + 1) % 3;
+  applyTimeOfDay();
+}
+function applyTimeOfDay() {
+  seaMesh.visible=false;
+  skyClouds.visible=todState!==2;
+  sunRainbow.visible=todState===0;
+  worldGroup?.traverse(obj=>{
+    if(obj.material?.isLineDashedMaterial) obj.material.color.setHex(todState===2?0xead39d:0x536b85);
+  });
   const btn = document.getElementById("btn-tod");
   if (todState === 0) {
     btn.innerHTML = "<span>☀️</span><span>時段</span>";
-    scene.background.set("#e6f2f5");
+    scene.background=daySky;
     seaMesh.material.color.set("#bae6fd");
     hemiLight.color.setHex(0xffffff);
     sunLight.color.setHex(0xfffbeb);
     sunLight.intensity = 0.92;
   } else if (todState === 1) {
     btn.innerHTML = "<span>🌅</span><span>夕陽</span>";
-    scene.background.set("#ffedd5");
+    scene.background=new THREE.Color("#ebba9c");
     seaMesh.material.color.set("#fdba74");
     hemiLight.color.setHex(0xfed7aa);
     sunLight.color.setHex(0xf97316);
     sunLight.intensity = 1.05;
   } else {
     btn.innerHTML = "<span>🌙</span><span>星夜</span>";
-    scene.background.set("#0f172a");
+    scene.background=schoolSky;
     seaMesh.material.color.set("#1e293b");
-    hemiLight.color.setHex(0x334155);
-    sunLight.color.setHex(0x38bdf8);
-    sunLight.intensity = 0.48;
+    hemiLight.color.setHex(0xffedd5);
+    sunLight.color.setHex(0xffe3c3);
+    sunLight.intensity = 0.76;
   }
 }
 
@@ -5024,12 +5232,13 @@ function updateLabelsProjection() {
   });
 }
 
-function animateLoop() {
+let lastOrbitFrame;
+function animateLoop(now = performance.now()) {
   requestAnimationFrame(animateLoop);
 
-  if (autoTour) {
-    spherical.theta += 0.0038;
-  }
+  const elapsed = Math.max(0,Math.min(100,now-(lastOrbitFrame ?? now)));
+  lastOrbitFrame = now;
+  if (autoTour) spherical.theta += elapsed * (2*Math.PI/24000);
 
   // ⌨️ 鍵盤方向鍵（↑ ↓ ← →）與 WASD 上下左右平移畫面
   if (activeNavKeys.size > 0) {
@@ -5105,9 +5314,7 @@ window.addEventListener("keydown", e => {
     if (e.code) activeNavKeys.add(e.code);
     if (e.key) activeNavKeys.add(e.key);
     if (autoTour) {
-      autoTour = false;
-      const btn = document.getElementById("btn-tour");
-      if (btn) btn.classList.remove("active");
+      setAutoOrbit(false);
     }
   } else if (e.key === "+" || e.key === "=") {
     e.preventDefault();
@@ -5168,7 +5375,7 @@ function toggleKeyHintToast() {
 window.addEventListener("DOMContentLoaded", () => {
   setupSearch();
   initThreeEngine();
-  setTimeout(toggleKeyHintToast, 1600);
+
 });
 
 
@@ -5249,6 +5456,8 @@ function updateTourStep() {
   const stop = TOUR_STOPS[tourStep];
   if (!stop) return;
 
+  hubFocusedIsland = stop.stage || "hope";
+  renderSchoolRoute();
   targetLook.set(stop.lookAt[0], stop.lookAt[1], stop.lookAt[2]);
   spherical.radius = stop.spherical.radius;
   spherical.theta = stop.spherical.theta;
@@ -5334,7 +5543,8 @@ def main():
 
     if os.path.isdir(PROTO_DIR):
         proto_index = os.path.join(PROTO_DIR, "index.html")
-        open(proto_index, "w", encoding="utf-8").write(life_html)
+        library = os.path.relpath(os.path.join(ROOT, "vendor", "three-r128.min.js"), PROTO_DIR).replace(os.sep, "/")
+        open(proto_index, "w", encoding="utf-8").write(life_html.replace("vendor/three-r128.min.js", library))
         print(f"✅ 已同步更新本機原型資料夾：{proto_index}")
 
 
