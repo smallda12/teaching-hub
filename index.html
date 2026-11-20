@@ -6,6 +6,7 @@
 <title>高雄特殊教育學校國小部 115 學年度教材｜3D 領域群島與三階段導覽</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🏝️</text></svg>">
 <script src="vendor/three-r128.min.js"></script>
+<script src="vendor/OrbitControls-r128.js"></script>
 <style>
 :root {
   --bg-sea: #e6f2f5;
@@ -1259,6 +1260,7 @@ nav.domain-bar {background:#202d47;border-bottom:1px solid #4d5364;}
 .route-stop .route-mark {border:2px solid var(--island-ink);background:#fffcf3;}
 .route-stop[aria-pressed="true"] {box-shadow:inset 4px 0 var(--island-ink);}
 :root {--s1-color:#885506;--s2-color:#664193;--s3-color:#a53941;}
+#skip-flight {position:absolute;z-index:46;right:18px;top:14px;}
 </style>
 </head>
 <body>
@@ -1313,6 +1315,7 @@ nav.domain-bar {background:#202d47;border-bottom:1px solid #4d5364;}
 <!-- 3D 沙盤主視口 -->
 <main id="stage-3d">
   <canvas id="canvas-3d"></canvas>
+  <button id="skip-flight" class="atlas-open" hidden onclick="arriveAtView()">略過飛行</button>
   <div id="labels-layer"></div>
 
   <!-- 左上角當前島嶼資訊卡（含領域專屬屬性快速切換列） -->
@@ -1328,16 +1331,8 @@ nav.domain-bar {background:#202d47;border-bottom:1px solid #4d5364;}
 
   <!-- 右下角鏡頭控制 -->
   <div class="cam-controls">
-    <button class="cam-btn" id="btn-drag-mode" onclick="toggleDragMode()" title="切換拖曳模式：目前為 🔄 視角旋轉（點擊切換為 ✋ 拖曳平移，可將任何島拉到中間觀看）">🔄</button>
-    <button class="cam-btn" onclick="zoomCamera(-1)" title="拉近視角（放大）" aria-label="拉近視角">➕</button>
-    <button class="cam-btn" onclick="zoomCamera(1)" title="拉遠視角（縮小）" aria-label="拉遠視角">➖</button>
     <button class="cam-btn" onclick="resetCamera()" title="重置視角">⟲</button>
-    <button class="cam-btn" id="btn-tour" onclick="toggleTour()" title="自動環繞 360 度" aria-label="自動環繞 360 度" aria-pressed="false">360°</button>
     <button class="cam-btn" id="btn-all-pins" onclick="toggleShowAllPins()" title="切換顯示全部單元標籤／精選標籤">🏷️</button>
-    <button class="cam-btn" id="btn-key-hint" onclick="toggleKeyHintToast()" title="⌨️ 操作指引：
-方向鍵（↑ ↓ ← →）或 WASD：上下左右平移畫面
-滑鼠滾輪 或 ➕/➖：拉近／拉遠
-滑鼠左鍵：360度環視旋轉">⌨️</button>
   </div>
 
   <!-- 底部單元快速導覽船塢（進入領域島時顯示該島 30 單元） -->
@@ -1542,8 +1537,70 @@ let scene, camera, renderer, worldGroup, labelsLayer;
 let isDragging = false, dragMoved = false;
 let spherical = { radius: 42, theta: 0.68, phi: 1.02 };
 let targetLook = new THREE.Vector3(0, 0, 0);
-let currentLook = new THREE.Vector3(0, 0, 0);
-let autoTour = false;
+let controls, journey, flightWhale;
+let firstCameraView = true;
+const flightButton = () => document.getElementById("skip-flight");
+
+function arriveAtView() {
+  if (!journey) return;
+  camera.position.copy(journey.endEye);
+  controls.target.copy(journey.endTarget);
+  journey = null;
+  controls.enabled = true;
+  if (flightWhale) flightWhale.visible = false;
+  flightButton().hidden = true;
+  renderer.domElement.style.opacity = "";
+  controls.update();
+}
+
+function travelToView(fly = false) {
+  const endTarget = targetLook.clone();
+  const endEye = new THREE.Vector3().setFromSphericalCoords(spherical.radius,spherical.phi,spherical.theta).add(endTarget);
+  const startTarget = controls.target.clone(), startEye = camera.position.clone();
+  const distance = startTarget.distanceTo(endTarget);
+  const flight = fly && distance > 3 && !!flightWhale;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const path = new THREE.QuadraticBezierCurve3(startTarget.clone(), startTarget.clone().lerp(endTarget,0.5),endTarget.clone());
+  path.v0.y += 4;
+  path.v1.y += 8 + Math.min(10, distance * 0.12);
+  path.v2.y += 4;
+  journey = {start:performance.now(), duration:reduced?900:flight?1000*Math.min(9,Math.max(5,3.5+path.getLength()/12)):1100,
+    startTarget,startEye,endTarget,endEye,path,flight,reduced};
+  if (firstCameraView) {firstCameraView=false; arriveAtView(); return;}
+  controls.enabled = !flight;
+  if (flightWhale) flightWhale.visible = flight && !reduced;
+  flightButton().hidden = !flight;
+  renderer.domElement.style.opacity = "";
+}
+
+function moveCamera(now) {
+  if (!journey) {controls.update();return;}
+  const j=journey, t=Math.max(0,Math.min(1,(now-j.start)/j.duration));
+  if (t===1) {arriveAtView();return;}
+  const k=t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+  if (j.reduced) {
+    renderer.domElement.style.opacity=String(Math.abs(2*t-1));
+    camera.position.copy(t<0.5?j.startEye:j.endEye);
+    controls.target.copy(t<0.5?j.startTarget:j.endTarget);
+  } else if (j.flight) {
+    const pos=j.path.getPointAt(k), heading=j.path.getTangentAt(k);
+    flightWhale.position.copy(pos);
+    flightWhale.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0),heading);
+    const chase=pos.clone().addScaledVector(heading,-7); chase.y+=4;
+    const takeoff=THREE.MathUtils.smoothstep(t,0,0.25), landing=THREE.MathUtils.smoothstep(t,0.70,1);
+    camera.position.copy(j.startEye).lerp(chase,takeoff).lerp(j.endEye,landing);
+    controls.target.copy(j.startTarget).lerp(pos,takeoff).lerp(j.endTarget,landing);
+  } else {
+    controls.target.lerpVectors(j.startTarget,j.endTarget,k);
+    const a=j.startEye.clone().sub(j.startTarget), b=j.endEye.clone().sub(j.endTarget);
+    const length=THREE.MathUtils.lerp(a.length(),b.length(),k);
+    const rotation=new THREE.Quaternion().setFromUnitVectors(a.normalize(),b.normalize());
+    a.applyQuaternion(new THREE.Quaternion().slerp(rotation,k));
+    camera.position.copy(controls.target).addScaledVector(a,length);
+  }
+  camera.lookAt(controls.target);
+}
+
 let todState = 0; // 0: day, 1: sunset, 2: night
 let hemiLight, sunLight, backLight, seaMesh, schoolSky, daySky, skyClouds, sunRainbow;
 const pinItems = [];
@@ -2273,6 +2330,11 @@ function createHopeSchoolMonument(yBase) {
     fin.rotation.y=side*0.58;
   }
   whaleG.scale.setScalar(1.12);g.add(whaleG);
+  if (!flightWhale) {
+    flightWhale=whaleG.clone(true);
+    flightWhale.visible=false;
+    scene.add(flightWhale);
+  }
   actorAnimators.push(t=>{
     whaleG.position.y=0.10+0.12*Math.sin(t*1.25);
     tail.rotation.z=0.14*Math.sin(t*1.8);
@@ -3870,9 +3932,7 @@ function renderBannerAttrBar() {
       <button class="attr-chip active" onclick="setStageCamera()">
         <span>🌟</span><span>群島全景置中</span>
       </button>
-      <button class="attr-chip" onclick="toggleDragMode()">
-        <span>✋</span><span>切換拖曳平移</span>
-      </button>
+
       <button class="attr-chip ${showAll30Pins ? 'active' : ''}" onclick="toggleShowAllPins()">
         🏷️ ${showAll30Pins ? '已展開各島代表單元' : '展開各島代表單元'}
       </button>
@@ -3913,6 +3973,7 @@ function setHubCamera() {
   spherical.radius = Math.min(140, Math.max(80, 85 / camera.aspect));
   spherical.theta = 0.0;
   spherical.phi = 0.98;
+  travelToView();
 }
 
 function setStageCamera() {
@@ -3920,6 +3981,7 @@ function setStageCamera() {
   spherical.radius = 86;
   spherical.theta = 0.08;
   spherical.phi = 0.96;
+  travelToView();
 }
 
 function enterWorldView(pushHash = true) {
@@ -4055,6 +4117,7 @@ function selectStage(stage) {
     spherical.phi = 0.96;
   }
 
+  travelToView();
   renderQuickDock();
 }
 
@@ -4292,7 +4355,7 @@ function initThreeEngine() {
   daySky = paintDaySky();
   scene.background=daySky;
 
-  camera = new THREE.PerspectiveCamera(38, stageEl.clientWidth / stageEl.clientHeight, 0.5, 300);
+  camera = new THREE.PerspectiveCamera(40, stageEl.clientWidth / stageEl.clientHeight, 0.05, 3000);
 
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setSize(stageEl.clientWidth, stageEl.clientHeight);
@@ -4367,73 +4430,28 @@ function initThreeEngine() {
   });
 
   // 滑鼠與觸控事件（支援 ✋ 拖曳平移模式與 🔄 旋轉視角模式，右鍵/中鍵/Shift 隨時平移）
-  // 一指或滑鼠繞注視點旋轉，雙指以兩指中心平移並依距離縮放。
-  const pointers = new Map();
-  let origin;
-  let panDrag = false;
-  function pairGeometry() {
-    const [a,b] = pointers.values();
-    return {x:(a.x+b.x)/2, y:(a.y+b.y)/2, distance:Math.hypot(a.x-b.x,a.y-b.y)};
-  }
-  function endPointer(e) {
-    if (!pointers.delete(e.pointerId)) return;
-    isDragging = pointers.size > 0;
-    if (isDragging) origin = pointers.values().next().value;
-    else stageEl.classList.remove("orbit-dragging");
-    if (e.type === "pointercancel") dragMoved = true;
-  }
-  stageEl.addEventListener("contextmenu", e => e.preventDefault());
-  stageEl.addEventListener("pointerdown", e => {
-    if (!e.target.closest("#canvas-3d, .label-pin") || pointers.size >= 2) return;
-    const point = {x:e.clientX,y:e.clientY};
-    if (pointers.size === 0) {
-      origin = point;
-      dragMoved = false;
-      panDrag = dragMode === "pan" || e.button === 2 || e.button === 1 || e.shiftKey;
-    } else {
-      dragMoved = true;
-    }
-    pointers.set(e.pointerId,point);
-    e.target.setPointerCapture(e.pointerId);
-    setAutoOrbit(false);
-    isDragging = true;
-    stageEl.classList.add("orbit-dragging");
+  controls = new THREE.OrbitControls(camera,canvas);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.enablePan = false;
+  controls.minDistance = 0.8;
+  controls.maxDistance = 420;
+  controls.addEventListener("start",()=>{
+    isDragging=true;
+    if (journey && !journey.flight) {journey=null; renderer.domElement.style.opacity="";}
   });
-  stageEl.addEventListener("pointermove", e => {
-    const previous = pointers.get(e.pointerId);
-    if (!previous) return;
-    const next = {x:e.clientX,y:e.clientY};
-    const before = pointers.size === 2 ? pairGeometry() : null;
-    pointers.set(e.pointerId,next);
-    if (before) {
-      const after = pairGeometry();
-      if (before.distance > 4 && after.distance > 4) {
-        spherical.radius = Math.max(12,Math.min(140,spherical.radius*before.distance/after.distance));
-      }
-      panCamera(after.x-before.x,after.y-before.y);
-      return;
-    }
-    if (!dragMoved && Math.hypot(next.x-origin.x,next.y-origin.y)<4) return;
-    const start = dragMoved ? previous : origin;
-    dragMoved = true;
-    const dx = next.x-start.x, dy = next.y-start.y;
-    if (panDrag) panCamera(dx,dy);
-    else {
-      spherical.theta -= dx * Math.PI * 2 / stageEl.clientWidth;
-      spherical.phi = Math.max(0.035,Math.min(Math.PI-0.035,
-        spherical.phi - dy * Math.PI / stageEl.clientHeight));
-    }
-  });
-  for (const eventName of ["pointerup","pointercancel","lostpointercapture"]) {
-    stageEl.addEventListener(eventName,endPointer);
-  }
-  window.addEventListener("blur", () => {
-    pointers.clear();
-    isDragging = false;
-    dragMoved = true;
-    stageEl.classList.remove("orbit-dragging");
-  });
-
+  controls.addEventListener("end",()=>{isDragging=false;});
+  // 只區別點選與拖曳，旋轉及縮放完全由 OrbitControls 處理。
+  let pressPoint;
+  stageEl.addEventListener("pointerdown",e=>{
+    dragMoved=!e.isPrimary;
+    pressPoint={x:e.clientX,y:e.clientY};
+  },true);
+  stageEl.addEventListener("pointermove",e=>{
+    if(pressPoint && Math.hypot(e.clientX-pressPoint.x,e.clientY-pressPoint.y)>4) dragMoved=true;
+  },true);
+  window.addEventListener("pointerup",()=>{pressPoint=null;});
+  window.addEventListener("pointercancel",()=>{pressPoint=null;dragMoved=true;});
   // 游標停在島上 → 只顯示那一座島（或那一棟單元小屋）的標籤
   let lastPickT = 0;
   stageEl.addEventListener("pointermove", e => {
@@ -4455,7 +4473,7 @@ function initThreeEngine() {
 
   // 點按島嶼：滑鼠直接進入；觸控第一下先顯示標籤，再點一下才進入
   renderer.domElement.addEventListener("click", e => {
-    if (dragMoved) return;
+    if (dragMoved || journey?.flight) return;
     const it = pickPinAt(e.clientX, e.clientY);
     if (!it) { tapPin = null; return; }
     const isTouch = e.pointerType === "touch";
@@ -4466,14 +4484,6 @@ function initThreeEngine() {
     tapPin = null;
     if (it.onClick) it.onClick();
   });
-  // 滑鼠滾輪縮放（支援畫布與全域視窗，遇彈窗與單元抽屜保留原生滾動）
-  window.addEventListener("wheel", e => {
-    if (e.target.closest && e.target.closest("#treasure-modal, #modal-hope-school, .unit-quick-dock, .modal-content")) {
-      return;
-    }
-    spherical.radius = Math.max(12, Math.min(140, spherical.radius + e.deltaY * 0.036));
-  }, { passive: true });
-
   window.addEventListener("resize", onResize);
 
   // 根據初始 Hash 或預設領域載入
@@ -4521,36 +4531,7 @@ function onResize() {
   renderer.setSize(stageEl.clientWidth, stageEl.clientHeight);
 }
 
-let dragMode = "rotate"; // "rotate" or "pan"
 let hubFocusedIsland = "hope";
-
-function toggleDragMode() {
-  dragMode = (dragMode === "rotate") ? "pan" : "rotate";
-  const btn = document.getElementById("btn-drag-mode");
-  const stageEl = document.getElementById("stage-3d");
-  if (btn) {
-    btn.classList.toggle("active", dragMode === "pan");
-    btn.innerHTML = dragMode === "pan" ? "✋" : "🔄";
-    btn.title = dragMode === "pan"
-      ? "目前為：✋ 拖曳平移模式（拖曳可將任何島拉到中間，點擊切換為 🔄 旋轉）"
-      : "目前為：🔄 視角旋轉模式（點擊切換為 ✋ 拖曳平移）";
-  }
-  if (stageEl) {
-    stageEl.style.cursor = dragMode === "pan" ? "grab" : "";
-  }
-}
-
-function panCamera(dx, dy) {
-  const panSpeed = spherical.radius * 0.0013;
-  const forward = new THREE.Vector3();
-  camera.getWorldDirection(forward);
-  forward.y = 0;
-  forward.normalize();
-  const right = new THREE.Vector3().crossVectors(forward, new THREE.Vector3(0, 1, 0)).normalize();
-
-  targetLook.addScaledVector(right, -dx * panSpeed);
-  targetLook.addScaledVector(forward, -dy * panSpeed);
-}
 
 function focusHubIsland(st) {
   stopWhaleTourSilently();
@@ -4561,6 +4542,7 @@ function focusHubIsland(st) {
   spherical.radius=window.innerWidth<=820?31:25;
   spherical.phi=1.20;
   spherical.theta=st==="2"?0.32:-0.32;
+  travelToView(true);
   renderSchoolRoute();
   if(restoreFocus) document.querySelector('.route-stop[aria-pressed="true"]')?.focus({preventScroll:true});
 }
@@ -4573,11 +4555,6 @@ function focusOrEnterStage(st) {
   }
 }
 
-function zoomCamera(dir) {
-  const step = 8;
-  spherical.radius = Math.max(12, Math.min(140, spherical.radius + dir * step));
-}
-
 function resetCamera() {
   if (currentMode === "world") {
     if (worldStage) setStageCamera();
@@ -4585,18 +4562,6 @@ function resetCamera() {
   } else {
     selectStage("all");
   }
-}
-
-function setAutoOrbit(enabled) {
-  autoTour = enabled;
-  const btn = document.getElementById("btn-tour");
-  btn.classList.toggle("active",enabled);
-  btn.setAttribute("aria-pressed",String(enabled));
-  btn.title = enabled ? "暫停自動環繞" : "自動環繞 360 度";
-  btn.setAttribute("aria-label",btn.title);
-}
-function toggleTour() {
-  setAutoOrbit(!autoTour);
 }
 
 function cycleTimeOfDay() {
@@ -4714,47 +4679,9 @@ function updateLabelsProjection() {
   });
 }
 
-let lastOrbitFrame;
 function animateLoop(now = performance.now()) {
   requestAnimationFrame(animateLoop);
-
-  const elapsed = Math.max(0,Math.min(100,now-(lastOrbitFrame ?? now)));
-  lastOrbitFrame = now;
-  if (autoTour) spherical.theta += elapsed * (2*Math.PI/24000);
-
-  // ⌨️ 鍵盤方向鍵（↑ ↓ ← →）與 WASD 上下左右平移畫面
-  if (activeNavKeys.size > 0) {
-    let moveX = 0; // 左右平移 (螢幕視角右/左)
-    let moveZ = 0; // 上下平移 (螢幕視角前/後)
-    if (activeNavKeys.has("ArrowRight") || activeNavKeys.has("KeyD") || activeNavKeys.has("d") || activeNavKeys.has("D")) moveX += 1;
-    if (activeNavKeys.has("ArrowLeft") || activeNavKeys.has("KeyA") || activeNavKeys.has("a") || activeNavKeys.has("A")) moveX -= 1;
-    if (activeNavKeys.has("ArrowUp") || activeNavKeys.has("KeyW") || activeNavKeys.has("w") || activeNavKeys.has("W")) moveZ += 1;
-    if (activeNavKeys.has("ArrowDown") || activeNavKeys.has("KeyS") || activeNavKeys.has("s") || activeNavKeys.has("S")) moveZ -= 1;
-
-    if (moveX !== 0 || moveZ !== 0) {
-      const len = Math.hypot(moveX, moveZ);
-      const nx = moveX / len;
-      const nz = moveZ / len;
-
-      // 平移速度依目前相機拉遠半徑動態縮放，拉遠時快速掃視、拉近時細膩觀賞
-      const speed = spherical.radius * 0.013;
-      const forward = new THREE.Vector3();
-      camera.getWorldDirection(forward);
-      forward.y = 0;
-      forward.normalize();
-      const right = new THREE.Vector3().crossVectors(forward, new THREE.Vector3(0, 1, 0)).normalize();
-
-      targetLook.addScaledVector(right, nx * speed);
-      targetLook.addScaledVector(forward, nz * speed);
-    }
-  }
-
-  currentLook.lerp(targetLook, 0.08);
-  const cx = spherical.radius * Math.sin(spherical.phi) * Math.sin(spherical.theta);
-  const cy = spherical.radius * Math.cos(spherical.phi);
-  const cz = spherical.radius * Math.sin(spherical.phi) * Math.cos(spherical.theta);
-  camera.position.set(cx + currentLook.x, cy + currentLook.y, cz + currentLook.z);
-  camera.lookAt(currentLook);
+  moveCamera(now);
 
   const t = Date.now() * 0.0016;
   if (worldGroup) {
@@ -4777,82 +4704,9 @@ function animateLoop(now = performance.now()) {
   updateLabelsProjection();
 }
 
-const activeNavKeys = new Set();
-
-window.addEventListener("keydown", e => {
-  if (e.key === "Escape") {
-    closeModal();
-    return;
-  }
-
-  // 若使用者正在搜尋欄輸入文字，或開啟彈窗時，不攔截方向鍵
-  const tag = document.activeElement ? document.activeElement.tagName : "";
-  if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
-  if (document.querySelector(".modal.open, #treasure-modal.open, #modal-hope-school.visible")) return;
-
-  const navCodes = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyW", "KeyS", "KeyA", "KeyD"];
-  if (navCodes.includes(e.code) || ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
-    e.preventDefault();
-    if (e.code) activeNavKeys.add(e.code);
-    if (e.key) activeNavKeys.add(e.key);
-    if (autoTour) {
-      setAutoOrbit(false);
-    }
-  } else if (e.key === "+" || e.key === "=") {
-    e.preventDefault();
-    zoomCamera(-1);
-  } else if (e.key === "-" || e.key === "_") {
-    e.preventDefault();
-    zoomCamera(1);
-  }
+window.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){if(journey?.flight) arriveAtView();else closeModal();}
 });
-
-window.addEventListener("keyup", e => {
-  if (e.code) activeNavKeys.delete(e.code);
-  if (e.key) activeNavKeys.delete(e.key);
-});
-
-window.addEventListener("blur", () => {
-  activeNavKeys.clear();
-});
-
-function toggleKeyHintToast() {
-  let toast = document.getElementById("key-hint-toast");
-  if (!toast) {
-    toast = document.createElement("div");
-    toast.id = "key-hint-toast";
-    toast.style.cssText = `
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(15, 23, 42, 0.92);
-      color: #ffffff;
-      padding: 10px 22px;
-      border-radius: 24px;
-      font-size: 13px;
-      font-weight: 600;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.3);
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.18);
-      transition: opacity 0.35s ease, transform 0.35s ease;
-      pointer-events: none;
-    `;
-    toast.innerHTML = `<span>⌨️ <b>鍵盤操作</b>：方向鍵（↑ ↓ ← →）平移畫面</span><span style="color:#94a3b8;">｜</span><span>🖱️ <b>滑鼠</b>：滾輪縮放・左鍵旋轉・右鍵平移</span>`;
-    document.body.appendChild(toast);
-  }
-  toast.style.opacity = "1";
-  toast.style.transform = "translateX(-50%) translateY(0)";
-  clearTimeout(window._keyHintTimer);
-  window._keyHintTimer = setTimeout(() => {
-    toast.style.opacity = "0";
-    toast.style.transform = "translateX(-50%) translateY(10px)";
-  }, 4500);
-}
 
 window.addEventListener("DOMContentLoaded", () => {
   setupSearch();
@@ -4884,6 +4738,7 @@ function focusHopeSchool() {
   spherical.radius = 24;
   spherical.theta = 0.05;
   spherical.phi = 1.05;
+  travelToView();
   openHopeSchoolModal();
 }
 
@@ -4944,6 +4799,7 @@ function updateTourStep() {
   spherical.radius = stop.spherical.radius;
   spherical.theta = stop.spherical.theta;
   spherical.phi = stop.spherical.phi;
+  travelToView(true);
 
   const bar = document.getElementById("tour-bar");
   if (bar) {
