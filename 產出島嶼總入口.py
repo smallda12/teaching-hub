@@ -521,7 +521,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>高雄特校國小部，希望學園總入口</title>
+<title>高雄特校國小部｜希望學園總入口</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🏝️</text></svg>">
 <script src="vendor/three-r128.min.js"></script>
 <script src="vendor/OrbitControls-r128.js"></script>
@@ -1792,7 +1792,7 @@ nav.domain-bar {background:#202d47;border-bottom:1px solid #4d5364;}
     </button>
     <div class="brand-logo" id="top-logo">🏝️</div>
     <div class="brand-titles">
-      <h1 id="top-title">高雄特校國小部，希望學園總入口</h1>
+      <h1 id="top-title">高雄特校國小部｜希望學園總入口</h1>
       <p id="top-subtitle">校訓：快樂活潑，自立自強 ｜ 10 大領域島嶼 × 240 個互動單元</p>
     </div>
   </div>
@@ -4518,7 +4518,7 @@ function enterWorldView(pushHash = true) {
   document.getElementById("unit-dock").classList.remove("visible");
 
   document.getElementById("top-logo").innerText = "🏫";
-  document.getElementById("top-title").innerText = "高雄特校國小部，希望學園總入口";
+  document.getElementById("top-title").innerText = "高雄特校國小部｜希望學園總入口";
   document.getElementById("top-subtitle").innerText = "希望學園 × 三個學習階段 × 10 大領域 × 240 個互動單元";
 
   document.getElementById("banner-title").innerText = "🏫 希望學園（快樂活潑，自立自強）";
