@@ -521,7 +521,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>高雄特殊教育學校國小部 115 學年度教材｜3D 領域群島與三階段導覽</title>
+<title>高雄特校國小部，希望學園總入口</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🏝️</text></svg>">
 <script src="vendor/three-r128.min.js"></script>
 <script src="vendor/OrbitControls-r128.js"></script>
@@ -1792,7 +1792,7 @@ nav.domain-bar {background:#202d47;border-bottom:1px solid #4d5364;}
     </button>
     <div class="brand-logo" id="top-logo">🏝️</div>
     <div class="brand-titles">
-      <h1 id="top-title">🏫 希望學園・3D 特教群島總入口</h1>
+      <h1 id="top-title">高雄特校國小部，希望學園總入口</h1>
       <p id="top-subtitle">校訓：快樂活潑，自立自強 ｜ 10 大領域島嶼 × 240 個互動單元</p>
     </div>
   </div>
@@ -4518,7 +4518,7 @@ function enterWorldView(pushHash = true) {
   document.getElementById("unit-dock").classList.remove("visible");
 
   document.getElementById("top-logo").innerText = "🏫";
-  document.getElementById("top-title").innerText = "高雄特教國小部｜希望學園總入口";
+  document.getElementById("top-title").innerText = "高雄特校國小部，希望學園總入口";
   document.getElementById("top-subtitle").innerText = "希望學園 × 三個學習階段 × 10 大領域 × 240 個互動單元";
 
   document.getElementById("banner-title").innerText = "🏫 希望學園（快樂活潑，自立自強）";
@@ -5408,8 +5408,14 @@ def main():
 
     if os.path.isdir(PROTO_DIR):
         proto_index = os.path.join(PROTO_DIR, "index.html")
-        library = os.path.relpath(os.path.join(ROOT, "vendor", "three-r128.min.js"), PROTO_DIR).replace(os.sep, "/")
-        open(proto_index, "w", encoding="utf-8").write(life_html.replace('src="vendor/', 'src="' + os.path.dirname(library) + "/"))
+        prefix = os.path.relpath(ROOT, PROTO_DIR).replace(os.sep, "/") + "/"
+        proto_units = [dict(u, cover=prefix + u["cover"], manual=prefix + u["manual"]) for u in all_units]
+        proto_data = json.dumps(build_domains_payload(proto_units), ensure_ascii=False)
+        proto_html = (life_html.replace(json_str, proto_data, 1)
+                      .replace('src="vendor/', 'src="' + prefix + 'vendor/')
+                      .replace('href="index_classic.html"', 'href="' + prefix + 'index_classic.html"'))
+        with open(proto_index, "w", encoding="utf-8") as output:
+            output.write(proto_html)
         print(f"✅ 已同步更新本機原型資料夾：{proto_index}")
 
 
