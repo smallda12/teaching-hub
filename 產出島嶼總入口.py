@@ -2071,7 +2071,7 @@ function arriveAtView() {
   controls.update();
 }
 
-function travelToView(fly = false) {
+function travelToView(fly = false, immediate = false) {
   const endTarget = targetLook.clone();
   const endEye = new THREE.Vector3().setFromSphericalCoords(spherical.radius,spherical.phi,spherical.theta).add(endTarget);
   const startTarget = controls.target.clone(), startEye = camera.position.clone();
@@ -2084,7 +2084,7 @@ function travelToView(fly = false) {
   path.v2.y += 4;
   journey = {start:performance.now(), duration:reduced?900:flight?1000*Math.min(9,Math.max(5,3.5+path.getLength()/12)):1100,
     startTarget,startEye,endTarget,endEye,path,flight,reduced};
-  if (firstCameraView) {firstCameraView=false; arriveAtView(); return;}
+  if (firstCameraView || immediate) {firstCameraView=false; arriveAtView(); return;}
   controls.enabled = !flight;
   if (flightWhale) flightWhale.visible = flight && !reduced;
   flightButton().hidden = !flight;
@@ -4602,18 +4602,24 @@ function enterDomainIsland(domainId, pushHash = true, fromStage = null) {
   renderDomainBar();
   renderBannerAttrBar();
   buildDomainIslandScene(domainId);
-  selectStage(fromStage || "all");
+  selectStage(fromStage || "all", { focusMainIsland: true });
 
   if (displayView === "list") renderListView();
 }
 
-function selectStage(stage) {
+function selectStage(stage, { focusMainIsland = false } = {}) {
   currentStageFilter = stage;
   document.querySelectorAll(".stage-btn").forEach(b => {
     b.classList.toggle("active", b.dataset.stage === stage);
   });
 
-  if (stage === "all") {
+  if (focusMainIsland) {
+    // 保留來源階段的教材篩選，進場鏡頭固定取景中央共學廣場。
+    targetLook.set(0, 2, 0);
+    spherical.radius = Math.max(21, 15 / camera.aspect);
+    spherical.theta = -0.34;
+    spherical.phi = 1.08;
+  } else if (stage === "all") {
     targetLook.set(0, 1.8, 4.0);
     spherical.radius = 72;
     spherical.theta = 0.0;
@@ -4635,7 +4641,7 @@ function selectStage(stage) {
     spherical.phi = 0.96;
   }
 
-  travelToView();
+  travelToView(false, focusMainIsland);
   renderQuickDock();
 }
 
