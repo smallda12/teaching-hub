@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>開啟單元教材</title>
+<style>
+  html, body, iframe { width: 100%; height: 100%; margin: 0; border: 0; }
+  body { font: 1.15rem system-ui, sans-serif; }
+  iframe { display: block; }
+  #status { margin: 1.5rem; }
+</style>
+<p id="status" role="status">正在開啟單元教材……</p>
+<script>
+  const params = new URLSearchParams(location.search);
+  const unit = params.get("unit");
+  const sections = new Map([
+    ["ppt", "區教學"], ["video", "區影片"], ["quiz", "區評量"],
+    ["cards", "區輪播"], ["wheel", "區點名"]
+  ]);
+  const section = sections.get(params.get("section"));
+  const statusText = document.getElementById("status");
+  if (section && /^teaching-site-[a-z0-9-]+$/.test(unit)) {
+    const frame = document.createElement("iframe");
+    frame.title = "單元教材";
+    frame.allowFullscreen = true;
+    frame.style.visibility = "hidden";
+    function openSection() {
+      const doc = frame.contentDocument;
+      const button = doc?.querySelector(`.導覽鈕[data-區="${section}"]`);
+      if (!button?.onclick) return false;
+      button.click();
+      document.title = button.textContent.trim() + "｜" + doc.title;
+      frame.title = document.title;
+      statusText.hidden = true;
+      frame.style.visibility = "visible";
+      return true;
+    }
+    // 教材在 DOMContentLoaded 初始化導覽，毋須等所有影片與圖片下載完。
+    const timer = setInterval(() => {
+      if (openSection()) clearInterval(timer);
+    }, 80);
+    frame.addEventListener("load", () => {
+      clearInterval(timer);
+      if (!statusText.hidden && !openSection()) {
+        statusText.textContent = "無法開啟指定分頁。";
+        const link = document.createElement("a");
+        link.href = frame.src;
+        link.textContent = "進入此單元教學網站";
+        statusText.append(link);
+      }
+    }, { once: true });
+    frame.src = "/" + unit + "/";
+    document.body.append(frame);
+  } else {
+    statusText.textContent = "教材連結不完整，請從總入口重新選擇單元。";
+  }
+</script>
+</html>

@@ -4213,11 +4213,13 @@ function openUnitModal(uid) {
 
   document.getElementById("m-title").innerText = `${u.topicEmoji || ""} ${u.name}`;
 
-  document.getElementById("m-link-ppt").href = `${u.url}#teaching`;
-  document.getElementById("m-link-video").href = `${u.url}#videos`;
-  document.getElementById("m-link-quiz").href = `${u.url}#quizzes`;
-  document.getElementById("m-link-cards").href = `${u.url}#flashcards`;
-  document.getElementById("m-link-wheel").href = `${u.url}#teaching`;
+  const unitUrl = new URL(u.url);
+  const moduleUrl = new URL("/teaching-hub/module.html", unitUrl);
+  moduleUrl.searchParams.set("unit", unitUrl.pathname.split("/")[1]);
+  for (const key of ["ppt", "video", "quiz", "cards", "wheel"]) {
+    moduleUrl.searchParams.set("section", key);
+    document.getElementById("m-link-" + key).href = moduleUrl.href;
+  }
   document.getElementById("m-link-manual").href = u.manual;
   document.getElementById("m-link-site").href = u.url;
 
